@@ -1,5 +1,9 @@
 2004-12-28  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/model/VideoTrack.java (coalesce): Wrote.
+
+2004-12-28  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/internal/core/model/KillCommand.java: New file.
 	* src/org/medi8/internal/core/model/VideoTrack.java (replaceClip): New 
 	method.

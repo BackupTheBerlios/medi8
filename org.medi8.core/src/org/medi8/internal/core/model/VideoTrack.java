@@ -200,7 +200,28 @@ public class VideoTrack extends Track
 	 */
 	public void coalesce (Time when)
 	{
-	  // FIXME
+	  int index = findClip(when);
+	  if (index <= 0)
+	    return;
+	  
+	  // See if the clips on either side of the time
+	  // look like they were the result of a split.
+	  Clip left = (Clip) elements.get(index - 1);
+	  Clip right = (Clip) elements.get(index);
+	  if (! (left instanceof SelectionClip)
+	      || ! (right instanceof SelectionClip))
+	    return;
+	  SelectionClip selLeft = (SelectionClip) left;
+	  SelectionClip selRight = (SelectionClip) right;
+	  if (selLeft.getChild() != selRight.getChild()
+	      || selLeft.getSelectionEndTime() != selRight.getSelectionStartTime())
+	    return;
+	  elements.set(index - 1, selLeft.getChild());
+	  times.remove(index);
+	  elements.remove(index);
+	  // FIXME: should have a new kind of event.
+	  // FIXME choice of deletion is arbitrary.
+	  notify (new DeleteEvent(this, right));
 	}
 
 	private int findClip(Clip clip)
