@@ -57,7 +57,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.EditorPart;
 import org.medi8.core.file.Medi8XMLParser;
 import org.medi8.core.file.XMLGeneratingVisitor;
-import org.medi8.internal.core.model.AutomationTrack;
 import org.medi8.internal.core.model.Clip;
 import org.medi8.internal.core.model.InsertOrDeleteCommand;
 import org.medi8.internal.core.model.Sequence;

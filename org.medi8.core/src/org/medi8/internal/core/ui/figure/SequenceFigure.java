@@ -10,8 +10,8 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.util.DelegatingDropAdapter;
+import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -29,7 +29,6 @@ import org.medi8.internal.core.model.VideoTrack;
 import org.medi8.internal.core.ui.ClipSelection;
 import org.medi8.internal.core.ui.Medi8Layout;
 import org.medi8.internal.core.ui.Scale;
-import org.medi8.internal.core.ui.figure.VideoTrackFigure.TrackDropListener;
 
 /**
  * A SequenceFigure is the visual representation of a Sequence.

@@ -11,7 +11,6 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.swt.graphics.Image;
 import org.medi8.internal.core.model.Time;
-import org.medi8.internal.core.ui.MouseHandler;
 
 /**
  * This represents a conflict.

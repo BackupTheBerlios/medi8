@@ -14,7 +14,6 @@ import org.medi8.internal.core.model.FileClip;
 import org.medi8.internal.core.model.SelectionClip;
 import org.medi8.internal.core.model.Sequence;
 import org.medi8.internal.core.model.Time;
-import org.medi8.internal.core.model.Track;
 import org.medi8.internal.core.model.VideoTrack;
 import org.medi8.internal.core.model.Visitor;
 import org.medi8.internal.core.model.audio.AudioBus;

@@ -3,14 +3,13 @@
  */
 package org.medi8.internal.core.ui.figure;
 
-import org.medi8.internal.core.ui.Scale;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.medi8.internal.core.ui.Scale;
 
 // FIXME: should display tic marks and times
 // Probably will need some heuristic to make this display prettily.

@@ -3,7 +3,6 @@
  */
 package org.medi8.internal.core.model;
 
-import org.medi8.internal.core.model.events.SyntheticLengthChangeEvent;
 import org.medi8.internal.core.ui.Scale;
 import org.medi8.internal.core.ui.figure.SequenceFigure;
 import org.medi8.internal.core.ui.figure.TrackFigure;

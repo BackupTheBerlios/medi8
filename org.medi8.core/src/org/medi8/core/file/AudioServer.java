@@ -8,8 +8,6 @@ package org.medi8.core.file;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.Socket;
 
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Shell;

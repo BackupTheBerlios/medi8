@@ -3,13 +3,13 @@ package org.medi8.core.preferences;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import org.eclipse.jface.preference.*;
-import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.IWorkbench;
-import org.medi8.core.CorePlugin;
-import org.medi8.core.file.AudioServer;
-import org.medi8.internal.core.ui.ComboFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.medi8.core.CorePlugin;
+import org.medi8.internal.core.ui.ComboFieldEditor;
 
 /**
  * This class represents a preference page that

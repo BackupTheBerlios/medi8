@@ -3,10 +3,6 @@
  */
 package org.medi8.internal.core.ui;
 
-import org.medi8.internal.core.ui.figure.MarkerFigure;
-import org.medi8.internal.core.ui.figure.SelectionFigure;
-import org.medi8.internal.core.ui.figure.TimecodeRuler;
-
 import java.util.Iterator;
 
 import org.eclipse.draw2d.AbstractHintLayout;
@@ -16,6 +12,9 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.medi8.internal.core.ui.figure.MarkerFigure;
+import org.medi8.internal.core.ui.figure.SelectionFigure;
+import org.medi8.internal.core.ui.figure.TimecodeRuler;
 
 /**
  * A layout manager that knows how to lay out a medi8 frame.

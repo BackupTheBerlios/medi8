@@ -1,15 +1,17 @@
 package org.medi8.core;
 
-import org.eclipse.ui.plugin.*;
-import org.eclipse.core.runtime.*;
-import org.eclipse.core.resources.*;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.medi8.core.file.AudioServer;
 import org.osgi.framework.BundleContext;
-
-import java.util.*;
 
 /**
  * The main plugin class to be used in the desktop.

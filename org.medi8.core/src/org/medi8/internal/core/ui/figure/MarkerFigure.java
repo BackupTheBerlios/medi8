@@ -3,15 +3,14 @@
  */
 package org.medi8.internal.core.ui.figure;
 
-import org.medi8.internal.core.model.Time;
-import org.medi8.internal.core.model.Track;
-
 import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
+import org.medi8.internal.core.model.Time;
+import org.medi8.internal.core.model.Track;
 
 /**
  * This class is a Figure that displays an image.
