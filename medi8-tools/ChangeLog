@@ -1,6 +1,17 @@
 2004-11-13  Anthony Green  <green@spindazzle.org>
 
+	* util/log.hh (log_warning): New macro. 
+	(log_level_t): Add MEDI8_LOG_WARNING.
+	* util/log.cc (level_names): Add warning. 
 	* audio/m8aplay/m8aplay.cc (main): Print "OK" when server is ready.
+	(main): Rename ports "output_left" and "output_right".
+	(set_left_port): New function.
+	(set_right_port): New function.
+	(LEFT_PORT): New macro.
+	(RIGHT_PORT): New macro.
+	(generic_handler): Add port switching support.
+	(left_port_handler): Remove.
+	(main): Don't force port connection at startup.
 
 2004-11-12  Anthony Green  <green@spindazzle.org>
 

@@ -37,8 +37,9 @@ init_logger (log_level_t level, const char *filename)
 #endif
 }
 
-static const char *level_names[] = { "DEBUG: ",
-																		 "ERROR: " };
+static const char *level_names[] = { "DEBUG  : ",
+																		 "WARNING: ",
+																		 "ERROR  : " };
 
 int
 log (log_level_t level, const char *fmt, ...)

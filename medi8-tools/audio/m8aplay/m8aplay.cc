@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <lo/lo.h>
 #include <jack/jack.h>
@@ -38,7 +39,7 @@ generic_handler (const char *path, const char *types, lo_arg **argv,
 
 static int
 volume_handler (const char *path, const char *types, lo_arg **argv, 
-                int argc, void *data, void *user_data);                
+                int argc, void *data, void *user_data);
                 
 // The OSC error handler.
 static void
@@ -91,7 +92,7 @@ main (int argc, char *argv[])
   // add the volume handler.
   lo_server_thread_add_method (st, "/medi8/audio/volume", 
            	                   "i", volume_handler, NULL);
-
+           	                   
   // Start the OSC server thread.
   lo_server_thread_start (st);
 	
@@ -104,10 +105,10 @@ main (int argc, char *argv[])
   jack_error_callback = error_callback;
                                                                                                                                         
   jack_left_output_port =
-    jack_port_register (jack_client, "output",
+    jack_port_register (jack_client, "output_left",
                         JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
   jack_right_output_port =
-    jack_port_register (jack_client, "output",
+    jack_port_register (jack_client, "output_right",
                         JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
                                                                                                                                         
   log_debug ("engine sample rate: %u", jack_get_sample_rate (jack_client));
@@ -115,21 +116,7 @@ main (int argc, char *argv[])
   jack_set_buffer_size (jack_client, 2048);
                                                                                                                                         
   jack_activate (jack_client);
-                                                                                                                                        
-  const char **ports;
-  if ((ports = jack_get_ports (jack_client, NULL, NULL,
-                               JackPortIsPhysical|JackPortIsInput)) == NULL)
-    log_error ("Cannot find any physical playback ports");
-                                                                                                                                        
-  if (jack_connect (jack_client,
-                    jack_port_name (jack_left_output_port), ports[0]))
-    log_error ("Cannot connect left output ports");
-  if (jack_connect (jack_client,
-                    jack_port_name (jack_right_output_port), ports[1]))
-    log_error ("Cannot connect right output ports");
-                                                                                                                                        
-  free (ports);
-	
+
 	// Tell medi8 that we've started up OK.
 	puts ("OK");
 	fflush (stdout);
@@ -140,24 +127,48 @@ main (int argc, char *argv[])
 	}
 }
 
+#define LEFT_PORT "/medi8/audio/port/left/"
+#define RIGHT_PORT "/medi8/audio/port/right/"
+
+static int
+set_left_port (const char *pname)
+{
+	log_debug ("setting left port to %s\n", pname);
+	jack_port_disconnect (jack_client, jack_left_output_port);
+	jack_connect (jack_client,
+								jack_port_name (jack_left_output_port), pname);
+	return 0;
+}
+
+static int
+set_right_port (const char *pname)
+{
+	log_debug ("setting right port to %s\n", pname);
+	jack_port_disconnect (jack_client, jack_right_output_port);
+	jack_connect (jack_client,
+								jack_port_name (jack_right_output_port), pname);
+	return 0;
+}
+
 int
 generic_handler (const char *path, const char *types, lo_arg **argv,
                  int argc, void *data, void *user_data)
 {
-  int i;
-                                                                                
-  log_debug ("path: <%s>\n", path);
-  for (i=0; i<argc; i++)
-  {
-    log_debug ("\targ %d '%c' ", i, types[i]);
-    lo_arg_pp ((lo_type) types[i], argv[i]);
-  }
-              
+	/* Handle various messages.  */
+	if (strncmp (path, LEFT_PORT, 
+		           strlen (LEFT_PORT)) == 0)
+		set_left_port (&path[strlen (LEFT_PORT)]);
+	else if (strncmp (path, RIGHT_PORT, 
+		           strlen (RIGHT_PORT)) == 0)
+		set_right_port (&path[strlen (RIGHT_PORT)]);
+	else                                          	                                                                            
+    log_warning ("unrecognized OSC message: <%s>", path);
+   
   // Returning 1 means that we didn't handle the message, and
   // the server should try other methods.                                                                            
   return 1;
 }
-                                                                                
+                                                                    
 int
 volume_handler (const char *path, const char *types, lo_arg **argv, 
                 int argc, void *data, void *user_data)
