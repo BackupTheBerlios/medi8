@@ -8,7 +8,8 @@ package org.medi8.internal.core.ui;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
-import org.medi8.internal.core.ui.widget.gtk.Monitor;
+import org.medi8.internal.core.model.Monitor;
+import org.medi8.internal.core.ui.widget.gtk.MonitorWidget;
 
 /**
  * @author green
@@ -18,7 +19,10 @@ import org.medi8.internal.core.ui.widget.gtk.Monitor;
  */
 public class MonitorView extends ViewPart {
 
-	private Monitor displayArea;
+	private MonitorWidget displayArea;
+	
+	// The monitor model.
+	private Monitor monitor;
 
 	/**
 	 * 
@@ -31,7 +35,9 @@ public class MonitorView extends ViewPart {
 	 * @see org.eclipse.ui.IWorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
 	 */
 	public void createPartControl(Composite parent) {
-		displayArea = new Monitor (parent);
+	  MonitorWidget mw = new MonitorWidget (parent);
+		displayArea = mw;
+		monitor = new Monitor (mw.getVideoServer());
 	}
 
 	/* (non-Javadoc)
