@@ -1,5 +1,9 @@
 2004-11-16  Anthony Green  <green@spindazzle.org>
 
+	* src/org/medi8/internal/core/ui/AudioBusView.java: Rename from 
+	AudioEffectView.java.
+	* src/org/medi8/internal/core/ui/AudioEffectView.java: Renamed
+	to AudioBusView.java.
 	* src/org/medi8/internal/core/model/audio/RangeControl.java (setValue): 
 	New file.
 	* src/org/medi8/internal/core/model/audio/GainAndBalance.java: New file.
