@@ -42,6 +42,10 @@ public:
 	// Create a new bus.
   bus (const char *name);
   
+  virtual ~bus ()
+  {
+  }
+  
   // Add an input source to this bus.
   void add_input (audio_source *);
 
