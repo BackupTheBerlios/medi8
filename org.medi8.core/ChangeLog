@@ -1,5 +1,16 @@
 2004-11-07  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/Medi8Editor.java (run): Create command and
+	run it.
+	* src/org/medi8/internal/core/ui/figure/TrackFigure.java (mousePressed):
+	Updated.
+	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java (cursorTrack):
+	New field.
+	(setCursorLocation): Added track argument.
+	(computeChildren): New method. 
+
+2004-11-07  Tom Tromey  <tromey@redhat.com>
+
 	GUI support for Paste command:
 	* src/org/medi8/internal/core/Medi8Editor.java (createActions): Added
 	Paste action.

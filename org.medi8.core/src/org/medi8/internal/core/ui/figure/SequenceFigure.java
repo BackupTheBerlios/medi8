@@ -23,6 +23,7 @@ import org.medi8.internal.core.model.Medi8Event;
 import org.medi8.internal.core.model.IChangeListener;
 import org.medi8.internal.core.model.Sequence;
 import org.medi8.internal.core.model.Time;
+import org.medi8.internal.core.model.Track;
 import org.medi8.internal.core.model.VideoTrack;
 import org.medi8.internal.core.ui.ClipSelection;
 import org.medi8.internal.core.ui.Medi8Layout;
@@ -115,16 +116,21 @@ public class SequenceFigure extends Figure implements IChangeListener
 	 * Set the current cursor location.
 	 * If called with a negative argument, the cursor is removed.
 	 */
-	public void setCursorLocation(int x)
+	public void setCursorLocation(VideoTrack track, int x)
 	{
 		if (x < 0)
+		{
 			cursorLine.setVisible(false);
+			cursorTrack = null;
+		}
 		else
 		{
 			// FIXME: should use a Time, not an x coordinate.
 			cursorLine.setStart(new Point(x, 0));
 			cursorLine.setEnd(new Point(x, getBounds().height));
 			cursorLine.setVisible(true);
+			// assert track != null;
+			cursorTrack = track;
 		}
 		editor.notifyCursorChange();
 	}
@@ -134,6 +140,11 @@ public class SequenceFigure extends Figure implements IChangeListener
 		if (! cursorLine.isVisible())
 			return null;
 		return scale.unitsToDuration(cursorLine.getBounds().x);
+	}
+	
+	public VideoTrack getCursorTrack ()
+	{
+		return cursorTrack;
 	}
 	
 	private void computeChildren()
@@ -166,9 +177,10 @@ public class SequenceFigure extends Figure implements IChangeListener
 	// Information used for selection processing.
 	private Figure selectionBox;
 	
-	// The cursor line.
+	// The cursor line and track.
 	private Polyline cursorLine;
-	
+	private VideoTrack cursorTrack;
+
 	// This is referenced elsewhere in the package, namely by TrackFigure.
 	static Transfer fileTransfer = FileTransfer.getInstance(); 
 }

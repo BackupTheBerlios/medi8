@@ -418,8 +418,10 @@ public class Medi8Editor extends EditorPart
 			}
 
 			public void run() {
-				// FIXME: we also need to know the current track
-				// in order to have a generic paste action.
+				Command cmd = new InsertOrDeleteCommand ("insert", 
+						sequenceFigure.getCursorTrack(),
+						clipboardClip, sequenceFigure.getCursorTime());
+				executeCommand(cmd);
 			}
 		};
 		registry.registerAction(action);

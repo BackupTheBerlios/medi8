@@ -356,14 +356,14 @@ public class TrackFigure extends Figure
 			if (clip == null)
 			{
 				sequenceFigure.clearSelection();
-				sequenceFigure.setCursorLocation(where.x);
+				sequenceFigure.setCursorLocation(track, where.x);
 			}
 			else
 			{
 				Rectangle bound = child.getBounds();
 				sequenceFigure.setSelection(TrackFigure.this, bound.x, bound.x + bound.width,
 						clip);
-				sequenceFigure.setCursorLocation(-1);
+				sequenceFigure.setCursorLocation(null, -1);
 			}
 		}
 		public void mouseReleased(MouseEvent me) {
