@@ -8,15 +8,12 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.eclipse.draw2d.AbstractHintLayout;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MouseEvent;
-import org.eclipse.draw2d.MouseListener;
-import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -188,8 +185,7 @@ public class VideoTrackFigure extends TrackFigure
 				width, height);
 		return result;
 	}
-	
-	
+
 	/**
 	 * This handles the drop part of dnd. 
 	 * FIXME: ideally there would be a generic draw2d drop listener.

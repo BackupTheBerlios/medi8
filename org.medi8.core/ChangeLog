@@ -2,6 +2,7 @@
 
 	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java: Clean
 	up imports.
+	* src/org/medi8/internal/core/Medi8Editor.java: Ditto.	
 
 2004-11-21  Anthony Green  <green@spindazzle.org>
 
