@@ -1,4 +1,4 @@
-SUBDIRS = consumer_thumb consumer_info consumer_monitor m8vplay 
+SUBDIRS = m8aplay 
 
 all:
 	for dir in $(SUBDIRS); do \

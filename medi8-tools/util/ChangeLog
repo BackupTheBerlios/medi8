@@ -1,0 +1,3 @@
+2004-11-10  Anthony Green  <green@spindazzle.org>
+
+	* Makefile, log.hh, log.cc: New files.
