@@ -33,6 +33,7 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.SaveAction;
+import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.gef.ui.actions.UpdateAction;
 import org.eclipse.jface.action.IAction;
@@ -49,6 +50,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.EditorPart;
@@ -68,6 +70,28 @@ import org.medi8.internal.core.ui.figure.SequenceFigure;
 public class Medi8Editor extends EditorPart
   implements CommandStackListener, ISelectionProvider
 {
+	class InternalDeleteAction extends DeleteAction {
+		InternalDeleteAction(IWorkbenchPart editor) {
+			super(editor);
+		}
+
+		protected boolean calculateEnabled () {
+			ISelection sel = getSelection ();
+			return sel != null && ! getSelection ().isEmpty();
+		}
+
+		public void run () {
+			ISelection sel = getSelection();
+			if (! (sel instanceof ClipSelection))
+				return;
+			ClipSelection cs = (ClipSelection) sel;
+			Clip c = cs.getClip();
+			VideoTrack track = cs.getTrack();
+			executeCommand(new InsertOrDeleteCommand("deletion", track, c));
+			sequenceFigure.clearSelection();
+		}
+	}
+
 	/**
 	 * Height of a clip, in pixels.
 	 */
@@ -307,25 +331,51 @@ public class Medi8Editor extends EditorPart
 	
 		// FIXME: we probably shouldn't bother using a DeleteAction here.
 		// we should just write our own actions.
-		action = new DeleteAction(this) {
-			protected boolean calculateEnabled () {
-				return ! getSelection ().isEmpty();
+		action = new InternalDeleteAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		site.getActionBars().setGlobalActionHandler(ActionFactory.DELETE.getId(), action);
+		
+		// This is just like Delete, but also copies to the clipboard.
+		action = new InternalDeleteAction(this) {
+			public String getId() {
+				return ActionFactory.CUT.getId ();
 			}
 			
 			public void run () {
+				super.run ();
+				// FIXME: copy to the clipboard.
+			}
+		};
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		site.getActionBars().setGlobalActionHandler(ActionFactory.CUT.getId(), action);
+		
+		action = new SelectionAction(this) {
+			public String getId () {
+				return ActionFactory.COPY.getId();
+			}
+
+			protected boolean calculateEnabled () {
+				ISelection sel = getSelection();
+				return sel != null && ! getSelection().isEmpty ();
+			}
+			
+			public void run () {
+				// FIXME: this is just a hack... we really need
+				// a clipboard abstraction.
 				ISelection sel = getSelection();
 				if (! (sel instanceof ClipSelection))
 					return;
 				ClipSelection cs = (ClipSelection) sel;
 				Clip c = cs.getClip();
-				VideoTrack track = cs.getTrack();
-				executeCommand(new InsertOrDeleteCommand("deletion", track, c));
-				sequenceFigure.clearSelection();
+				clipboardClip = (Clip) c.clone ();
+				// FIXME: we have to update the clipboard actions
 			}
 		};
 		registry.registerAction(action);
-		selectionActions.add(action.getId());
-		site.getActionBars().setGlobalActionHandler(ActionFactory.DELETE.getId(), action);
+		selectionActions.add(ActionFactory.COPY.getId());
+		site.getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), action);
 	
 		action = new SaveAction(this);
 		registry.registerAction(action);
@@ -404,4 +454,7 @@ public class Medi8Editor extends EditorPart
 
 	/** Figure representing the sequence we display. */
 	SequenceFigure sequenceFigure;
+	
+	/** The clip on our clipboard.  */
+	Clip clipboardClip;
 }
