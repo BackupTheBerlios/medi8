@@ -35,7 +35,7 @@ typedef enum {
 extern log_level_t log_level;
 
 #define log_debug(...) \
-  ((log_level <= LOG_DEBUG) ? \
+  ((log_level <= MEDI8_LOG_DEBUG) ? \
    log(MEDI8_LOG_DEBUG, ## __VA_ARGS__) : 0)
 
 #define log_error(...) \
