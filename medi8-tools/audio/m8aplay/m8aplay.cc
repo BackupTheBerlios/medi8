@@ -22,6 +22,7 @@
 #include "log.hh"
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <lo/lo.h>
 #include <jack/jack.h>
@@ -128,6 +129,10 @@ main (int argc, char *argv[])
     log_error ("Cannot connect right output ports");
                                                                                                                                         
   free (ports);
+	
+	// Tell medi8 that we've started up OK.
+	puts ("OK");
+	fflush (stdout);
 	
 	while (1)
 	{
