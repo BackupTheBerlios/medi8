@@ -1,8 +1,25 @@
+2004-11-11  Anthony Green  <green@spindazzle.org>
+
+	* src/org/medi8/core/Medi8Perspective.java (createInitialLayout): Add
+	audio effects view in a folder.
+	* src/org/medi8/internal/core/ui/AudioEffectsView.java: New file.
+	* src/org/medi8/internal/core/ui/widget/KnobWidget.java: New file.
+	* plugin.xml: Add audio effects view.
+
+2004-11-10  Anthony Green  <green@spindazzle.org>
+
+	* src/org/medi8/internal/core/ui/widget/gtk/MonitorWidget.java (controlResized): 
+	Add control listener for resizing.  Nothing is done yet.
+	* src/org/medi8/core/file/VideoServer.java (VideoServer): invoke m8vplay
+	with size info.
+	 (VideoServer): exec the video server through "sh" in order to populate the
+	 environment. 
+
 2004-11-09  Anthony Green  <green@spindazzle.org>
 
 	* src/org/medi8/core/file/MLTClipFactory.java (createThumbnail): Read 
 	PPM data from the consumer_thumb and take a first crack at compositing
-	it into the brick.
+	it into the brick. 
 
 2004-11-09  Tom Tromey  <tromey@redhat.com>
 

@@ -83,6 +83,13 @@
             class="org.medi8.internal.core.ui.MonitorView"
             id="org.medi8.internal.core.ui.MonitorView">
       </view>
+      <view
+      	    name="Audio Effects"
+      	    icon="medi8.png"
+      	    category="Medi8"
+      	    class="org.medi8.internal.core.ui.AudioEffectsView"
+      	    id="org.medi8.internal.core.ui.AudioEffectView">
+      </view>
    </extension>
                                                                                 
 

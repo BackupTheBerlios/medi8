@@ -4,6 +4,7 @@
  */
 package org.medi8.core;
 
+import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
@@ -20,9 +21,14 @@ public class Medi8Perspective implements IPerspectiveFactory {
 	public void createInitialLayout(IPageLayout layout) {
 		//	Get the editor area.
 		String editorArea = layout.getEditorArea();
+	
 		//	Start adding views...
-		layout.addView("org.eclipse.ui.views.ResourceNavigator",
-			IPageLayout.LEFT, 0.25f, editorArea);
+		IFolderLayout topLeft = layout.createFolder("topLeft", 
+		                                            IPageLayout.LEFT, 0.25f,
+		                                            editorArea);
+		topLeft.addView (IPageLayout.ID_RES_NAV);
+		topLeft.addPlaceholder ("org.medi8.intern.core.ui.AudioEffectsView");
+		
 		layout.addView("org.medi8.internal.core.ui.MonitorView",
 			IPageLayout.TOP, 0.3f, editorArea);
 	}
