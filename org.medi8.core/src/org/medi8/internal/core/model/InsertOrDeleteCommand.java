@@ -51,9 +51,10 @@ public class InsertOrDeleteCommand extends Command
 		super(label);
 		track = parent;
 		child = clip;
-		startTime = null;
-		// FIXME: startTime = parent.findClipTime(clip);
-		// if (startTime == null) throw blah;
+		startTime = parent.findClipTime(clip);
+		// This exception makes debugging simpler.
+		if (startTime == null)
+			throw new IllegalArgumentException("clip not found in parent track");
 		what = DELETE;
 	}
 

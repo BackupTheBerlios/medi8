@@ -8,16 +8,19 @@ import java.util.Iterator;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.util.DelegatingDropAdapter;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Canvas;
 import org.medi8.internal.core.Medi8Editor;
+import org.medi8.internal.core.model.Clip;
 import org.medi8.internal.core.model.Medi8Event;
 import org.medi8.internal.core.model.IChangeListener;
 import org.medi8.internal.core.model.Sequence;
 import org.medi8.internal.core.model.VideoTrack;
+import org.medi8.internal.core.ui.ClipSelection;
 import org.medi8.internal.core.ui.Medi8Layout;
 import org.medi8.internal.core.ui.Scale;
 
@@ -65,22 +68,32 @@ public class SequenceFigure extends Figure implements IChangeListener
 	public void clearSelection ()
 	{
 		selectionBox.setVisible(false);
+		ISelection sel = new ISelection() {
+			public boolean isEmpty() {
+				return true;
+			}
+		};
+		editor.getSite().getSelectionProvider().setSelection(sel);
 	}
+
 	/**
 	 * Set the selection to a part of a particular track
 	 * @param track TrackFigure holding the selection
 	 * @param xLow Low X coordinate
 	 * @param xHigh High X coordinate
 	 */
-	public void setSelection(TrackFigure track, int xLow, int xHigh)
+	public void setSelection(TrackFigure track, int xLow, int xHigh, Clip clip)
 	{
 		Rectangle bounds = track.getBounds();
 		bounds.setLocation(xLow, bounds.y - Medi8Editor.VERTICAL_GAP / 2);
 		bounds.setSize(xHigh - xLow, bounds.height + Medi8Editor.VERTICAL_GAP);
 		selectionBox.setBounds(bounds);
 		selectionBox.setVisible(true);
+		
+		ISelection sel = new ClipSelection(clip, track.getTrack());
+		editor.getSite().getSelectionProvider().setSelection(sel);
 	}
-
+	
 	private void computeChildren()
 	{
 		add(topRuler);

@@ -358,7 +358,8 @@ public class TrackFigure extends Figure
 			else
 			{
 				Rectangle bound = child.getBounds();
-				sequenceFigure.setSelection(TrackFigure.this, bound.x, bound.x + bound.width);
+				sequenceFigure.setSelection(TrackFigure.this, bound.x, bound.x + bound.width,
+						clip);
 			}
 		}
 		public void mouseReleased(MouseEvent me) {

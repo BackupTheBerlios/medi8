@@ -100,6 +100,14 @@ public class VideoTrack extends Track
 		return true;
 	}
 	
+	public Time findClipTime(Clip clip)
+	{
+		int index = findClip(clip);
+		if (index == -1)
+			return null;
+		return (Time) times.elementAt(index);
+	}
+	
 	public boolean move(Clip clip, Time delta)
 	{
 		int index = findClip(clip);

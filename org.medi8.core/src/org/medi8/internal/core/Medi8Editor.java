@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,10 +33,13 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.SaveAction;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.gef.ui.actions.UpdateAction;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -49,16 +53,20 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.EditorPart;
 import org.medi8.core.file.XMLGeneratingVisitor;
+import org.medi8.internal.core.model.Clip;
+import org.medi8.internal.core.model.InsertOrDeleteCommand;
 import org.medi8.internal.core.model.Sequence;
 import org.medi8.internal.core.model.Time;
 import org.medi8.internal.core.model.VideoTrack;
+import org.medi8.internal.core.ui.ClipSelection;
 import org.medi8.internal.core.ui.MouseHandler;
 import org.medi8.internal.core.ui.Scale;
 import org.medi8.internal.core.ui.figure.SequenceFigure;
 
 /**
  */
-public class Medi8Editor extends EditorPart implements CommandStackListener
+public class Medi8Editor extends EditorPart
+  implements CommandStackListener, ISelectionProvider
 {
 	/**
 	 * Height of a clip, in pixels.
@@ -232,15 +240,15 @@ public class Medi8Editor extends EditorPart implements CommandStackListener
 			sequence.addTrack(tracks[i]);
 		}
 		
-		SequenceFigure box = new SequenceFigure(this, sequence, scaler);
-		box.setBounds(
+		sequenceFigure = new SequenceFigure(this, sequence, scaler);
+		sequenceFigure.setBounds(
 			new Rectangle(0, 0, 20, CLIP_HEIGHT));
-		base.add(box);
+		base.add(sequenceFigure);
 		base.setLayoutManager(new FlowLayout());
 		
-		MouseHandler handler = new MouseHandler (box);
-		box.addMouseListener(handler);
-		box.addMouseMotionListener(handler);
+		MouseHandler handler = new MouseHandler (sequenceFigure);
+		sequenceFigure.addMouseListener(handler);
+		sequenceFigure.addMouseMotionListener(handler);
 		
 		LayeredPane top = new LayeredPane();
 		top.setLayoutManager(new FlowLayout());
@@ -282,6 +290,8 @@ public class Medi8Editor extends EditorPart implements CommandStackListener
 
 	private void createActions(IEditorSite site) 
 	{
+		site.setSelectionProvider(this);
+
 		registry = new ActionRegistry();
 		IAction action;
 	
@@ -295,8 +305,24 @@ public class Medi8Editor extends EditorPart implements CommandStackListener
 		stackActions.add(action.getId());
 		site.getActionBars().setGlobalActionHandler(ActionFactory.REDO.getId(), action);
 	
-		//action = new SelectionAction
-		action = new DeleteAction(this);
+		// FIXME: we probably shouldn't bother using a DeleteAction here.
+		// we should just write our own actions.
+		action = new DeleteAction(this) {
+			protected boolean calculateEnabled () {
+				return ! getSelection ().isEmpty();
+			}
+			
+			public void run () {
+				ISelection sel = getSelection();
+				if (! (sel instanceof ClipSelection))
+					return;
+				ClipSelection cs = (ClipSelection) sel;
+				Clip c = cs.getClip();
+				VideoTrack track = cs.getTrack();
+				executeCommand(new InsertOrDeleteCommand("deletion", track, c));
+				sequenceFigure.clearSelection();
+			}
+		};
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		site.getActionBars().setGlobalActionHandler(ActionFactory.DELETE.getId(), action);
@@ -333,6 +359,30 @@ public class Medi8Editor extends EditorPart implements CommandStackListener
 		super.firePropertyChange(property);
 		updateActions(propertyActions);
 	}
+	
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		selectionListeners.add(listener);
+	}
+	
+	public ISelection getSelection() {
+		return currentSelection;
+	}
+	
+	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+		selectionListeners.remove(listener);
+	}
+	
+	public void setSelection(ISelection selection) {
+		currentSelection = selection;
+		SelectionChangedEvent ev = new SelectionChangedEvent(this, selection);
+		Iterator it = selectionListeners.iterator();
+		while (it.hasNext())
+		{
+			ISelectionChangedListener l = (ISelectionChangedListener) it.next();
+			l.selectionChanged(ev);
+		}
+		updateActions(selectionActions);
+	}
 
 	/** The sequence we're editing.  */
 	private Sequence sequence;
@@ -346,4 +396,12 @@ public class Medi8Editor extends EditorPart implements CommandStackListener
 	private ArrayList stackActions = new ArrayList();
 	private ArrayList selectionActions = new ArrayList();
 	private ArrayList propertyActions = new ArrayList();
+	
+	/** Listeners. */
+	private HashSet selectionListeners = new HashSet();
+	/** Selection.  */
+	private ISelection currentSelection;
+
+	/** Figure representing the sequence we display. */
+	SequenceFigure sequenceFigure;
 }
