@@ -417,7 +417,8 @@ public class Medi8Editor extends EditorPart
 			}
 
 			public boolean calculateEnabled() {
-				return sequenceFigure.getCursorTime() != null
+				return sequenceFigure != null
+					&& sequenceFigure.getCursorTime() != null
 					&& clipboardClip != null;
 			}
 

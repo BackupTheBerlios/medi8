@@ -3,6 +3,11 @@
  */
 package org.medi8.internal.core.model;
 
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.geometry.Rectangle;
+
 /**
  * This class represents a dead section of a track.  It wraps some
  * other clip and declares to the conflict manager that this section
@@ -36,6 +41,15 @@ public class DeadClip extends Clip
   {
     child.visit (v);
   }
-  
+
+  public Figure getFigure(int width, int height)
+  {
+	RectangleFigure box = new RectangleFigure();
+	box.setBounds(new Rectangle(0, 0, width, height));
+	box.setBackgroundColor(ColorConstants.darkGray);
+	box.setFill(true);
+    return box;
+  }
+
   private Clip child;
 }

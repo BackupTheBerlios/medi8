@@ -5,6 +5,11 @@ package org.medi8.internal.core.model;
 
 import java.io.PrintStream;
 
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.geometry.Rectangle;
+
 /**
  * This represents an empty clip.
  * This is ordinarily used as a placeholder to
@@ -43,5 +48,14 @@ public class EmptyClip extends Clip
 	public void visitChildren (Visitor v)
 	{
 		// Nothing.
+	}
+
+	public Figure getFigure(int width, int height)
+	{
+	  RectangleFigure box = new RectangleFigure();
+	  box.setBounds(new Rectangle(0, 0, width, height));
+	  box.setBackgroundColor(ColorConstants.lightGray);
+	  box.setFill(true);
+	  return box;
 	}
 }

@@ -6,6 +6,8 @@
  */
 package org.medi8.internal.core.model;
 
+import org.eclipse.draw2d.Figure;
+
 /**
  * A Clip is the base class for all assets.
  * Each Clip has its own timeline starting at 0 and
@@ -70,6 +72,14 @@ public abstract class Clip implements Visitable, Cloneable
 			return null;
 		}
 	}
+	
+	/**
+	 * Return a figure representing this clip.
+	 * @param width   Desired width of the resulting figure
+	 * @param height  Desired height of the resulting figure
+	 * @return
+	 */
+	public abstract Figure getFigure(int width, int height);
 	
 	protected Provenance location;
 	protected Time length;

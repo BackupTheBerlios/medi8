@@ -121,37 +121,12 @@ public class VideoTrackFigure extends TrackFigure
 			Clip clip = (Clip) iter.next();
 			Provenance prov = clip.getProvenance();
 			
-			Figure fig;
 			int width = scale.durationToUnits(clip.getLength());
-			String tip = null;
-			if (clip instanceof EmptyClip)
-			{
-				fig = createBox(ColorConstants.lightGray, width, height);
-				// This is handy while debugging.
-				tip = "Empty Clip";
-			}
-			else if (clip instanceof DeadClip)
-			{
-			  fig = createBox (ColorConstants.darkGray, width, height);
-			  tip = "Dead Clip: " + clip.getProvenance();
-			}
-			else if (clip instanceof FileClip)
-			{
-				FileClip fc = (FileClip) clip;
-				String file = fc.getFile();
-				fig = createThumbnail(file, width, height);
-				if (fig == null)
-				{
-					tip = tip + "; Fail";
-					fig = createBox(ColorConstants.lightGray, width, height);
-				}
-			}
-			else
-			{
-				fig = createBox((i % 2) == 0 ? ColorConstants.blue : ColorConstants.cyan,
-						width, height);
-				++i;
-			}
+			// This isn't best, since right now the clip toString()
+			// methods return debugging stuff.  FIXME: add a new
+			// non-debugging toString (or a flag) and use that.
+			String tip = clip.toString();
+			Figure fig = clip.getFigure(width, height);
 			if (tip == null && prov != null)
 				tip = prov.toString();
 			if (SequenceFigure.FIGURE_DEBUG)
@@ -165,25 +140,6 @@ public class VideoTrackFigure extends TrackFigure
 			figureMap.put(fig, clip);
 			now += clip.getLength().toDouble();
 		}
-	}
-	
-	private Figure createBox(Color c, int width, int height)
-	{
-		RectangleFigure box = new RectangleFigure();
-		box.setBounds(new Rectangle(0, 0, width, height));
-		box.setBackgroundColor(c);
-		box.setFill(true);
-		return box;
-	}
-	
-	private Figure createThumbnail(String file, int overallWidth, int height)
-	{
-		int width = (int) (height * ASPECT);
-		ImageFigure result = new ImageFigure();
-		result.setSize(overallWidth, height);
-		MLTClipFactory.createThumbnail(result, file, overallWidth,
-				width, height);
-		return result;
 	}
 
 	/**
@@ -344,5 +300,5 @@ public class VideoTrackFigure extends TrackFigure
 	 * Aspect ratio.  FIXME: can't be fixed, but must be property of
 	 * the underlying sequence.  This is width/height.
 	 */
-	private static double ASPECT = 4.0 / 3.0;
+	public static double ASPECT = 4.0 / 3.0;
 }

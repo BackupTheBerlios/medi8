@@ -1,5 +1,20 @@
 2005-01-03  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/Medi8Editor.java (calculateEnabled): Check
+	for non-null sequenceFigure.
+	* src/org/medi8/internal/core/model/SelectionClip.java (getFigure): New method.
+	* src/org/medi8/internal/core/model/FileClip.java (createThumbnail): New method,
+	from VideoTrackFigure.
+	(getFigure): New method.
+	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java (ASPECT):
+	Now public.
+	(createThumbnail): Removed.
+	(createBox): Removed.
+	(computeChildren): Use Clip.getFigure.
+	* src/org/medi8/internal/core/model/EmptyClip.java (getFigure): New method.
+	* src/org/medi8/internal/core/model/DeadClip.java (getFigure): New method.
+	* src/org/medi8/internal/core/model/Clip.java (getFigure): New method.
+
 	* src/org/medi8/internal/core/model/Sequence.java (updateOneEdge): Documented.
 	(createSimpleTransitionCommand): Only introduce splits when needed.
 	(updateActive): Correctly find other active clip.

@@ -3,6 +3,8 @@
  */
 package org.medi8.internal.core.model;
 
+import org.eclipse.draw2d.Figure;
+
 /**
  * This is a Clip that represents a selection of
  * some other clip.
@@ -59,6 +61,14 @@ public class SelectionClip extends Clip implements Visitable
 	public void visitChildren (Visitor v)
 	{
 		child.visit (v);
+	}
+
+	public Figure getFigure(int width, int height)
+	{
+	  // Ideally we would display frames from the
+	  // selected part of the clip.  But, currently
+	  // the MLT driver we have can't do this.
+	  return child.getFigure(width, height);
 	}
 
 	private Clip child;

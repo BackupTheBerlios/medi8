@@ -6,6 +6,14 @@
  */
 package org.medi8.internal.core.model;
 
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.ImageFigure;
+import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.medi8.core.file.MLTClipFactory;
+import org.medi8.internal.core.ui.figure.VideoTrackFigure;
+
 /**
  * @author tromey
  *
@@ -45,5 +53,29 @@ public class FileClip extends Clip implements Visitable
 	public void visitChildren (Visitor v)
 	{
 		// Nothing.
+	}
+
+	public Figure getFigure(int width, int height)
+	{
+	  Figure fig = createThumbnail(width, height);
+	  if (fig == null)
+	  {
+		RectangleFigure box = new RectangleFigure();
+		box.setBounds(new Rectangle(0, 0, width, height));
+		box.setBackgroundColor(ColorConstants.cyan);
+		box.setFill(true);
+		fig = box;
+	  }
+	  return fig;
+	}
+
+	private Figure createThumbnail(int overallWidth, int height)
+	{
+		int width = (int) (height * VideoTrackFigure.ASPECT);
+		ImageFigure result = new ImageFigure();
+		result.setSize(overallWidth, height);
+		MLTClipFactory.createThumbnail(result, file, overallWidth,
+				width, height);
+		return result;
 	}
 }
