@@ -1,3 +1,10 @@
+2004-12-28  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/internal/core/model/KillCommand.java: New file.
+	* src/org/medi8/internal/core/model/VideoTrack.java (replaceClip): New 
+	method.
+	* src/org/medi8/internal/core/model/events/ReplaceEvent.java: New file.
+
 2004-12-27  Tom Tromey  <tromey@redhat.com>
 
 	* src/org/medi8/internal/core/model/VideoTrack.java (split): New method.

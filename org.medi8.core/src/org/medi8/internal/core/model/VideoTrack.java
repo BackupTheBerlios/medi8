@@ -10,6 +10,7 @@ import org.medi8.internal.core.model.audio.AudioBus;
 import org.medi8.internal.core.model.events.AddEvent;
 import org.medi8.internal.core.model.events.DeleteEvent;
 import org.medi8.internal.core.model.events.MoveEvent;
+import org.medi8.internal.core.model.events.ReplaceEvent;
 import org.medi8.internal.core.model.events.SyntheticLengthChangeEvent;
 import org.medi8.internal.core.ui.Scale;
 import org.medi8.internal.core.ui.figure.SequenceFigure;
@@ -140,6 +141,25 @@ public class VideoTrack extends Track
 		}
 		notify(new MoveEvent(this, clip, delta));
 		return true;
+	}
+	
+	/**
+	 * Replace one clip in this track with another clip.
+	 * The new clip takes the old clip's place.
+	 * The new clip must not be longer than the old clip.
+	 * The old clip must be an element of this track.
+	 * @param oldClip
+	 * @param newClip
+	 */
+	public void replaceClip(Clip oldClip, Clip newClip)
+	{
+	  int index = findClip(oldClip);
+	  if (index == -1)
+	    throw new IllegalArgumentException("clip not found");
+	  if (oldClip.getLength().compareTo(newClip.getLength()) < 0)
+	    throw new IllegalArgumentException("new clip too long");
+	  elements.set(index, newClip);
+	  notify(new ReplaceEvent(this, oldClip, newClip));
 	}
 	
 	/**
