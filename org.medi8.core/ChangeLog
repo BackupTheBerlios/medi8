@@ -1,5 +1,10 @@
 2004-11-21  Anthony Green  <green@spindazzle.org>
 
+	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java: Clean
+	up imports.
+
+2004-11-21  Anthony Green  <green@spindazzle.org>
+
 	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java: New
 	file.
 	* src/org/medi8/internal/core/ui/figure/AutomationTrackFigure.java: 
