@@ -7,11 +7,14 @@
 package org.medi8.core.file;
 
 import java.io.PrintStream;
+import java.util.Iterator;
 
+import org.medi8.internal.core.model.Clip;
 import org.medi8.internal.core.model.EmptyClip;
 import org.medi8.internal.core.model.FileClip;
 import org.medi8.internal.core.model.SelectionClip;
 import org.medi8.internal.core.model.Sequence;
+import org.medi8.internal.core.model.Time;
 import org.medi8.internal.core.model.VideoTrack;
 import org.medi8.internal.core.model.Visitor;
 
@@ -42,7 +45,19 @@ public class XMLGeneratingVisitor extends Visitor {
 	 */
 	public void visit(VideoTrack t) {
 		out.println("<track>");
-		t.visitChildren(this);
+		Time now = new Time();
+		Iterator i = t.getIterator();
+		while (i.hasNext())
+		{
+			Clip c = (Clip) i.next();
+			if (! (c instanceof EmptyClip))
+			{
+				out.println("<clip time=\"" + now + "\">");
+				c.visit(this);
+				out.println("</clip>");
+			}
+			now = new Time(now, c.getLength());
+		}
 		out.println("</track>");
 	}
 
