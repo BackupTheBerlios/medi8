@@ -1,8 +1,5 @@
 /*
  * Created on Jul 31, 2004
- *
- * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 package org.medi8.core.file;
 
@@ -19,12 +16,12 @@ import org.medi8.internal.core.model.VideoTrack;
 import org.medi8.internal.core.model.Visitor;
 
 /**
- * @author tromey
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * This class generates an XML representation of a given sequence.
+ * It is used for saving a sequence.  The generated format is read
+ * by Medi8XMLParser; changes here must be reflected there.
  */
-public class XMLGeneratingVisitor extends Visitor {
+public class XMLGeneratingVisitor extends Visitor
+{
 	/** Where we send the XML.  */
 	PrintStream out;
 	
@@ -87,5 +84,4 @@ public class XMLGeneratingVisitor extends Visitor {
 		s.visitChildren(this);
 		out.println("</select>");
 	}
-
 }

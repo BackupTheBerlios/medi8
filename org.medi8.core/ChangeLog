@@ -1,0 +1,4 @@
+2004-11-07  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/core/file/XMLGeneratingVisitor.java: Documented.
+	* src/org/medi8/core/file/Medi8XMLParser.java: Documented.
