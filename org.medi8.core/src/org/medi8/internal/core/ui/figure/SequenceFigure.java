@@ -5,7 +5,10 @@ package org.medi8.internal.core.ui.figure;
 
 import java.util.Iterator;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Polyline;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.util.DelegatingDropAdapter;
 import org.eclipse.jface.viewers.ISelection;
@@ -45,6 +48,13 @@ public class SequenceFigure extends Figure implements IChangeListener
 		selectionBox = new SelectionFigure (this);
 		add (selectionBox);
 		selectionBox.setVisible(false);
+		
+		cursorLine = new Polyline();
+		cursorLine.setForegroundColor(ColorConstants.red);
+		cursorLine.addPoint(new Point(0, 0));
+		cursorLine.addPoint(new Point(0, 0));
+		cursorLine.setVisible(false);
+		add(cursorLine);
 		
 		setLayoutManager(new Medi8Layout(Medi8Editor.VERTICAL_GAP));
 		sequence.addChangeNotifyListener(this);
@@ -100,6 +110,23 @@ public class SequenceFigure extends Figure implements IChangeListener
 		editor.getSite().getSelectionProvider().setSelection(sel);
 	}
 	
+	/**
+	 * Set the current cursor location.
+	 * If called with a negative argument, the cursor is removed.
+	 */
+	public void setCursorLocation(int x)
+	{
+		if (x < 0)
+			cursorLine.setVisible(false);
+		else
+		{
+			// FIXME: should use a Time, not an x coordinate.
+			cursorLine.setStart(new Point(x, 0));
+			cursorLine.setEnd(new Point(x, getBounds().height));
+			cursorLine.setVisible(true);
+		}
+	}
+	
 	private void computeChildren()
 	{
 		add(topRuler);
@@ -112,6 +139,9 @@ public class SequenceFigure extends Figure implements IChangeListener
 			// FIXME: at some point we'll want to unregister as well...
 			adapter.addDropTargetListener(child.getDropListener(editor));
 		}
+		// Make sure the cursor is always on top.
+		remove(cursorLine);
+		add(cursorLine);
 	}
 
 	private Medi8Editor editor;
@@ -126,6 +156,9 @@ public class SequenceFigure extends Figure implements IChangeListener
 	
 	// Information used for selection processing.
 	private Figure selectionBox;
+	
+	// The cursor line.
+	private Polyline cursorLine;
 	
 	// This is referenced elsewhere in the package, namely by TrackFigure.
 	static Transfer fileTransfer = FileTransfer.getInstance(); 

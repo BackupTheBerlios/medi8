@@ -1,4 +1,17 @@
 2004-11-07  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/ui/figure/TrackFigure.java (mousePressed):
+	Set cursor if no clip found.
+	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java (cursorLine):
+	New field.
+	(setCursorLocation):New method.
+	(SequenceFigure): Initialize new field.
+	(computeChildren): Ensure cursor is on top.
+	* src/org/medi8/internal/core/ui/Medi8Layout.java (calculatePreferredSize):
+	Ignore Polyline.
+	(layout): Handle cursor line.
+
+2004-11-07  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/core/file/XMLGeneratingVisitor.java: Documented.
 	* src/org/medi8/core/file/Medi8XMLParser.java: Documented.

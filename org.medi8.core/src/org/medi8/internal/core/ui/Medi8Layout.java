@@ -11,7 +11,10 @@ import java.util.Iterator;
 
 import org.eclipse.draw2d.AbstractHintLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 /**
@@ -40,8 +43,9 @@ public class Medi8Layout extends AbstractHintLayout
 			IFigure fig = (IFigure) iter.next();
 			
 			// Markers and selection figures are ignored here, since they
-			// don't change the size calculation.
-			if (fig instanceof MarkerFigure || fig instanceof SelectionFigure)
+			// don't change the size calculation.  Likewise the cursor line.
+			if (fig instanceof MarkerFigure || fig instanceof SelectionFigure
+					|| fig instanceof Polyline)
 				continue;
 			
 			Dimension dim = fig.getPreferredSize(wHint, -1);
@@ -60,6 +64,7 @@ public class Medi8Layout extends AbstractHintLayout
 		Rectangle bounds = new Rectangle();
 		int y = 0;
 		Iterator iter = figure.getChildren().iterator();
+		Polyline cursor = null;
 		while (iter.hasNext())
 		{
 			IFigure fig = (IFigure) iter.next();
@@ -68,6 +73,13 @@ public class Medi8Layout extends AbstractHintLayout
 			if (fig instanceof MarkerFigure)
 			{
 				// FIXME: for now, do nothing
+				continue;
+			}
+			
+			// We handle the cursor specially later.
+			if (fig instanceof Polyline)
+			{
+				cursor = (Polyline) fig;
 				continue;
 			}
 			
@@ -91,6 +103,14 @@ public class Medi8Layout extends AbstractHintLayout
 			// Only add gap between two track elements.
 			if (! (fig instanceof TimecodeRuler))
 				y += gap;
+		}
+		
+		if (cursor != null)
+		{
+			PointList points = cursor.getPoints();
+			Point p2 = points.getLastPoint();
+			p2.y = y;
+			cursor.setEnd(p2);
 		}
 	}
 	
