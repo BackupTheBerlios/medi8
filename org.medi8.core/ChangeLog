@@ -1,3 +1,8 @@
+2005-01-05  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/internal/core/model/VideoTrack.java (addClip): Removed
+	debugging print.
+
 2005-01-04  Tom Tromey  <tromey@redhat.com>
 
 	* src/org/medi8/internal/core/model/VideoTrack.java (addClipNoEvents): 

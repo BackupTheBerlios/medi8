@@ -66,7 +66,6 @@ public class VideoTrack extends Track
 		{
 			notify(new AddEvent(this, when, clip));
 		}
-		System.out.println(result + " added to " + this+": " + clip);
 		return result;
 	}
 	
