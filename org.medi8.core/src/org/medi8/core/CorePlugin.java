@@ -75,10 +75,10 @@ public class CorePlugin extends AbstractUIPlugin {
 		  .addPropertyChangeListener (new IPropertyChangeListener() {
 		    public void propertyChange (PropertyChangeEvent event) {
 		      String prop = event.getProperty();
-		      if (prop.startsWith("/medi8/audio/"))
+		      if (prop.startsWith("/medi8/audio/port/"))
+		        AudioServer.send (prop + "/" + event.getNewValue(), null);
+		      else if (prop.startsWith("/medi8/audio/"))
 		        AudioServer.send (prop, event.getNewValue());
-		      System.out.println ("a preference setting changed");
-		      System.out.println (event.getProperty());
 		    }
 		  });
 	}

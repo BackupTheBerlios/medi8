@@ -73,7 +73,7 @@ public class AudioPreferencePage
 		} catch (Exception _) {
 		  // Do nothing.
 		}
-		System.out.println ("read " + prop.size() + " properties");
+	
 		String choices[][] = new String[prop.size()][2];
 		Enumeration e = prop.propertyNames();
 		int i = 0;

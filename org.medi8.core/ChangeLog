@@ -1,5 +1,13 @@
 2004-11-13  Anthony Green  <green@spindazzle.org>
 
+	* src/org/medi8/core/preferences/AudioPreferencePage.java 
+	(createFieldEditors): Remove debugging code.
+	* src/org/medi8/core/CorePlugin.java (propertyChange): Removed some 
+	debugging code.
+	(propertyChange): Construct new style port setting OSC messages.
+	
+2004-11-13  Anthony Green  <green@spindazzle.org>
+
 	* src/org/medi8/core/preferences/AudioPreferencePage.java (initializeDefaults): 
 	Use OSC message names for preference names (see property change listener
 	in CorePlugin.start()).
