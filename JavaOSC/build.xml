@@ -1,0 +1,42 @@
+<project name="Incerpt" default="dist" basedir=".">
+	<description>
+		Build file for JavaOSC
+	</description>
+	
+	<property name="build" location="build" />
+	<property name="dest" location="lib" />
+	<property name="lib" location="lib" />
+
+	<target name="compile" description = "Compile the source">
+		<javac srcdir="src/" destdir="build/">
+			<classpath>
+				<pathelement path="${classpath}"/>
+				<pathelement path="${lib}/junit.jar" />
+			</classpath>
+		</javac>
+	</target>
+	<target name="dist" depends="compile" description="Jar it all up">
+		<jar 
+			destfile="${dest}/javaosc.jar"
+			manifest="build-support/MainClass.mf"	
+			basedir="build"	
+		/>
+	</target>
+	<target name="test" description="Run the JUnit tests">
+		<junit printsummary="on">
+			<classpath>
+				<pathelement path="${classpath}"/>
+				<pathelement path="${lib}/junit.jar" />
+				<pathelement path="${lib}/javaosc.jar" />
+			</classpath>
+			<batchtest>
+				<fileset dir="src/">
+					<include name="**/*Test*.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	<target name="run" description="Run the JavaOSC Example">
+		<java jar="${lib}/javaosc.jar" fork="true" />
+	</target>
+</project>
