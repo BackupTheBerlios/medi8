@@ -36,14 +36,11 @@ private:
   AVCodecContext *codec_context;
                                                                                                                                                              
   int audio_stream_id;
-  int video_stream_id; 
                                                                                                                                                              
   jack_nframes_t sample_rate;
                                                                                                                                                              
   int audio_buffer_position, audio_buffer_end;
   float audio_buffer[AVCODEC_MAX_AUDIO_FRAME_SIZE * 2];
-                                                                                                                                                             
-  pthread_mutex_t mutex;
   
   ReSampleContext *rsc;
                                                                                                                                                              
