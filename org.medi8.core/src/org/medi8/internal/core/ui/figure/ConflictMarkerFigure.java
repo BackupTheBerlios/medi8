@@ -84,10 +84,10 @@ public class ConflictMarkerFigure extends MarkerFigure
       compound.add(new SplitCommand ("split", marker.track2, time));
       // Now kill the old in/out sections.
       compound.add(new KillBeforeCommand("kill before", 
-                                         firstLive ? marker.track1 : marker.track2,
+                                         firstLive ? marker.track2 : marker.track1,
                                                    time));
       compound.add(new KillAfterCommand("kill after",
-                                        firstLive ? marker.track2 : marker.track1,
+                                        firstLive ? marker.track1 : marker.track2,
                                                   time));
 
       editor.executeCommand(compound);
