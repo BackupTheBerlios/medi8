@@ -79,16 +79,22 @@ public class Medi8Editor extends EditorPart
 			ISelection sel = getSelection ();
 			return sel != null && ! getSelection ().isEmpty();
 		}
-
-		public void run () {
+		
+		public Clip performDelete ()
+		{
 			ISelection sel = getSelection();
 			if (! (sel instanceof ClipSelection))
-				return;
+				return null;
 			ClipSelection cs = (ClipSelection) sel;
 			Clip c = cs.getClip();
 			VideoTrack track = cs.getTrack();
 			executeCommand(new InsertOrDeleteCommand("deletion", track, c));
 			sequenceFigure.clearSelection();
+			return c;
+		}
+
+		public void run () {
+			performDelete ();
 		}
 	}
 
@@ -318,7 +324,7 @@ public class Medi8Editor extends EditorPart
 
 		registry = new ActionRegistry();
 		IAction action;
-	
+		
 		action = new UndoAction(this);
 		registry.registerAction(action);
 		stackActions.add(action.getId());
@@ -343,8 +349,9 @@ public class Medi8Editor extends EditorPart
 			}
 			
 			public void run () {
-				super.run ();
-				// FIXME: copy to the clipboard.
+				Clip del = performDelete ();
+				if (del != null)
+					setClipboard((Clip) del.clone ());
 			}
 		};
 		registry.registerAction(action);
@@ -369,8 +376,7 @@ public class Medi8Editor extends EditorPart
 					return;
 				ClipSelection cs = (ClipSelection) sel;
 				Clip c = cs.getClip();
-				clipboardClip = (Clip) c.clone ();
-				// FIXME: we have to update the clipboard actions
+				setClipboard((Clip) c.clone ());
 			}
 		};
 		registry.registerAction(action);
@@ -382,7 +388,6 @@ public class Medi8Editor extends EditorPart
 		propertyActions.add(action.getId());
 		site.getActionBars().setGlobalActionHandler(ActionFactory.SAVE.getId(), action);
 		
-		// FIXME: implement run().
 		//action = new RetargetAction(IWorkbenchActionConstants.BOOKMARK, "Add Bookmark...");
 		//registry.registerAction(action);
 		// FIXME: add to one of the update lists.
@@ -433,6 +438,12 @@ public class Medi8Editor extends EditorPart
 		}
 		updateActions(selectionActions);
 	}
+	
+	public void setClipboard(Clip newClip)
+	{
+		clipboardClip = newClip;
+		updateActions(clipboardActions);
+	}
 
 	/** The sequence we're editing.  */
 	private Sequence sequence;
@@ -446,6 +457,7 @@ public class Medi8Editor extends EditorPart
 	private ArrayList stackActions = new ArrayList();
 	private ArrayList selectionActions = new ArrayList();
 	private ArrayList propertyActions = new ArrayList();
+	private ArrayList clipboardActions = new ArrayList();
 	
 	/** Listeners. */
 	private HashSet selectionListeners = new HashSet();
