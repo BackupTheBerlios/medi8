@@ -61,7 +61,14 @@ public class TrackFigure extends Figure
 		TrackMouseHandler handler = new TrackMouseHandler ();
 		this.addMouseMotionListener(handler);
 		this.addMouseListener(handler);
-		
+
+		// Set our height before computing children;
+		// otherwise we could end up with a strangely sized
+		// clip image.
+		Dimension size = getSize();
+		size.height = Medi8Editor.CLIP_HEIGHT;
+		setSize(size);
+
 		computeChildren();
 		setBackgroundColor(ColorConstants.lightGray);
 		setForegroundColor(ColorConstants.lightGray);
@@ -214,7 +221,7 @@ public class TrackFigure extends Figure
 				offset += dim.width;
 			}
 			
-			return new Dimension(offset, 48); // FIXME
+			return new Dimension(offset, Medi8Editor.CLIP_HEIGHT);
 		}
 
 		/* (non-Javadoc)
@@ -234,7 +241,7 @@ public class TrackFigure extends Figure
 				bounds.x = offset;
 				bounds.y = 0;
 				bounds.width = dim.width;
-				bounds.height = 48;  // FIXME
+				bounds.height = Medi8Editor.CLIP_HEIGHT;
 				fig.setBounds(bounds);
 				offset += dim.width;
 			}
