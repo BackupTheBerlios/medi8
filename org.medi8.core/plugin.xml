@@ -73,13 +73,13 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            name="Monitor"
-            id="Monitor">
+            name="Medi8"
+            id="Medi8">
       </category>
       <view
             name="Monitor"
             icon="medi8.png"
-            category="Monitor"
+            category="Medi8"
             class="org.medi8.internal.core.ui.MonitorView"
             id="org.medi8.internal.core.ui.MonitorView">
       </view>
