@@ -1,3 +1,44 @@
+2004-11-12  Anthony Green  <green@spindazzle.org>
+
+	* audio/m8ainfo/m8ainfo.cc, audio/m8info/Makefile: New files. 
+	* audio/Makefile: Add m8ainfo dir.
+	
+2004-11-11  Anthony Green  <green@spindazzle.org>
+
+	* audio/m8apley/m8aplay.cc (main): Create OSC server thread and 
+	handle volume messages.
+	
+2004-11-11  Anthony Green  <green@spindazzle.org>
+
+	* util/log.hh: Fix MEDI8_LOG_DEBUG reference.
+
+2004-11-10  Anthony Green  <green@spindazzle.org>
+
+	* util/Makefile, log.hh, log.cc: New files.
+
 2004-11-10  Anthony Green  <green@spindazzle.org>
 
 	* Makefile: Add util directory.
+	
+2004-11-10  Anthony Green  <green@spindazzle.org>
+
+	* video/Makefile (SUBDIRS): Add consumer_monitor.
+	
+2004-11-10  Anthony Green  <green@spindazzle.org>
+
+	* video/m8vplay/log.cc (level_names): Add ERROR. 
+	* video/m8vplay/m8vplay.cc (main): Read command line args and 
+	open up an SDL window. 
+	* video/m8vplay/log.hh (log_error, MEDI8_LOG_ERROR): New error 
+	logging support.
+
+2004-11-10  Anthony Green  <green@spindazzle.org>
+
+	* video/consumer_monitor/Makefile, 
+	video/consumer_monitor/consumer_monitor.h, 
+	video/consumer_monitor/consumer_monitor.c, 
+	video/consumer_monitor/factory.c: New files. 
+	
+2004-11-09  Anthony Green  <green@spindazzle.org>
+
+	* m8vplay/consumer_thumb/README: New file.

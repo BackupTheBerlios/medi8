@@ -1,4 +1,4 @@
-SUBDIRS = m8aplay 
+SUBDIRS = m8aplay m8ainfo
 
 all:
 	for dir in $(SUBDIRS); do \

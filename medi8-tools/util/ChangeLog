@@ -1,7 +1,0 @@
-2004-11-11  Anthony Green  <green@spindazzle.org>
-
-	* log.hh: Fix MEDI8_LOG_DEBUG reference.
-
-2004-11-10  Anthony Green  <green@spindazzle.org>
-
-	* Makefile, log.hh, log.cc: New files.

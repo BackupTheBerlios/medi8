@@ -1,9 +1,0 @@
-2004-11-10  Anthony Green  <green@spindazzle.org>
-
-	* log.cc (level_names): Add ERROR. 
-	* m8vplay.cc (main): Read command line args and open up an SDL window. 
-	* log.hh (log_error, MEDI8_LOG_ERROR): New error logging support.
-
-2004-11-09  Anthony Green  <green@spindazzle.org>
-
-	* m8vplay.cc (main): 
