@@ -11,7 +11,7 @@ all: m8vplay
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 m8vplay: $(OBJECTS)
-	g++ -o m8vplay $(OBJECTS) -lmlt++ -lmlt
+	g++ -o m8vplay $(OBJECTS) -lmlt++ -lmlt -lSDL
 
 clean:
 	rm -f m8vplay *.o *~

@@ -22,14 +22,50 @@
 #include "log.hh"
 #include "m8vplay.hh"
 
+#include <stdlib.h>
+#include <unistd.h>
+#include <SDL/SDL.h>
+
 int
 main (int argc, char *argv[])
 {
 	// FIXME do something smarter with log data.
 	init_logger (MEDI8_LOG_DEBUG, "/tmp/m8vplay.log");
- 
-	m8vplay player;
+
+	if (argc != 3)
+	{
+	  log_error ("Usage: m8vplay WIDTH HEIGHT\n");
+	  exit (1);
+	}
+	
+	log_debug ("Environment variable SDL_WINDOWID=%s", getenv ("SDL_WINDOWID"));
+	
+	int width = atoi (argv[1]);
+	int height = atoi (argv[2]);
+    
+  log_debug ("width = %d", width);
+  log_debug ("height = %d", height);
+    	                                                                            
+  if (SDL_Init (SDL_INIT_VIDEO) < 0)
+    {
+      log_error ("Unable to init SDL: %s", SDL_GetError ());
+      // FIXME how to fail gracefully?
+      // exit (1);
+    }
+  atexit (SDL_Quit);
+                                                                                
+  SDL_Surface *screen;
+  screen = SDL_SetVideoMode (width, height, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+  if (screen == NULL)
+    {
+      log_error ("Unable to set %dx%d video: %s",
+               	 width, height, SDL_GetError ());
+      // exit (1);
+    }
+    
+  m8vplay player;
 	
 	player.start();
+
 	player.wait_for_shutdown();
 }

@@ -28,14 +28,18 @@
 
 typedef enum {
   MEDI8_LOG_DEBUG = 0,
-  MEDI8_LOG_NONE = 1
+  MEDI8_LOG_ERROR = 1,
+  MEDI8_LOG_NONE = 2
 } log_level_t;
 
 extern log_level_t log_level;
 
 #define log_debug(...) \
   ((log_level <= LOG_DEBUG) ? \
-   log(LOG_DEBUG, ## __VA_ARGS__) : 0)
+   log(MEDI8_LOG_DEBUG, ## __VA_ARGS__) : 0)
+
+#define log_error(...) \
+  log(MEDI8_LOG_ERROR, ## __VA_ARGS__)
 
 int
 log (log_level_t level, const char *fmt, ...)
