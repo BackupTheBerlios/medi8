@@ -33,6 +33,7 @@ public class SplitCommand extends Command
    */
   public void execute ()
   {
+    // System.out.println("adding split to track " + track + " at " + when);
     track.split(when);
   }
   

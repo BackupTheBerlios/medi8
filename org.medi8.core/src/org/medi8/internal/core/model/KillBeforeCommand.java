@@ -21,6 +21,7 @@ public class KillBeforeCommand extends KillCommand
   {
     if (original == null)
       original = track.findClipBefore(when);
+    // System.out.println("KillBeforetrack " + track + " at " + when + " clip "+ original);
     super.execute ();
   }
   

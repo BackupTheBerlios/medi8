@@ -127,21 +127,33 @@ public class Sequence implements Visitable
       Time t1 = track1.findClipTime(c1);
       Clip c2 = track2.findClipAfter(time);
       Time t2 = track2.findClipTime(c2);
+      // These are true if we should split the corresponding clip.
+      boolean split1 = ! time.equals(t1);
+      boolean split2 = ! time.equals(t2);
       // 'firstLive' is true if clip 1 starts before clip 2.
       boolean firstLive = t1.compareTo(t2) <= 0;
+      
+      // System.out.println("time = " + time+"; t1 = " + t1 + "; t2 = " +t2);
+      // System.out.println("track1 = " +track1 + "; clip1 = " + c1);
+      // System.out.println("track2 = " +track2 + "; clip2 = " + c2);
+      // System.out.println("s1 = " + split1 + "; s2 = " + split2);
 
       // First introduce splits into the tracks.
-      compound.add(new SplitCommand ("split", track1, time));
-      compound.add(new SplitCommand ("split", track2, time));
+      if (split1)
+        compound.add(new SplitCommand ("split", track1, time));
+      if (split2)
+        compound.add(new SplitCommand ("split", track2, time));
       // Now kill the old in/out sections.  The clip which
       // starts earlier gets the KillAfter command; the clip
       // which starts later gets the KillBefore command.
-      compound.add(new KillBeforeCommand("kill before", 
-                                         firstLive ? track2 : track1,
-                                                   time));
-      compound.add(new KillAfterCommand("kill after",
-                                        firstLive ? track1 : track2,
-                                                  time));
+      if ((firstLive && split2) || (! firstLive && split1))
+        compound.add(new KillBeforeCommand("kill before",
+                                           firstLive ? track2 : track1,
+                                                     time));
+      if ((firstLive && split1) || (! firstLive && split2))
+        compound.add(new KillAfterCommand("kill after",
+                                          firstLive ? track1 : track2,
+                                                    time));
 
       return compound;
 	}
@@ -189,6 +201,12 @@ public class Sequence implements Visitable
 	  return result;
 	}
 	
+	// This updates one edge by advancing its corresponding
+	// iterator.  This method knows how to skip empty and dead
+	// clips.  When it returns, the indicated iterator will be
+	// advanced, and the indicated element of CURRENT will be
+	// the next relevant edge for that track.  If there is no
+	// next edge, the element of CURRENT will be null.
 	void updateOneEdge (int slot, Iterator[] iterators, Edge[] current)
 	{
 	  if (iterators[slot] != null)
@@ -246,7 +264,6 @@ public class Sequence implements Visitable
 	  {
 	    if (starts[i])
 	    {
-	      active[i] = current[i];
 	      if (anyActive)
 	      {
 	        VideoTrack other = null;
@@ -258,10 +275,12 @@ public class Sequence implements Visitable
 	            break;
 	          }
 	        }
-	        // FIXME: throw exception if other==null.
+	        if (other == null)
+	          throw new NullPointerException("couldn't find conflicting track");
 	        markers.add (new ConflictMarker ((VideoTrack) tracks.get(i), other,
-	                                         active[i].when));
+	                                         current[i].when));
 	      }
+	      active[i] = current[i];
 	      updateOneEdge(i, iterators, current);
 	    }
 	  }
@@ -283,6 +302,7 @@ public class Sequence implements Visitable
 	  Edge[] active = new Edge[tracks.size ()];
 	  Edge[] currentEdges = new Edge[tracks.size ()];
 
+	  // Set up the initial edges for each track.
 	  for (int i = 0; i < currentEdges.length; ++i)
 	    updateOneEdge(i, iterators, currentEdges);
 
