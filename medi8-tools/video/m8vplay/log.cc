@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-log_level_t log_level = LOG_NONE;
+log_level_t log_level = MEDI8_LOG_NONE;
 
 static FILE *log_file = 0;
 
@@ -42,7 +42,7 @@ static const char *level_names[] = { "DEBUG: " };
 int
 log (log_level_t level, const char *fmt, ...)
 {
-  assert (level < LOG_NONE);
+  assert (level < MEDI8_LOG_NONE);
   va_list ap;
   va_start (ap, fmt);
   fputs (level_names[level], log_file);
