@@ -52,6 +52,12 @@ public class SequenceFigure extends Figure implements IChangeListener
 		topRuler.setScale(scale);
 		computeChildren();
 	}
+	
+	public void setSequence(Sequence s)
+	{
+		this.sequence = s;
+		computeChildren();
+	}
 
 	public boolean useLocalCoordinates()
 	{

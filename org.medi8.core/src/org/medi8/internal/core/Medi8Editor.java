@@ -6,6 +6,7 @@ package org.medi8.internal.core;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.EventObject;
@@ -54,6 +55,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.EditorPart;
+import org.medi8.core.file.Medi8XMLParser;
 import org.medi8.core.file.XMLGeneratingVisitor;
 import org.medi8.internal.core.model.Clip;
 import org.medi8.internal.core.model.InsertOrDeleteCommand;
@@ -64,6 +66,9 @@ import org.medi8.internal.core.ui.ClipSelection;
 import org.medi8.internal.core.ui.MouseHandler;
 import org.medi8.internal.core.ui.Scale;
 import org.medi8.internal.core.ui.figure.SequenceFigure;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  */
@@ -193,7 +198,15 @@ public class Medi8Editor extends EditorPart
 		{
 			InputStream is = file.getContents(false);
 			setPartName(file.getName());
-			// FIXME: load the file here.
+			
+			XMLReader xr = XMLReaderFactory.createXMLReader();
+			Medi8XMLParser parser = new Medi8XMLParser();
+			xr.setContentHandler(parser);
+			xr.setErrorHandler(parser);
+			xr.parse(new InputSource(new InputStreamReader(is)));
+			
+			sequence = parser.getSequence();
+			
 			// FIXME: add a resource change listener for this file
 			is.close(); 
 		}
@@ -262,12 +275,15 @@ public class Medi8Editor extends EditorPart
 		Scale scaler = new Scale();
 
 		// Make some initial tracks.
-		sequence = new Sequence();
-		VideoTrack[] tracks = new VideoTrack[5];
-		for (int i = 0; i < tracks.length; ++i)
+		if (sequence == null)
 		{
-			tracks[i] = new VideoTrack();
-			sequence.addTrack(tracks[i]);
+			sequence = new Sequence();
+			VideoTrack[] tracks = new VideoTrack[5];
+			for (int i = 0; i < tracks.length; ++i)
+			{
+				tracks[i] = new VideoTrack();
+				sequence.addTrack(tracks[i]);
+			}
 		}
 		
 		sequenceFigure = new SequenceFigure(this, sequence, scaler);

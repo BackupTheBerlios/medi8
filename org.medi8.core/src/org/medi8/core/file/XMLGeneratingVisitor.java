@@ -75,6 +75,7 @@ public class XMLGeneratingVisitor extends Visitor {
 	 */
 	public void visit(FileClip f) {
 		out.println("<file name=\"" + f.getFile() + "\" "
+				+ "length=\"" + f.getLength() + "\" "
 				+ "subpart=\"" + f.getPart() + "\"/>");
 	}
 	
