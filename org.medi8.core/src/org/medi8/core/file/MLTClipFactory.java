@@ -149,15 +149,15 @@ public class MLTClipFactory
 		  	  {
 		  	  	if (c < width * 3)
 		  	  	  {
-		  	  	  	data.data[l * overallWidth + c] = tdata.data[l * width + c];
-		  	  	  	data.data[l * overallWidth + c + 1] = tdata.data[l * width + c + 1];
-		  	  	  	data.data[l * overallWidth + c + 2] = tdata.data[l * width + c + 2];
+		  	  	  	data.data[l * overallWidth * 3 + c] = tdata.data[l * width * 3 + c];
+		  	  	  	data.data[l * overallWidth * 3 + c + 1] = tdata.data[l * width * 3 + c + 1];
+		  	  	  	data.data[l * overallWidth * 3 + c + 2] = tdata.data[l * width * 3 + c + 2];
 		  	  	  }
 		  	  	else
 		  	  	  {
-	  	  	  		data.data[l * overallWidth + c] = 30;
-	  	  	  		data.data[l * overallWidth + c + 1] = 78;
-	  	  	  		data.data[l * overallWidth + c + 2] = 23;
+	  	  	  		data.data[l * overallWidth * 3 + c] = 30;
+	  	  	  		data.data[l * overallWidth * 3 + c + 1] = 78;
+	  	  	  		data.data[l * overallWidth * 3 + c + 2] = 23;
 		  	  	  }
 		  	  }
 		  }
