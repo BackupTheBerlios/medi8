@@ -1,5 +1,7 @@
 2004-11-13  Tom Tromey  <tromey@redhat.com>
 
+	* themes/default/knob48/.xvpics: Removed.
+
 	* src/org/medi8/internal/core/ui/Medi8Layout.java (Medi8Layout): Added scale
 	argument.
 	(scale): New field.
