@@ -1,9 +1,13 @@
 all: .repository-stamp
+	make -C util all
+	make -C audio all
 	make -C video all
 
 clean:
 	@rm -rf modules
 	@rm -f .repository-stamp *~
+	make -C util clean
+	make -C audio clean
 	make -C video clean
 
 # MLT doesn't support multiple repositories currently.
