@@ -1,0 +1,10 @@
+The consumer generates a sequence of thumbnail images for a give sequence
+of frame numbers.
+
+The following consumer properties are used:
+
+	width		- width of the requested image
+	height		- height of the requested image
+	frames		- a comma delimited list of frame numbers
+
+The resulting image data is written to stdout as a sequence of PPM images.
