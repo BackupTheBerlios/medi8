@@ -2,6 +2,12 @@
 
 	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java: Clean
 	up imports.
+	* src/org/medi8/internal/core/ui/widget/KnobWidget.java: Ditto.
+	* src/org/medi8/internal/core/ui/figure/TimecodeRuler.java: Ditto.
+	* src/org/medi8/internal/core/ui/figure/ConflictMarkerFigure.java: Ditto.
+	* src/org/medi8/internal/core/ui/Medi8Layout.java: Ditto.
+	* src/org/medi8/core/preferences/PrimaryPreferencePage.java: Ditto.
+	* src/org/medi8/core/Medi8ProjectNature.java: Ditto.
 	* src/org/medi8/internal/core/Medi8Editor.java: Ditto.	
 	* src/org/medi8/core/file/AudioServer.java: Ditto.
 
