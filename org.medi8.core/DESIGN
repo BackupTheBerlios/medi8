@@ -1,0 +1,108 @@
+A movie project, like other projects, has a number
+of files in it.
+
+A sequence file, suffix ".seq", holds a single sequence.
+Conceptually a sequence is like a scene of a movie.
+A sequence file can be treated like any media resource
+by other files (or projects if it is exported).  So, for instance,
+it can be imported into another sequence, selected from,
+clipped, etc.
+
+A sequence file displays in its own editor.
+This editor shows a bunch of different Tracks,
+stacked vertically, and controlled by a single horizontal
+scrollbar and working on the same timeline.
+
+A Track is just a convenient timeline in which to drop
+things.  Conceptually, all the Tracks in a sequence file
+play simultaneously.  If two tracks have content at
+a given moment in time, this is a conflict that must be
+resolved.  Conflicts will appear to the user in the Task
+list, and also as markers in the sequence editor. 
+
+When there is a conflict between two Tracks, the
+user can resolve it in a few ways.  He can delete
+content from one of the tracks (either removing the 
+clip entirely, or removing some selection from it).
+Or, more commonly, he could apply a transition
+effect spanning the duration of the conflict.
+
+A sequence file also holds information about audio
+tracks.  Like video tracks, audio tracks appear as stacked
+widgets in the editor and all tracks play simultaneously.
+Their signals are all mixed into final audio output.
+There may be different kinds of audio sequences, 
+including raw wave data, and midi events.   In addition to the
+raw audio data, audio tracks contain sequences of events
+for manipulating their output.  For instance, volume, balance,
+and muting are all dynamically adjusted programmatically,
+or by recording events along with the underlying audio 
+data.  And finally, each  audio track can be processed 
+by an effect bank, which  consisits of a series of 
+special plugins which manipulate the audio data in 
+order.  These include filter, delay, and  reverb effects.   
+Parameters of these effects are all 
+dynamically adjusted programmatically,
+or through recorded events.
+
+Media files can also appear in the project.  These are
+always read-only.  If you want to edit them, you create
+a new sequence file and drag-and-drop a media file
+into a track.  (we should have a special drop target that
+will auto-create a new track.)  It isn't possible to drop
+a media file on a track where it would overlap with content
+already on that track (someday we could lift this and allow
+in-track editing).
+
+we'll have an explorer view like the PDE, which will
+show all the sequences and media files in the project.  we'll
+show the outline view of a media file here; you can use the arrow
+next to the name to see internal structure, like the video and
+audio elements making up the file.  That way you can select just
+the ones you want to import.  If the file has other structure (e.g.,
+it has been separated into labelled scenes already), then this will
+also be visible here.
+
+we don't specify how media files end up in a project; this is an
+eclipse platform thing.  I anticipate a special team plugin for
+large movies that knows how to contact the network server
+and keep proxies to avoid copying large data (or something
+similar) -- see the linked resources feature.
+
+===============================================
+
+Internally we'll use a model-view-controller paradigm.
+
+Sequence will be the class representing a single sequence
+file.  It will consist of a number of Track objects, plus some meta-data.
+A Track will consist of a number of Clip objects at different time slots.
+
+Menus and buttons and such will work by constructing new
+objects that manipulate the model.  The model, in turn, will send out
+notifications so that the UI can redisplay as appropriate.
+
+Also unsure how transitions will be handled.
+Perhaps by editing the Track objects to remove parts of each
+Clip and replace them with a Transition?
+Ideally the user could easily change what Transition is in 
+use at a given point.
+
+With this model how will the user apply some global filter
+to the whole sequence?  e.g. if we want a black and white
+sequence from color source?  Or if we want to blur or sharpen,
+change the FPS, etc?  (One option is to require a new sequence
+file for each global filter, but that doesn't seem very convenient.)
+
+===============================================
+
+Building the Project
+
+A project might have many internal dependencies: sequences
+can depend on media files and also on other sequences.
+So, medi8 will contribute a builder.
+
+For any given sequence, we'll invisibly cache the results of
+running the sequence.  When a result is needed, we'll first
+ensure that the cached copy is up-to-date.  When a sequence
+is needed elsewhere, we'll invisibly replace references to the
+sequence with references to the cache file.
