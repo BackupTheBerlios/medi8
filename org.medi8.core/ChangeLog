@@ -1,3 +1,11 @@
+2004-11-16  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/internal/core/ui/figure/MarkerFigure.java (time): Now
+	protected.
+	* src/org/medi8/internal/core/ui/figure/ConflictMarkerFigure.java: New file.
+	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java (computeChildren):
+	Use ConflictMarkerFigure.
+
 2004-11-16  Anthony Green  <green@spindazzle.org>
 
 	* src/org/medi8/internal/core/ui/AudioBusView.java: Rename from 

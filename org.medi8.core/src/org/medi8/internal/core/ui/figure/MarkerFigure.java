@@ -28,7 +28,6 @@ public class MarkerFigure extends ImageFigure
 	{
 		this.time = time;
 		setImage(getDefaultImage());
-		setToolTip(new Label ("Conflict between tracks"));
 	}
 
 	/**
@@ -81,7 +80,7 @@ public class MarkerFigure extends ImageFigure
 	  return time;
 	}
 
-	private Time time;
+	protected Time time;
 	
 	private Image getDefaultImage ()
 	{
