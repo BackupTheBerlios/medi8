@@ -1,3 +1,27 @@
+2004-11-14  Anthony Green  <green@spindazzle.org>
+
+	* audio/m8aplay/playlist.hh: New file.
+	* audio/m8aplay/playlist.cc (playlist::add): New file.
+	* audio/m8aplay/m8aplay.cc (process): Pull data from the master bus.
+	(master_bus): New static.
+	Include bus.hh.
+	(sync_callback): New function.
+	* audio/m8aplay/bus.hh: New file.
+	* audio/m8aplay/bus.cc: New file.
+	* audio/m8aplay/Makefile: Add ffmpef_file_reader.cc. 
+	Link with ffmpeg libraries.
+	Add bus.cc.
+	Add playlist.cc.
+	* audio/m8aplay/ffmpeg_file_reader.cc: New file.
+	* audio/m8aplay/ffmpeg_file_reader.hh: New file.
+	* audio/m8aplay/audio_source.hh (audio_source): New file.
+
+2004-11-13  Anthony Green  <green@spindazzle.org>
+
+	* audio/m8aplay/m8aplay.cc (volume_handler): Clean up debug messages.
+	(set_right_port): Ditto.
+	(set_left_port): Ditto.
+	
 2004-11-13  Anthony Green  <green@spindazzle.org>
 
 	* util/log.hh (log_warning): New macro. 
