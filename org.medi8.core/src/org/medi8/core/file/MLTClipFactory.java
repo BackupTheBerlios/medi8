@@ -30,15 +30,18 @@ public class MLTClipFactory
 	{
 	}
 	
+  // We use this property when running in the build workspace (for
+  // development only).	static String repository;
+	static String repository; 
+	static {
+	    String workspace = System.getProperty ("medi8.workspace");
+	    repository = "";
+	    if (workspace != null)
+	    	repository = "MLT_REPOSITORY=" + workspace + "/medi8-tools/modules";
+	}
+	
 	public static Clip createClip(File file)
 	{
-	  // We use this property when running in the build workspace (for
-	  // development only).
-	  String workspace = System.getProperty ("medi8.workspace");
-	  String repository = "";
-	  if (workspace != null)
-	    repository = "MLT_REPOSITORY=" + workspace + "/medi8-tools/modules";
-	  
 		try
 		{
 			Process p = Runtime.getRuntime().exec(new String[] {
@@ -89,15 +92,75 @@ public class MLTClipFactory
 	{
 		byte[] bytes = new byte[overallWidth * height * 3];
 		ImageData data = new ImageData(overallWidth, height, 24, pd, 3, bytes);
+		byte[] tbytes = new byte[width * height * 3];
+		ImageData tdata = new ImageData (width, height, 24, pd, 3, tbytes);
 		Process p = null;
-		
-		// FIXME Fill this with something silly for now.
-		for (int i = 0; i < data.data.length;)
+	
+		try
 		{
-	    data.data[i++] = 30;
-	    data.data[i++] = 78;	
-	    data.data[i++] = 23;
-	  }
+			p = Runtime.getRuntime().exec(new String[] {
+					"inigo",
+					file.toString(),
+					"-consumer",
+					"thumb",
+					"width=" + width,
+					"height=" + height,
+					// TODO this is a comman delimited list of frames.
+					// For now let's just grab the first.
+					"frames=0"
+			},
+				new String[] {
+			        repository,
+			        "MLT_NORMALISATION=NTSC"
+			});
+			
+			Properties prop = new Properties();
+			
+			DataInputStream dis = new DataInputStream (p.getInputStream ());
+			String line = dis.readLine ();
+			// FIXME check that this was "P6"
+			line = dis.readLine ();
+			// FIXME check that this was WIDTH x HEIGHT
+			line = dis.readLine ();
+			// FIXME check that this was 255.
+			
+			// Now read the image data.
+			dis.readFully (tdata.data);
+		}
+		catch (IOException _)
+		{
+		  if (p != null)
+		    p.destroy ();
+		  return;
+		}                
+		try
+    {
+      int res = p.waitFor();
+    }
+		catch (InterruptedException _)
+		{
+		  p.destroy();
+		}
+
+		// FIXME Fill this with something silly for now.
+		for (int l = 0; l < height; l++)
+		  {
+		  	for (int c = 0; c < overallWidth * 3; c += 3)
+		  	  {
+		  	  	if (c < width * 3)
+		  	  	  {
+		  	  	  	data.data[l * overallWidth + c] = tdata.data[l * width + c];
+		  	  	  	data.data[l * overallWidth + c + 1] = tdata.data[l * width + c + 1];
+		  	  	  	data.data[l * overallWidth + c + 2] = tdata.data[l * width + c + 2];
+		  	  	  }
+		  	  	else
+		  	  	  {
+	  	  	  		data.data[l * overallWidth + c] = 30;
+	  	  	  		data.data[l * overallWidth + c + 1] = 78;
+	  	  	  		data.data[l * overallWidth + c + 2] = 23;
+		  	  	  }
+		  	  }
+		  }
 		
 		Image img = new Image(null, data);
 		container.setImage(img);
