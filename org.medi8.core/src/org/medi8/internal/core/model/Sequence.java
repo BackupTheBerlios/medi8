@@ -127,12 +127,15 @@ public class Sequence implements Visitable
       Time t1 = track1.findClipTime(c1);
       Clip c2 = track2.findClipAfter(time);
       Time t2 = track2.findClipTime(c2);
+      // 'firstLive' is true if clip 1 starts before clip 2.
       boolean firstLive = t1.compareTo(t2) <= 0;
 
       // First introduce splits into the tracks.
       compound.add(new SplitCommand ("split", track1, time));
       compound.add(new SplitCommand ("split", track2, time));
-      // Now kill the old in/out sections.
+      // Now kill the old in/out sections.  The clip which
+      // starts earlier gets the KillAfter command; the clip
+      // which starts later gets the KillBefore command.
       compound.add(new KillBeforeCommand("kill before", 
                                          firstLive ? track2 : track1,
                                                    time));
@@ -246,8 +249,17 @@ public class Sequence implements Visitable
 	      active[i] = current[i];
 	      if (anyActive)
 	      {
-	        // FIXME: search for the other track.
-	        markers.add (new ConflictMarker ((VideoTrack) tracks.get(i), null,
+	        VideoTrack other = null;
+	        for (int j = 0; j < active.length; ++j)
+	        {
+	          if (active[j] != null)
+	          {
+	            other = (VideoTrack) tracks.get(j);
+	            break;
+	          }
+	        }
+	        // FIXME: throw exception if other==null.
+	        markers.add (new ConflictMarker ((VideoTrack) tracks.get(i), other,
 	                                         active[i].when));
 	      }
 	      updateOneEdge(i, iterators, current);
