@@ -3,6 +3,9 @@ package org.medi8.core;
 import org.eclipse.ui.plugin.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.resources.*;
+import org.medi8.core.file.AudioServer;
+import org.osgi.framework.BundleContext;
+
 import java.util.*;
 
 /**
@@ -60,4 +63,21 @@ public class CorePlugin extends AbstractUIPlugin {
 	public ResourceBundle getResourceBundle() {
 		return resourceBundle;
 	}
+	
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		// Start the audio server.
+		AudioServer.start ();
+	}
+	
+	public void stop(BundleContext context) throws Exception {
+		try {
+      // Shutdown the audio server. 
+		  AudioServer.stop ();
+		} 
+		finally {
+			super.stop(context);
+		}
+	}
+
 }

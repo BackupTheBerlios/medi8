@@ -3,6 +3,7 @@
 	<name>org.medi8.core</name>
 	<comment></comment>
 	<projects>
+		<project>JavaOSC</project>
 		<project>medi8-tools</project>
 	</projects>
 	<buildSpec>

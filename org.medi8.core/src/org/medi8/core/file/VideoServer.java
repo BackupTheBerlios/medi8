@@ -22,13 +22,7 @@ import org.eclipse.swt.widgets.Shell;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class VideoServer 
-{
-    /* FIXME what's a good way to identify the location of the server
-     * process??  Hardcode for now - but this sucks.
-     */
-  private static final String server_name
-    = "/home/green/medi8/workspace/medi8-tools/video/m8vplay/m8vplay";
-  
+{ 
   Process process = null;
     
   /* This socket we use to talk to the server.  */

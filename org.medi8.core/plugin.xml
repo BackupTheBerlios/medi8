@@ -91,6 +91,21 @@
       	    id="org.medi8.internal.core.ui.AudioEffectView">
       </view>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.medi8.core.preferences.PrimaryPreferencePage"
+            name="Medi8"
+            id="org.medi8.core.preferences.PrimaryPreferencePage"/>
+      <page
+            class="org.medi8.core.preferences.AudioPreferencePage"
+            category="org.medi8.core.preferences.PrimaryPreferencePage"
+            name="Audio"
+            id="org.medi8.core.preferences.AudioPreferencePage"/>
+   </extension>
+   <extension
+         point="org.eclipse.core.filebuffers.annotationModelCreation">
+   </extension>
                                                                                 
 
 </plugin>

@@ -1,3 +1,14 @@
+2004-11-12  Anthony Green  <green@spindazzle.org>
+
+	* src/org/medi8/internal/core/ui/AudioEffectsView.java (createPartControl):
+	Add placeholders for volume and balance.
+	* src/org/medi8/core/file/AudioServer.java (start): New method.
+	(stop): Make static.
+	(AudioServer): Reformat.
+	* src/org/medi8/core/preferences/AudioPreferencePage.java: New file.
+	* src/org/medi8/core/preferences/PrimaryPreferencePage.java: New file. 
+	* plugin.xml: Add preferences pages.
+
 2004-11-11  Anthony Green  <green@spindazzle.org>
 
 	* src/org/medi8/core/file/AudioServer.java: New file.
