@@ -1,10 +1,13 @@
 2004-11-11  Anthony Green  <green@spindazzle.org>
 
+	* src/org/medi8/core/file/AudioServer.java: New file.
+	* src/org/medi8/core/file/VideoServer.java: Delete unused static server_name.
 	* src/org/medi8/core/Medi8Perspective.java (createInitialLayout): Add
 	audio effects view in a folder.
 	* src/org/medi8/internal/core/ui/AudioEffectsView.java: New file.
 	* src/org/medi8/internal/core/ui/widget/KnobWidget.java: New file.
 	* plugin.xml: Add audio effects view.
+	Rename "Audio Effects" to "Audio".
 
 2004-11-10  Anthony Green  <green@spindazzle.org>
 
