@@ -1,3 +1,7 @@
+2004-11-23  Anthony Green  <green@spindazzle.org>
+
+	* plugin.xml: Fix reference to AudioBusView.
+
 2004-11-21  Anthony Green  <green@spindazzle.org>
 
 	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java: Clean

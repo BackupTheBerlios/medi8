@@ -90,8 +90,8 @@
       	    name="Audio"
       	    icon="medi8.png"
       	    category="Medi8"
-      	    class="org.medi8.internal.core.ui.AudioEffectsView"
-      	    id="org.medi8.internal.core.ui.AudioEffectView">
+      	    class="org.medi8.internal.core.ui.AudioBusView"
+      	    id="org.medi8.internal.core.ui.AudioBusView">
       </view>
    </extension>
    <extension
