@@ -1,3 +1,8 @@
+2004-11-09  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/core/file/OpenVIPClipFactory.java: Removed.
+	* src/org/medi8/core/file/OpenVIPNetworkVisitor.java: Likewise.
+
 2004-11-08  Tom Tromey  <tromey@redhat.com>
 
 	* src/org/medi8/internal/core/ui/figure/TrackFigure.java (TrackFigure):

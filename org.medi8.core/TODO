@@ -11,7 +11,7 @@ X Write new markers (maybe new types)
 X Have Medi8layout know about them
 
 Simple Commands
-* Cut - send operation to sequence, store returned clip somewhere
+X Cut - send operation to sequence, store returned clip somewhere
 X Copy - store returned clip
        [ this is implemented as Clip.clone() ]
 X Paste - drop the stored clip at a given point
