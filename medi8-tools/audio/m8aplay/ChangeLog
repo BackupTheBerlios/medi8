@@ -1,5 +1,0 @@
-2004-11-11  Anthony Green  <green@spindazzle.org>
-
-	* m8aplay.cc (main): Create OSC server thread and handle volume
-	messages.
-	
