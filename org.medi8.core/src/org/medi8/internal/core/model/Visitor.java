@@ -6,6 +6,8 @@
  */
 package org.medi8.internal.core.model;
 
+import org.medi8.internal.core.model.audio.AudioBus;
+
 /**
  * @author tromey
  *
@@ -14,6 +16,8 @@ package org.medi8.internal.core.model;
  */
 public abstract class Visitor
 {
+  public abstract void visit (AudioBus bus);
+  
 	public abstract void visit (FileClip clip);
 	
 	public abstract void visit (EmptyClip e);
@@ -23,6 +27,8 @@ public abstract class Visitor
 	public abstract void visit (SelectionClip s);
 	
 	public abstract void visit (VideoTrack t);
+	
+	public abstract void visit (AutomationTrack t);
 	
 	public abstract void visit (Sequence s);
 }

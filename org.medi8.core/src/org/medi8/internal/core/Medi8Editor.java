@@ -57,11 +57,14 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.EditorPart;
 import org.medi8.core.file.Medi8XMLParser;
 import org.medi8.core.file.XMLGeneratingVisitor;
+import org.medi8.internal.core.model.AutomationTrack;
 import org.medi8.internal.core.model.Clip;
 import org.medi8.internal.core.model.InsertOrDeleteCommand;
 import org.medi8.internal.core.model.Sequence;
 import org.medi8.internal.core.model.Time;
+import org.medi8.internal.core.model.Track;
 import org.medi8.internal.core.model.VideoTrack;
+import org.medi8.internal.core.model.audio.AudioBus;
 import org.medi8.internal.core.ui.ClipSelection;
 import org.medi8.internal.core.ui.MouseHandler;
 import org.medi8.internal.core.ui.Scale;
@@ -278,12 +281,15 @@ public class Medi8Editor extends EditorPart
 		if (sequence == null)
 		{
 			sequence = new Sequence();
-			VideoTrack[] tracks = new VideoTrack[5];
-			for (int i = 0; i < tracks.length; ++i)
+			Track[] tracks = new Track[6];
+			int i;
+			for (i = 0; i < tracks.length-1; ++i)
 			{
 				tracks[i] = new VideoTrack();
 				sequence.addTrack(tracks[i]);
 			}
+			tracks[i] = AudioBus.getMasterBus().getAutomationTrack ();
+			sequence.addTrack(tracks[i]);
 		}
 		
 		sequenceFigure = new SequenceFigure(this, sequence, scaler);

@@ -10,6 +10,7 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.util.DelegatingDropAdapter;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.dnd.DND;
@@ -23,10 +24,12 @@ import org.medi8.internal.core.model.IChangeListener;
 import org.medi8.internal.core.model.Medi8Event;
 import org.medi8.internal.core.model.Sequence;
 import org.medi8.internal.core.model.Time;
+import org.medi8.internal.core.model.Track;
 import org.medi8.internal.core.model.VideoTrack;
 import org.medi8.internal.core.ui.ClipSelection;
 import org.medi8.internal.core.ui.Medi8Layout;
 import org.medi8.internal.core.ui.Scale;
+import org.medi8.internal.core.ui.figure.VideoTrackFigure.TrackDropListener;
 
 /**
  * A SequenceFigure is the visual representation of a Sequence.
@@ -93,11 +96,11 @@ public class SequenceFigure extends Figure implements IChangeListener
 
 	/**
 	 * Set the selection to a part of a particular track
-	 * @param track TrackFigure holding the selection
+	 * @param track VideoTrackFigure holding the selection
 	 * @param xLow Low X coordinate
 	 * @param xHigh High X coordinate
 	 */
-	public void setSelection(TrackFigure track, int xLow, int xHigh, Clip clip)
+	public void setSelection(VideoTrackFigure track, int xLow, int xHigh, Clip clip)
 	{
 		Rectangle bounds = track.getBounds();
 		bounds.setLocation(xLow, bounds.y - Medi8Editor.VERTICAL_GAP / 2);
@@ -105,7 +108,7 @@ public class SequenceFigure extends Figure implements IChangeListener
 		selectionBox.setBounds(bounds);
 		selectionBox.setVisible(true);
 		
-		ISelection sel = new ClipSelection(clip, track.getTrack());
+		ISelection sel = new ClipSelection(clip, (VideoTrack) track.getTrack());
 		editor.getSite().getSelectionProvider().setSelection(sel);
 	}
 	
@@ -152,11 +155,12 @@ public class SequenceFigure extends Figure implements IChangeListener
 		Iterator iter = sequence.getIterator();
 		while (iter.hasNext())
 		{
-			VideoTrack track = (VideoTrack) iter.next();
-			TrackFigure child = new TrackFigure(this, track, scale);
+			TrackFigure child = ((Track) iter.next()).getFigure (this, scale);
 			add(child);
 			// FIXME: at some point we'll want to unregister as well...
-			adapter.addDropTargetListener(child.getDropListener(editor));
+			TransferDropTargetListener listener = child.getDropListener(editor);
+			if (listener != null)
+			  adapter.addDropTargetListener(listener);
 		}
 		// Make sure the cursor is always on top.
 		add(cursorLine);
@@ -186,7 +190,7 @@ public class SequenceFigure extends Figure implements IChangeListener
 	private Polyline cursorLine;
 	private VideoTrack cursorTrack;
 
-	// This is referenced elsewhere in the package, namely by TrackFigure.
+	// This is referenced elsewhere in the package, namely by VideoTrackFigure.
 	static Transfer fileTransfer = FileTransfer.getInstance();
 	
 	public static final boolean FIGURE_DEBUG = true;

@@ -3,6 +3,7 @@
  */
 package org.medi8.core.file;
 
+import org.medi8.internal.core.model.AutomationTrack;
 import org.medi8.internal.core.model.Clip;
 import org.medi8.internal.core.model.DeadClip;
 import org.medi8.internal.core.model.FileClip;
@@ -10,7 +11,9 @@ import org.medi8.internal.core.model.Provenance;
 import org.medi8.internal.core.model.SelectionClip;
 import org.medi8.internal.core.model.Sequence;
 import org.medi8.internal.core.model.Time;
+import org.medi8.internal.core.model.Track;
 import org.medi8.internal.core.model.VideoTrack;
+import org.medi8.internal.core.model.audio.AudioBus;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -26,7 +29,7 @@ public class Medi8XMLParser extends DefaultHandler
 	// The current Sequence.
 	Sequence currentSequence;
 	// The current Track.
-	VideoTrack currentTrack;
+	Track currentTrack;
 	// Start time of the current clip.
 	Time startTime;
 	// The clip we just parsed.
@@ -48,14 +51,19 @@ public class Medi8XMLParser extends DefaultHandler
 
 	public void endElement(String name)
 	{
-		if ("track".equals(name))
+		if ("videotrack".equals(name))
 		{
 			currentSequence.addTrack(currentTrack);
 			currentTrack = null;
 		}
+		else if ("automationtrack".equals(name))
+		{
+		  currentSequence.addTrack(currentTrack);
+		  currentTrack = null;
+		}
 		else if ("clip".equals(name))
 		{
-			currentTrack.addClip(startTime,currentClip);
+			((VideoTrack)currentTrack).addClip(startTime,currentClip);
 			startTime = null;
 			currentClip = null;
 		}
@@ -84,8 +92,10 @@ public class Medi8XMLParser extends DefaultHandler
 	{
 		if ("sequence".equals(name))
 			currentSequence = new Sequence ();
-		else if ("track".equals(name))
+		else if ("videotrack".equals(name))
 			currentTrack = new VideoTrack ();
+		else if ("automationtrack".equals(name))
+		  currentTrack = new AutomationTrack (new AudioBus ("FIXME"));
 		else if ("clip".equals(name))
 			startTime = new Time(Double.parseDouble(attrs.getValue("time")));
 		else if ("file".equals(name))

@@ -1,3 +1,35 @@
+2004-11-21  Anthony Green  <green@spindazzle.org>
+
+	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java: New
+	file.
+	* src/org/medi8/internal/core/ui/figure/AutomationTrackFigure.java: 
+	New file.
+	* src/org/medi8/internal/core/model/audio/AudioEffect.java (AudioEffect):
+	Create controls vector.
+	* src/org/medi8/core/file/XMLGeneratingVisitor.java: Refactor 
+	Track and VideoTrack usage.  Add AutomationTrack.
+	* src/org/medi8/internal/core/ui/figure/TrackFigure.java: Ditto.
+	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java: Ditto.
+	* src/org/medi8/internal/core/model/Visitor.java: Ditto.
+	* src/org/medi8/internal/core/model/VideoTrack.java: Ditto.
+	* src/org/medi8/internal/core/model/Track.java: Ditto.
+	* src/org/medi8/internal/core/model/Sequence.java: Ditto.
+	* src/org/medi8/internal/core/Medi8Editor.java: Ditto.
+	* src/org/medi8/core/file/Medi8XMLParser.java: Ditto.
+	
+2004-11-19  Anthony Green  <green@spindazzle.org>
+
+	* src/org/medi8/internal/core/model/AutomationTrack.java: Add bus.
+	* src/org/medi8/internal/core/model/Track.java (visit): New method.
+	* src/org/medi8/internal/core/model/VideoTrack.java: Move visit 
+	method to Track.
+	* src/org/medi8/internal/core/model/Sequence.java (visitChildren): Cast
+	to Track, not VideoTrack.
+	* src/org/medi8/internal/core/model/Visitor.java (visit): Change
+	VideoTrack to Track.
+	* src/org/medi8/internal/core/Medi8Editor.java (createFigure): Add
+	Master Bus automation track.
+
 2004-11-16  Tom Tromey  <tromey@redhat.com>
 
 	* src/org/medi8/internal/core/ui/figure/MarkerFigure.java (time): Now

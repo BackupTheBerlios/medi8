@@ -23,6 +23,7 @@ public class AudioEffect
   public AudioEffect (String name)
   {
     this.name = name;
+    controls = new Vector();
   }
   
   public Enumeration getControls ()

@@ -27,7 +27,7 @@ public class Medi8Perspective implements IPerspectiveFactory {
 		                                            IPageLayout.LEFT, 0.25f,
 		                                            editorArea);
 		topLeft.addView (IPageLayout.ID_RES_NAV);
-		topLeft.addPlaceholder ("org.medi8.intern.core.ui.AudioEffectsView");
+		topLeft.addPlaceholder ("org.medi8.intern.core.ui.AudioBusView");
 		
 		layout.addView("org.medi8.internal.core.ui.MonitorView",
 			IPageLayout.TOP, 0.3f, editorArea);

@@ -6,10 +6,15 @@ package org.medi8.internal.core.model;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.medi8.internal.core.model.audio.AudioBus;
 import org.medi8.internal.core.model.events.AddEvent;
 import org.medi8.internal.core.model.events.DeleteEvent;
 import org.medi8.internal.core.model.events.MoveEvent;
 import org.medi8.internal.core.model.events.SyntheticLengthChangeEvent;
+import org.medi8.internal.core.ui.Scale;
+import org.medi8.internal.core.ui.figure.SequenceFigure;
+import org.medi8.internal.core.ui.figure.TrackFigure;
+import org.medi8.internal.core.ui.figure.VideoTrackFigure;
 
 /**
  */
@@ -20,6 +25,17 @@ public class VideoTrack extends Track
 		listeners = new Vector();
 		times = new Vector();
 		elements = new Vector();
+		
+		// FIXME:  Every video track is being sent to the master audio bus
+		// for the purposes of testing.   This is, in fact, pretty bogus.
+		// Only audio tracks should go to the audio bus.  For now we'll just
+		// assume that every clip in the video track also includes audio.
+		AudioBus.getMasterBus().send(this);
+	}
+	
+	public TrackFigure getFigure (SequenceFigure seq, Scale scale)
+	{
+	  return new VideoTrackFigure (seq, this, scale);
 	}
 	
 	/**
@@ -218,7 +234,7 @@ public class VideoTrack extends Track
 			throw new Error("can't remove from a Track iterator");
 	    }
 	}
-	
+
 	public void visit (Visitor v)
 	{
 		v.visit(this);
