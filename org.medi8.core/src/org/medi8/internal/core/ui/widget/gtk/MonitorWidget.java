@@ -7,11 +7,12 @@
 package org.medi8.internal.core.ui.widget.gtk;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.medi8.core.file.VideoServer;
-import org.medi8.internal.core.model.Monitor;
 
 /**
  * @author green
@@ -30,7 +31,15 @@ public class MonitorWidget extends Composite {
 	
 	public MonitorWidget (Composite parent) {
 		super (parent, SWT.EMBEDDED);
+		
+		// Create our video server.
 		video_server = new VideoServer (embeddedHandle);
+		
+		parent.addControlListener (new ControlAdapter () {
+		  public void controlResized (ControlEvent event) {
+		    // TODO resize our embedded SDL window
+		    }
+		});
 		
 		parent.addDisposeListener (new DisposeListener () {
 		    public void widgetDisposed (DisposeEvent event) 

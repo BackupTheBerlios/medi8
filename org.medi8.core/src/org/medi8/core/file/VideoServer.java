@@ -60,10 +60,9 @@ public class VideoServer
 	    try
 	    {
 	        process = Runtime.getRuntime().exec(new String[] {
-	                    server_name, "5900" },
-	                    new String[] {
-	                		"SDL_WINDOWID=0x" + Long.toHexString(parentHandle),
-	                		"MLT_NORMALIZE=NTSC"});
+	                    "/bin/sh",
+	                    "-c",
+	                    "SDL_VIDEODRIVER=x11 SDL_DEBUG=1 SDL_WINDOWID=0x" + Long.toHexString(parentHandle) + " MLT_NORMALIZE=NTSC " + server_name + " 100 100"});
 	    } catch (IOException ex) {
 	        /* TODO this is pretty bogus.  We need a real error handling 
 	         * infrastructure.
@@ -82,6 +81,8 @@ public class VideoServer
           while (true)
           {
               line = dis.readLine ();
+              if (line != null)
+                System.out.println (line);
              
               if (line != null
                   && line.indexOf ("listening on port") != -1)
