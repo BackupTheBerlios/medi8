@@ -9,14 +9,10 @@ package org.medi8.internal.core.ui.figure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
-import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.graphics.Image;
 import org.medi8.internal.core.Medi8Editor;
-import org.medi8.internal.core.model.Clip;
-import org.medi8.internal.core.model.KillAfterCommand;
-import org.medi8.internal.core.model.KillBeforeCommand;
 import org.medi8.internal.core.model.Sequence;
-import org.medi8.internal.core.model.SplitCommand;
 import org.medi8.internal.core.model.Time;
 
 /**
@@ -61,36 +57,15 @@ public class ConflictMarkerFigure extends MarkerFigure
 
     public void mouseDoubleClicked(MouseEvent me)
     {
-      // When the user double-clicks on a conflict marker,
-      // we introduce a transition at the conflict point.
-      // Operationally this means inserting a split into both
-      // tracks at the conflict point, then wrapping the old
-      // incoming and outgoing clips with a DeadClip.
-      CompoundCommand compound = new CompoundCommand ("dual split");
       // FIXME: we only null check here because Sequence doesn't
       // properly create the ConflictMarker yet.
       if (marker.track1 == null || marker.track2 == null)
         return;
-
-      // Find the starting clip.
-      Clip c1 = marker.track1.findClipAfter(time);
-      Time t1 = marker.track1.findClipTime(c1);
-      Clip c2 = marker.track2.findClipAfter(time);
-      Time t2 = marker.track2.findClipTime(c2);
-      boolean firstLive = t1.compareTo(t2) <= 0;
-
-      // First introduce splits into the tracks.
-      compound.add(new SplitCommand ("split", marker.track1, time));
-      compound.add(new SplitCommand ("split", marker.track2, time));
-      // Now kill the old in/out sections.
-      compound.add(new KillBeforeCommand("kill before", 
-                                         firstLive ? marker.track2 : marker.track1,
-                                                   time));
-      compound.add(new KillAfterCommand("kill after",
-                                        firstLive ? marker.track1 : marker.track2,
-                                                  time));
-
-      editor.executeCommand(compound);
+      
+      Command cmd = Sequence.createSimpleTransitionCommand(marker.track1,
+                                                           marker.track2,
+                                                           time);
+      editor.executeCommand(cmd);
     }
     public void mousePressed(MouseEvent me)
     {

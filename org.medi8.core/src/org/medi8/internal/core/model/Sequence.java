@@ -6,6 +6,8 @@ package org.medi8.internal.core.model;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.medi8.internal.core.model.events.MarkerChangeEvent;
 import org.medi8.internal.core.model.events.NewTrackEvent;
 import org.medi8.internal.core.model.events.SyntheticLengthChangeEvent;
@@ -96,6 +98,49 @@ public class Sequence implements Visitable
 			{
 				v.visit((AutomationTrack) automationtracks.get(i));
 			}
+	}
+
+	/**
+	 * This is a helper function to create a new Command which
+	 * can be used to introduce a simple cut transition between
+	 * two tracks at a given time.
+	 * FIXME: this is only here because there didn't seem to be a
+	 * better place to put it.
+	 * @param track1
+	 * @param track2
+	 * @param when
+	 * @return
+	 */
+	public static Command createSimpleTransitionCommand (VideoTrack track1,
+	                                                     VideoTrack track2,
+	                                                     Time time)
+	{
+      // When the user double-clicks on a conflict marker,
+      // we introduce a transition at the conflict point.
+      // Operationally this means inserting a split into both
+      // tracks at the conflict point, then wrapping the old
+      // incoming and outgoing clips with a DeadClip.
+      CompoundCommand compound = new CompoundCommand ("dual split");
+
+      // Find the starting clip.
+      Clip c1 = track1.findClipAfter(time);
+      Time t1 = track1.findClipTime(c1);
+      Clip c2 = track2.findClipAfter(time);
+      Time t2 = track2.findClipTime(c2);
+      boolean firstLive = t1.compareTo(t2) <= 0;
+
+      // First introduce splits into the tracks.
+      compound.add(new SplitCommand ("split", track1, time));
+      compound.add(new SplitCommand ("split", track2, time));
+      // Now kill the old in/out sections.
+      compound.add(new KillBeforeCommand("kill before", 
+                                         firstLive ? track2 : track1,
+                                                   time));
+      compound.add(new KillAfterCommand("kill after",
+                                        firstLive ? track1 : track2,
+                                                  time));
+
+      return compound;
 	}
 
 	// FIXME: this exists so that rendering looks right.
