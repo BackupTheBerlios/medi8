@@ -30,6 +30,19 @@ rpm http://ccrma.stanford.edu/planetccrma/apt fedora/2/i386 planetcore
 		If you feel like building all this from source, grab mlt and mlt++
 		sources from cvs here:  http://mlt.sf.net
 
+	3.	The Jack Audio Connection Kit.   You should be able to grab this
+		with apt-get if you followed the instructions in [2].  You'll need the
+		jack-audio-connection-kit and jack-audio-connection-kit-devel
+		packages.
+		
+		Again, if you feel like building this from source, grab it source
+		releases from here:  http://jackit.sf.net
+
+	4.	liblo, the lightweight OSC protocol implementation.  You should be 
+		able to grab this with apt-get if you followed the instructions in [2].
+		You'll need the liblo and liblo-devel packages.
+
+
 Running medi8
 --------------
 
@@ -37,7 +50,13 @@ We've only run ever run medi8 from within Eclipse so far.
 
 	1.	Make sure you've built everything, including medi8-tools.
 	
-	2.	Create a launch configuration for medi8.  In the launch configuration
+	2.	Start the jack daemon.  There are multiple ways of doing this.
+		Check out the jackd man page for some guidance.   In most cases
+		it should simply boil down to running:
+				
+					$ jackd -d alsa
+
+	3.	Create a launch configuration for medi8.  In the launch configuration
 		be sure to add the following VM option:
 			-Dmedi8.workspace=/PATH/TO/YOUR/WORKSPACE
 		This is required in order for medi8 to locate various components
