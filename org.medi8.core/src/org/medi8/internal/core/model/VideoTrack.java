@@ -141,6 +141,47 @@ public class VideoTrack extends Track
 		notify(new MoveEvent(this, clip, delta));
 		return true;
 	}
+	
+	/**
+	 * Insert a split at the indicated time.  This will cause
+	 * the clip at this time to be replaced by two selections
+	 * of the original clip.  The first selection will end at
+	 * the indicated time, and the second selection will begin
+	 * where the first left off.  If the indicated time is not
+	 * inside a clip, this does nothing.
+	 * @param when time at which to split
+	 */
+	public void split(Time when)
+	{
+	  int index = findClip(when);
+	  if (index == -1)
+	    return;
+	  
+	  Clip clip = (Clip) elements.get(index);
+	  Time start = (Time) times.get(index);
+	  Time selWhen = when.getDifference(start);
+	  Time newLen = clip.getLength().getDifference(selWhen);
+	  
+	  SelectionClip left = new SelectionClip(clip, new Time(), selWhen);
+	  SelectionClip right = new SelectionClip (clip, selWhen, newLen);
+	  elements.set(index, left);
+	  
+	  times.insertElementAt(when, index + 1);
+	  elements.insertElementAt(right, index + 1);
+	  
+	  // FIXME: really we ought to have a new kind of event.
+	  notify (new AddEvent (this, when, right));
+	}
+	
+	/**
+	 * Coalesce a previously split region.  This does nothing
+	 * if the indicated time is not a split point.
+	 * @param when the time at which to coalesce
+	 */
+	public void coalesce (Time when)
+	{
+	  // FIXME
+	}
 
 	private int findClip(Clip clip)
 	{
@@ -150,6 +191,24 @@ public class VideoTrack extends Track
 				return i;
 		}
 		return -1;
+	}
+	
+	private int findClip(Time when)
+	{
+	  for (int i = elements.size() - 1; i >= 0; --i)
+	  {
+	    Time t = (Time) times.get(i);
+	    // If the time we're looking for comes before this
+	    // element, keep going.
+	    if (when.compareTo(t) < 0)
+	      continue;
+	    Clip clip = (Clip) elements.get(i);
+	    // If the time we're looking for comes before the end
+	    // of this element, we've found it.
+	    if (when.compareTo(new Time (t, clip.getLength())) < 0)
+	      return i;
+	  }
+	  return -1;
 	}
 
 	public void addChangeNotifyListener(IChangeListener listener)

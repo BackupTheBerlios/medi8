@@ -168,7 +168,7 @@ public class SequenceFigure extends Figure implements IChangeListener
 		while (iter.hasNext())
 		{
 		  Sequence.ConflictMarker marker = (Sequence.ConflictMarker) iter.next();
-		  add (new ConflictMarkerFigure (marker.when));
+		  add (new ConflictMarkerFigure (marker, editor));
 		}
 	}
 

@@ -128,6 +128,7 @@ public class Sequence implements Visitable
 		searchForConflicts();
 	}
 	
+	// Find the earliest starting time of a set of edges.
 	Time findMinimum (Edge[] edges)
 	{
 	  Time result = null;

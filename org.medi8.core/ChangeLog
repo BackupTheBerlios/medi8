@@ -1,3 +1,16 @@
+2004-12-27  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/internal/core/model/VideoTrack.java (split): New method.
+	(coalesce): Likewise.
+	(findClip): Likewise.
+	* src/org/medi8/internal/core/model/SplitCommand.java: New file.
+	* src/org/medi8/internal/core/ui/figure/ConflictMarkerFigure.java: Cleaned
+	up imports.
+	(mouseDoubleClicked): Create and execute split commands.
+	(ConflictMarkerFigure): Changed arguments.
+	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java (computeChildren):
+	Updated.
+
 2004-11-23  Anthony Green  <green@spindazzle.org>
 
 	* plugin.xml: Fix reference to AudioBusView.
