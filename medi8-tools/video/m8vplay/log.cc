@@ -1,4 +1,4 @@
-// Engine for playing video.
+// Log file support.
 
 // Copyright (C) 2004 Anthony Green
 //
@@ -20,16 +20,35 @@
 // 02111-1307, USA.
 
 #include "log.hh"
-#include "m8vplay.hh"
+#include <assert.h>
+#include <stdio.h>
+#include <stdarg.h>
+
+log_level_t log_level = LOG_NONE;
+
+static FILE *log_file = 0;
+
+void 
+init_logger (log_level_t level, const char *filename)
+{
+#ifndef NDEBUG
+  log_level = level;
+  log_file = fopen (filename, "w");
+#endif
+}
+
+static const char *level_names[] = { "DEBUG: " };
 
 int
-main (int argc, char *argv[])
+log (log_level_t level, const char *fmt, ...)
 {
-	// FIXME do something smarter with log data.
-	init_logger (MEDI8_LOG_DEBUG, "/tmp/m8vplay.log");
- 
-	m8vplay player;
-	
-	player.start();
-	player.wait_for_shutdown();
+  assert (level < LOG_NONE);
+  va_list ap;
+  va_start (ap, fmt);
+  fputs (level_names[level], log_file);
+  int ret = vfprintf (log_file, fmt, ap);
+  fputs ("\n", log_file);
+  fflush (log_file);
+  va_end(ap);
+  return ret;
 }

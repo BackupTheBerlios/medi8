@@ -1,4 +1,4 @@
-// Engine for playing video.
+// Log file support.
 
 // Copyright (C) 2004 Anthony Green
 //
@@ -19,17 +19,30 @@
 // Software Foundation, 59 Temple Place - Suite 330, Boston, MA
 // 02111-1307, USA.
 
-#include "log.hh"
-#include "m8vplay.hh"
+#ifndef LOG_HH
+#define LOG_HH
+
+#ifdef NDEBUG
+#define log_debug(...)
+#else
+
+typedef enum {
+  MEDI8_LOG_DEBUG = 0,
+  MEDI8_LOG_NONE = 1
+} log_level_t;
+
+extern log_level_t log_level;
+
+#define log_debug(...) \
+  ((log_level <= LOG_DEBUG) ? \
+   log(LOG_DEBUG, ## __VA_ARGS__) : 0)
 
 int
-main (int argc, char *argv[])
-{
-	// FIXME do something smarter with log data.
-	init_logger (MEDI8_LOG_DEBUG, "/tmp/m8vplay.log");
- 
-	m8vplay player;
-	
-	player.start();
-	player.wait_for_shutdown();
-}
+log (log_level_t level, const char *fmt, ...)
+  __attribute__((format (printf, 2, 3)));
+
+#endif
+
+void init_logger (log_level_t, const char *);
+
+#endif

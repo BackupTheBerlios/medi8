@@ -1,4 +1,4 @@
-SOURCES = m8vplay.cc
+SOURCES = m8vplay.cc log.cc
 OBJECTS = $(SOURCES:.cc=.o)
 
 SUFFIXES = .cc .o .hh
