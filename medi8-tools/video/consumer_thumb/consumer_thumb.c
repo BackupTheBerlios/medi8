@@ -24,6 +24,7 @@
 #include <framework/mlt.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct consumer_thumb_s *consumer_thumb;
 
@@ -43,8 +44,6 @@ static int consumer_is_stopped (mlt_consumer parent);
 mlt_consumer 
 consumer_thumb_init (char *arg)
 {
-	printf ("arg = \"%s\"\n", arg);
-	
   // Create the consumer object
   consumer_thumb this = calloc (sizeof (struct consumer_thumb_s), 1);
   
@@ -87,44 +86,58 @@ consumer_thumb_init (char *arg)
   return NULL;
 }
 
-// TODO: Use user specified extents
-#define WIDTH (320/4)
-#define HEIGHT (240/4)
-
 static int
 consumer_start (mlt_consumer this)
 {
   mlt_frame frame = NULL;
   uint8_t *image;
   mlt_image_format vfmt = mlt_image_rgb24;
-  int width = WIDTH, height = HEIGHT;
+  int width, height;
+  char *frame_list;
   
   // Get the producer service
   mlt_service service = mlt_service_get_producer (mlt_consumer_service (this));
   
-  // Seek to frame 666.
-  // TODO: Seek to a frame defined by the user.
-  mlt_producer_seek ((mlt_producer) service, 666);
-  
-  // Get a frame from the attached producer
-  mlt_properties_set (mlt_consumer_properties (this), "aspect_ratio", "1.0");
-  frame = mlt_consumer_get_frame (this);
-  
-  mlt_properties_set (mlt_frame_properties (frame), "distort", "true");
-  mlt_frame_get_image (frame, 
-					       			 &image,
-		       						 &vfmt,
-		       						 &width, &height, 
-		       						 0);
-  
-  // TODO: write to a file specified by the user
-  FILE *thumb = fopen ("/tmp/thumb.ppm", "wb");
-  fprintf (thumb, "P6\n%d %d\n255\n", width, height);
-  fwrite (image, width * height * 3, 1, thumb);
-  fclose (thumb);
-  
-  // Close the frame, and stop processing.
-  mlt_frame_close (frame);
+	width = mlt_properties_get_int (mlt_consumer_properties (this), "width");
+ 	height = mlt_properties_get_int (mlt_consumer_properties (this), "height");
+
+ 	mlt_properties_set (mlt_consumer_properties (this), "aspect_ratio", "1.0");
+  	  
+  // Get the list of frames we're interested in.
+  frame_list = mlt_properties_get (mlt_consumer_properties (this), "frames");
+
+  if (frame_list != NULL)
+  {
+  	char *number_string;
+  	do 
+  	{
+  		number_string = strtok (frame_list, ",");
+  		frame_list = 0;
+  		if (number_string)
+  		{
+  			// Seek to the requested frame.
+ 				mlt_producer_seek ((mlt_producer) service, atol (number_string));
+ 				
+ 				// Get the frame.
+ 				frame = mlt_consumer_get_frame (this);
+ 				
+ 				mlt_properties_set (mlt_frame_properties (frame), "distort", "true");
+ 				mlt_frame_get_image (frame, 
+								       			 &image,
+		       									 &vfmt,
+		       									 &width, &height, 
+		       									 0); 			
+		    
+		    // Send the image to stdout in PPM format.
+		    printf ("P6\n%d %d\n255\n", width, height);
+		    fwrite (image, width * height * 3, 1, stdout);
+		    
+			  mlt_frame_close (frame);
+  		}
+  	} while (number_string != NULL);
+  }
+
+  // Stop processing.
   mlt_consumer_stop( this );
   
   return 0;
