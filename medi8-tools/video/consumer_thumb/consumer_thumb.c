@@ -25,9 +25,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/** This classes definition.
-*/
-
 typedef struct consumer_thumb_s *consumer_thumb;
 
 struct consumer_thumb_s
