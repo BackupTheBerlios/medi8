@@ -50,6 +50,11 @@ public class DeadClip extends Clip
 	box.setFill(true);
     return box;
   }
+  
+  public String toString ()
+  {
+    return "DeadClip[" + super.toString() + "]";
+  }
 
   private Clip child;
 }

@@ -67,7 +67,7 @@ public class Medi8XMLParser extends DefaultHandler
 			startTime = null;
 			currentClip = null;
 		}
-		else if ("selection".equals(name))
+		else if ("select".equals(name))
 		{
 			currentClip = new SelectionClip(currentClip, currentStart, currentEnd);
 			currentStart = null;
@@ -106,7 +106,7 @@ public class Medi8XMLParser extends DefaultHandler
 			String subpart = attrs.getValue("subpart");
 			currentClip = new FileClip(where, length, filename, subpart);
 		}
-		else if ("selection".equals(name))
+		else if ("select".equals(name))
 		{
 			currentStart = new Time(Double.parseDouble(attrs.getValue("start")));
 			currentEnd = new Time(Double.parseDouble(attrs.getValue("end")));

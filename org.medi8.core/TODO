@@ -31,11 +31,11 @@ Audio support
 - figure out how to handle editing tasks...
 
 I/O:
-- Pick a format (probably XML, we can share the representation we use for
+X Pick a format (probably XML, we can share the representation we use for
   rendering - ?)
-- Write readers and writers
+X Write readers and writers
 - write export tool
-- importing shouldn't require a copy to the workspace!
+X importing shouldn't require a copy to the workspace!
   (it won't, since we'll be able to use linked resources.)
   
 Implement a Capture and Logging Perspective

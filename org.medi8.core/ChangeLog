@@ -1,5 +1,10 @@
 2005-01-03  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/core/file/Medi8XMLParser.java (endElement): Match "select",
+	not "selection".
+	(startElement): Likewise.
+	* src/org/medi8/internal/core/model/DeadClip.java (toString): New method.
+
 	* src/org/medi8/internal/core/Medi8Editor.java (calculateEnabled): Check
 	for non-null sequenceFigure.
 	* src/org/medi8/internal/core/model/SelectionClip.java (getFigure): New method.
