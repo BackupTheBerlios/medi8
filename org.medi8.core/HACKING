@@ -46,5 +46,11 @@ We've only run ever run medi8 from within Eclipse so far.
 		environment.
 
 
+Editing the Source
+-------------------
+
+The file eclipse-gnu.xml is an Eclipse style file for the coding style
+we use.  Import it into your Eclipse and set it as the formatting style
+when you hack on medi8.
 
 
