@@ -61,14 +61,16 @@ playlist::length ()
 void 
 playlist::locate (jack_nframes_t frame)
 {
-  std::list<list_item*>::iterator itr;
-	for (itr = plist.begin(); itr != plist.end(); ++itr)
+	for (play_itr = plist.begin(); play_itr != plist.end(); ++play_itr)
 	{
-		jack_nframes_t length = (*itr)->length;
+		jack_nframes_t length = (*play_itr)->length; 
 		if (frame > length)
 			frame -= length;
 		else
-			((*itr)->source)->locate (frame);
+		{
+			((*play_itr)->source)->locate (frame);
+			return;
+		}
 	}
 	log_error ("playlist::locate: attempting to seek beyond end");
 	assert (0);
