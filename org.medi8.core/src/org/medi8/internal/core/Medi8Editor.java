@@ -54,6 +54,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.actions.RetargetAction;
 import org.eclipse.ui.part.EditorPart;
 import org.medi8.core.file.Medi8XMLParser;
 import org.medi8.core.file.XMLGeneratingVisitor;
@@ -404,6 +405,27 @@ public class Medi8Editor extends EditorPart
 		propertyActions.add(action.getId());
 		site.getActionBars().setGlobalActionHandler(ActionFactory.SAVE.getId(), action);
 		
+		// FIXME: shouldn't use SelectionAction here.
+		action = new SelectionAction(this)
+		{
+			public String getId () {
+				return ActionFactory.PASTE.getId();
+			}
+
+			public boolean calculateEnabled() {
+				return sequenceFigure.getCursorTime() != null
+					&& clipboardClip != null;
+			}
+
+			public void run() {
+				// FIXME: we also need to know the current track
+				// in order to have a generic paste action.
+			}
+		};
+		registry.registerAction(action);
+		clipboardActions.add(action.getId());
+		site.getActionBars().setGlobalActionHandler(ActionFactory.PASTE.getId(), action);
+
 		//action = new RetargetAction(IWorkbenchActionConstants.BOOKMARK, "Add Bookmark...");
 		//registry.registerAction(action);
 		// FIXME: add to one of the update lists.
@@ -458,6 +480,11 @@ public class Medi8Editor extends EditorPart
 	public void setClipboard(Clip newClip)
 	{
 		clipboardClip = newClip;
+		updateActions(clipboardActions);
+	}
+	
+	public void notifyCursorChange ()
+	{
 		updateActions(clipboardActions);
 	}
 

@@ -1,5 +1,15 @@
 2004-11-07  Tom Tromey  <tromey@redhat.com>
 
+	GUI support for Paste command:
+	* src/org/medi8/internal/core/Medi8Editor.java (createActions): Added
+	Paste action.
+	(notifyCursorChange):New method. 
+	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java (getCursorTime):
+	New method.
+	(setCursorLocation): Notify editor when cursor changes.
+
+2004-11-07  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/internal/core/ui/figure/TrackFigure.java (mousePressed):
 	Set cursor if no clip found.
 	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java (cursorLine):

@@ -22,6 +22,7 @@ import org.medi8.internal.core.model.Clip;
 import org.medi8.internal.core.model.Medi8Event;
 import org.medi8.internal.core.model.IChangeListener;
 import org.medi8.internal.core.model.Sequence;
+import org.medi8.internal.core.model.Time;
 import org.medi8.internal.core.model.VideoTrack;
 import org.medi8.internal.core.ui.ClipSelection;
 import org.medi8.internal.core.ui.Medi8Layout;
@@ -125,6 +126,14 @@ public class SequenceFigure extends Figure implements IChangeListener
 			cursorLine.setEnd(new Point(x, getBounds().height));
 			cursorLine.setVisible(true);
 		}
+		editor.notifyCursorChange();
+	}
+	
+	public Time getCursorTime()
+	{
+		if (! cursorLine.isVisible())
+			return null;
+		return scale.unitsToDuration(cursorLine.getBounds().x);
 	}
 	
 	private void computeChildren()
