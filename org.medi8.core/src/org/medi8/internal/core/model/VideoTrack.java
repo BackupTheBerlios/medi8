@@ -66,6 +66,7 @@ public class VideoTrack extends Track
 		{
 			notify(new AddEvent(this, when, clip));
 		}
+		System.out.println(result + " added to " + this+": " + clip);
 		return result;
 	}
 	
@@ -89,15 +90,19 @@ public class VideoTrack extends Track
 				// Then keep going.
 				Clip c = (Clip) elements.get(i);
 				Time end = new Time(start, c.getLength());
-				if (when.compareTo(end) <= 0)
+				// Note that if the end of the previous clip is the same
+				// as the start of this clip, then that is ok.
+				if (when.compareTo(end) < 0)
 					return false;
 				continue;
 			}
 			// Requested time comes before the start of this clip.
 			// So this is our insertion point.  Make sure that the
 			// end of the requested clip is also before the starting
-			// point of this element in the vector. 
-			if (new Time(when, clip.getLength()).compareTo(start) >= 0)
+			// point of this element in the vector.  Note that if the
+			// end of the new clip is the same as the start of the next
+			// clip, then that is ok.
+			if (new Time(when, clip.getLength()).compareTo(start) > 0)
 				return false;
 			break;
 		}
