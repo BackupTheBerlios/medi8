@@ -29,7 +29,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Canvas;
-import org.medi8.core.file.OpenVIPClipFactory;
+import org.medi8.core.file.MLTClipFactory;
 import org.medi8.internal.core.Medi8Editor;
 import org.medi8.internal.core.model.Clip;
 import org.medi8.internal.core.model.EmptyClip;
@@ -180,7 +180,7 @@ public class TrackFigure extends Figure
 		int width = (int) (height * ASPECT);
 		ImageFigure result = new ImageFigure();
 		result.setSize(overallWidth, height);
-		OpenVIPClipFactory.createThumbnail(result, file, overallWidth,
+		MLTClipFactory.createThumbnail(result, file, overallWidth,
 				width, height);
 		return result;
 	}
@@ -302,7 +302,7 @@ public class TrackFigure extends Figure
 		public void drop(DropTargetEvent event) {
 			String[] files = (String[]) event.data;
 			// FIXME: for now only handle the first file.
-			Clip clip1 = OpenVIPClipFactory.createClip(new File(files[0]));
+			Clip clip1 = MLTClipFactory.createClip(new File(files[0]));
 			Point canvPoint = canvas.toControl(event.x, event.y);
 
 			// Now transform to figure's coordinates.
