@@ -20,6 +20,7 @@
 // 02111-1307, USA.
                
 #include <string.h>
+#include <math.h>
 
 #include "bus.hh"
 #include "log.hh"
@@ -64,8 +65,17 @@ bus::locate (jack_nframes_t frame)
 jack_nframes_t
 bus::length ()
 {
-	// TODO - iterate throught everything and find the longest.
-	return 1000000;
+	jack_nframes_t length = 0;
+	jack_nframes_t ilength;
+	
+	std::list<audio_source*>::iterator itr;
+	for (itr = input_list.begin(); itr != input_list.end(); ++itr)
+	{
+		ilength = (*itr)->length ();
+		length = length > ilength ? length : ilength;
+	}
+	
+	return length;
 }
 	                                                                                                                     
 jack_nframes_t

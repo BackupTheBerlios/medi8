@@ -28,10 +28,6 @@
 
 bool ffmpeg_file_reader::ffmpeg_initialized = false;
 
-#define MAX_BUFFERED_PACKET_COUNT 100
-
-static bool done;
-
 ffmpeg_file_reader::ffmpeg_file_reader (const char *filename,
 																				jack_nframes_t srate)
 {
@@ -83,7 +79,7 @@ ffmpeg_file_reader::ffmpeg_file_reader (const char *filename,
 			}
     }
     
-    rsc = audio_resample_init(2, 2, srate, 32000);
+    rsc = audio_resample_init (2, 2, srate, codec_context->sample_rate);
 	  log_debug ("initialized rsc with srate = %d", srate);
 }
 
@@ -99,8 +95,7 @@ ffmpeg_file_reader::locate (jack_nframes_t frame)
 jack_nframes_t
 ffmpeg_file_reader::length ()
 {
-	// TODO use ffmpeg to find the length of this file.
-	return 1000000;
+	return format_context->duration;
 }
 
 jack_nframes_t
@@ -165,7 +160,11 @@ ffmpeg_file_reader::process (jack_nframes_t nframes,
   	   		av_free_packet (packet);
 	   		}	
 				else
+				{
+					// We've hit the end of the file.  Return the number
+					// of frames read so far.
 					return (nframe_request - nframes);
+				}
       }
 		}
 }

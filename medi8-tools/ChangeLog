@@ -1,5 +1,16 @@
 2004-11-14  Anthony Green  <green@spindazzle.org>
 
+	* audio/m8aplay/bus.cc (bus::length): Compute length by
+	examining all of the inputs.
+	* audio/m8aplay/ffmpeg_file_reader.cc (MAX_BUFFERED_PACKET_COUNT):
+	Remove.
+	(done): Removed.
+	(ffmpeg_file_reader::ffmpeg_file_reader): Initialize
+	sample rate converter with actual sample rate from media file.
+	(ffmpeg_file_reader::process): Add comments.
+
+2004-11-14  Anthony Green  <green@spindazzle.org>
+
 	* audio/m8aplay/playlist.hh: New file.
 	* audio/m8aplay/playlist.cc (playlist::add): New file.
 	* audio/m8aplay/m8aplay.cc (process): Pull data from the master bus.
