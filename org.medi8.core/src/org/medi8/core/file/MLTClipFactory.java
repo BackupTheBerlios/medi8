@@ -32,6 +32,13 @@ public class MLTClipFactory
 	
 	public static Clip createClip(File file)
 	{
+	  // We use this property when running in the build workspace (for
+	  // development only).
+	  String workspace = System.getProperty ("medi8.workspace");
+	  String repository = "";
+	  if (workspace != null)
+	    repository = "MLT_REPOSITORY=" + workspace + "/medi8-tools/modules";
+	  
 		try
 		{
 			Process p = Runtime.getRuntime().exec(new String[] {
@@ -41,7 +48,7 @@ public class MLTClipFactory
 					"info"
 			},
 				new String[] {
-			        "MLT_REPOSITORY=/home/green/medi8/workspace/medi8-tools/modules",
+			        repository,
 			        "MLT_NORMALISATION=NTSC"
 			});
 			

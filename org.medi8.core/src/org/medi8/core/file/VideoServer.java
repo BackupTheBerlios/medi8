@@ -52,6 +52,11 @@ public class VideoServer
    */
 	public VideoServer (long parentHandle)
 	{
+	    String server_name = "m8vplay";
+	    String workspace = System.getProperty("medi8.workspace");
+	    if (workspace != null)
+	        server_name = workspace + "/medi8-tools/video/m8vplay/m8vplay";
+	    
 	    try
 	    {
 	        process = Runtime.getRuntime().exec(new String[] {
