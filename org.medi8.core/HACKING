@@ -1,0 +1,50 @@
+Medi8 Hacking Guide 
+=====================
+
+Project Dependencies
+---------------------
+
+You'll need the following bits to make progress on building and running medi8:
+
+	1.	The Eclipse SDK, along with the GEF and CDT plugins from eclipse.org.
+	
+	2.	MLT and various dependent packages.  Fedora Core 2 users should have
+		an easy time installing these by creating the following apt sources
+		files and running: "apt update && apt install mlt-devel mlt++-devel".
+		The MLT packages are unsigned, so you'll need to figure out how to 
+		work around this. 
+
+==== /etc/apt/sources.list.d/medi8.list =================================
+rpm http://medi8.berlios.de/fc2rpms/apt i386 unstable
+rpm-src http://medi8.berlios.de/fc2rpms/apt i386 unstable
+
+==== /etc/apt/sources.list.d/livna.list =================================
+rpm http://rpm.livna.org/ fedora/2/i386 stable unstable testing
+rpm-src http://rpm.livna.org/ fedora/2/i386 stable unstable testing
+
+==== /etc/apt/sources.list.d/planet-ccrma.list ==========================
+rpm http://ccrma.stanford.edu/planetccrma/apt fedora/2/i386 core updates
+rpm http://ccrma.stanford.edu/planetccrma/apt fedora/2/i386 planetccrma
+rpm http://ccrma.stanford.edu/planetccrma/apt fedora/2/i386 planetcore
+
+		If you feel like building all this from source, grab mlt and mlt++
+		sources from cvs here:  http://mlt.sf.net
+
+Running medi8
+--------------
+
+We've only run ever run medi8 from within Eclipse so far.  
+
+	1.	Make sure you've built everything, including medi8-tools.
+	
+	2.	Create a launch configuration for medi8.  In the launch configuration
+		be sure to add the following VM option:
+			-Dmedi8.workspace=/PATH/TO/YOUR/WORKSPACE
+		This is required in order for medi8 to locate various components
+		while running within your build environment.  We'll figure out 
+		something else when it comes time to decouple medi8 from the build
+		environment.
+
+
+
+
