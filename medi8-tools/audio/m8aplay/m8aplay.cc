@@ -1,4 +1,4 @@
-// Engine for playing video.
+// Engine for playing audio.
 
 // Copyright (C) 2004 Anthony Green
 //
@@ -24,6 +24,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <lo/lo.h>
+#include <jack/jack.h>
+
+static jack_client_t *jack_client;
+static jack_port_t *jack_left_output_port;
+static jack_port_t *jack_right_output_port;
 
 // Forward declarations of OSC message handlers.
 static int
@@ -41,6 +46,34 @@ error (int num, const char *msg, const char *path)
 	log_error ("liblo server error %d in path %s: %s", num, path, msg);
 }
                       
+/**
+ * The process callback is called by jack at the appropriate times.
+ */
+static int
+process (jack_nframes_t nframes, void *arg)
+{     
+#if 0	                                                                                                                                  
+  if (player->playing)
+    {
+      jack_default_audio_sample_t *left_out = (jack_default_audio_sample_t *)
+        jack_port_get_buffer (player->jack_left_output_port, nframes);
+                                                                                                                                        
+      jack_default_audio_sample_t *right_out = (jack_default_audio_sample_t *)
+        jack_port_get_buffer (player->jack_left_output_port, nframes);
+                                                                                                                                        
+      // Fill the buffers.
+    }
+#endif
+                                                                                                                                   
+  return 0;
+}
+
+static void
+error_callback (const char *s)
+{
+  log_error ("%s", s);
+}
+                                                                                                                                        
 int
 main (int argc, char *argv[])
 {
@@ -60,6 +93,41 @@ main (int argc, char *argv[])
 
   // Start the OSC server thread.
   lo_server_thread_start (st);
+	
+  if ((jack_client = jack_client_new ("medi8")) == 0)
+    log_error ("can't create jack client");
+                                                                                                                                        
+  if (jack_set_process_callback (jack_client, process, NULL /* THIS */) != 0)
+    log_error ("can't set callback");
+                                                                                                                                        
+  jack_error_callback = error_callback;
+                                                                                                                                        
+  jack_left_output_port =
+    jack_port_register (jack_client, "output",
+                        JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+  jack_right_output_port =
+    jack_port_register (jack_client, "output",
+                        JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+                                                                                                                                        
+  log_debug ("engine sample rate: %u", jack_get_sample_rate (jack_client));
+                                                                                                                                        
+  jack_set_buffer_size (jack_client, 2048);
+                                                                                                                                        
+  jack_activate (jack_client);
+                                                                                                                                        
+  const char **ports;
+  if ((ports = jack_get_ports (jack_client, NULL, NULL,
+                               JackPortIsPhysical|JackPortIsInput)) == NULL)
+    log_error ("Cannot find any physical playback ports");
+                                                                                                                                        
+  if (jack_connect (jack_client,
+                    jack_port_name (jack_left_output_port), ports[0]))
+    log_error ("Cannot connect left output ports");
+  if (jack_connect (jack_client,
+                    jack_port_name (jack_right_output_port), ports[1]))
+    log_error ("Cannot connect right output ports");
+                                                                                                                                        
+  free (ports);
 	
 	while (1)
 	{
