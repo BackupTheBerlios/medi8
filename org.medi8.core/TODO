@@ -34,7 +34,13 @@ I/O:
 - Pick a format (probably XML, we can share the representation we use for
   rendering - ?)
 - Write readers and writers
-- Consider OpenEXR as native video format.  http://www.openexr.com.  Many nice features.
 - write export tool
 - importing shouldn't require a copy to the workspace!
   (it won't, since we'll be able to use linked resources.)
+  
+Implement a Capture and Logging Perspective
+- dvgrab is a useful tool, but keeping track of the resulting dv files
+	is a PITA.  It would be nice to add a set of tools for capturing video
+	(via dvgrab probably), and recording info in a database of some sort, like
+	tape label, length, description, and maybe a couple of thumbnails.
+
