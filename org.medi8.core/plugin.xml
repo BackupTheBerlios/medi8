@@ -9,6 +9,9 @@
 
    <runtime>
       <library name="medi8core.jar"/>
+      <library name="lib/javaosc.jar">
+         <export name="*"/>
+      </library>
    </runtime>
    <requires>
       <import plugin="org.eclipse.core.runtime.compatibility"/>

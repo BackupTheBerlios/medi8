@@ -7,6 +7,7 @@ import org.eclipse.jface.preference.*;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.medi8.core.CorePlugin;
+import org.medi8.core.file.AudioServer;
 import org.medi8.internal.core.ui.ComboFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -28,9 +29,9 @@ import org.eclipse.jface.preference.IPreferenceStore;
 public class AudioPreferencePage
 	extends FieldEditorPreferencePage
 	implements IWorkbenchPreferencePage {
-	public static final String P_BUFFER = "bufferPreference";
-	public static final String P_LOUT = "loutPreference";
-	public static final String P_ROUT = "routPreference";
+	public static final String P_BUFFER = "/medi8/audio/bufferSize";
+	public static final String P_LOUT = "/medi8/audio/port/left";
+	public static final String P_ROUT = "/medi8/audio/port/right";
 	
 	public AudioPreferencePage() {
 		super(GRID);

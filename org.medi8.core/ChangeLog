@@ -1,3 +1,17 @@
+2004-11-13  Anthony Green  <green@spindazzle.org>
+
+	* src/org/medi8/core/preferences/AudioPreferencePage.java (initializeDefaults): 
+	Use OSC message names for preference names (see property change listener
+	in CorePlugin.start()).
+	* src/org/medi8/core/file/AudioServer.java (send): New method.
+	(start): New method.
+	(stop): New method.
+	(outPort): New static. 
+	* src/org/medi8/core/CorePlugin.java (start): New method.
+	(stop): New method.
+	* javaosc.jar: New file.
+	* plugin.xml: Use javaosc.jar.
+
 2004-11-13  Tom Tromey  <tromey@redhat.com>
 
 	* themes/default/knob48/.xvpics: Removed.

@@ -3,6 +3,8 @@ package org.medi8.core;
 import org.eclipse.ui.plugin.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.resources.*;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.medi8.core.file.AudioServer;
 import org.osgi.framework.BundleContext;
 
@@ -68,6 +70,17 @@ public class CorePlugin extends AbstractUIPlugin {
 		super.start(context);
 		// Start the audio server.
 		AudioServer.start ();
+		
+		getDefault().getPreferenceStore()
+		  .addPropertyChangeListener (new IPropertyChangeListener() {
+		    public void propertyChange (PropertyChangeEvent event) {
+		      String prop = event.getProperty();
+		      if (prop.startsWith("/medi8/audio/"))
+		        AudioServer.send (prop, event.getNewValue());
+		      System.out.println ("a preference setting changed");
+		      System.out.println (event.getProperty());
+		    }
+		  });
 	}
 	
 	public void stop(BundleContext context) throws Exception {

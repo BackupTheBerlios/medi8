@@ -14,6 +14,9 @@ import java.net.Socket;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Shell;
 
+import com.illposed.osc.OSCMessage;
+import com.illposed.osc.OSCPort;
+
 /**
  * @author green
  *
@@ -23,16 +26,12 @@ import org.eclipse.swt.widgets.Shell;
 public class AudioServer 
 {
   Process process = null;
-    
-  /* This socket we use to talk to the server.  */
-  Socket socket;
-  /* The input stream we use to read from the sever.  */
-  DataInputStream in;
-  /* The output stream we use to write to the server.  */
-  OutputStream out;
 
   /* The audio server.  */
   private static AudioServer audio_server = null;
+
+  /* The OSC port.  */
+  private static OSCPort outPort = null;
   
   /**
    * Create the audio server.  Much like the Highlander, there can be
@@ -50,6 +49,8 @@ public class AudioServer
    */
   public static void stop ()
   {
+    if (outPort != null)
+      outPort.close ();
     if (audio_server != null)
       audio_server.process.destroy ();
   } 
@@ -61,6 +62,21 @@ public class AudioServer
   {
     getAudioServer ();
   } 
+  
+  /**
+   * Send a message to the audio server.
+   */
+  public static void send (String msg, Object arg)
+  {
+    try {
+      Object margs[] = new Object[1];
+      margs[0] = arg;
+      OSCMessage oscmsg = new OSCMessage (msg, margs);
+ 	   outPort.send (oscmsg);
+ 	   } catch (Exception _) {
+      // Do nothing.
+ 	   }
+  }
   
   /**
    * Starts a new m8vplay server process, which is destroyed with the plugin
@@ -88,7 +104,23 @@ public class AudioServer
 	        	                       null);
 	    	}
 
-	    	DataInputStream dis = new DataInputStream (process.getErrorStream ());
+	    	DataInputStream dis = new DataInputStream (process.getInputStream());
+	    	
+	    	String ok = null;
+	    	try {
+	    	  ok = dis.readLine ();
+	    	} catch (IOException x) {
+	    	  // FIXME: what to do?
+	    	}
+	    	if ("OK".equals (ok))
+	    	  {
+	    	  	try {
+	    	  	  // FIXME: make port number customizable.
+	    	  	  outPort = new OSCPort (java.net.InetAddress.getLocalHost(), 5333);
+	    	  	} catch (Exception _) {
+	    	  	  // FIXME: what to do?
+	    	  	}
+	    	  }
     }
 }
 
