@@ -54,7 +54,6 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.actions.RetargetAction;
 import org.eclipse.ui.part.EditorPart;
 import org.medi8.core.file.Medi8XMLParser;
 import org.medi8.core.file.XMLGeneratingVisitor;
