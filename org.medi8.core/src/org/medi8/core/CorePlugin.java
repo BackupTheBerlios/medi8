@@ -3,6 +3,7 @@ package org.medi8.core;
 import org.eclipse.ui.plugin.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.resources.*;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.medi8.core.file.AudioServer;
@@ -71,8 +72,9 @@ public class CorePlugin extends AbstractUIPlugin {
 		// Start the audio server.
 		AudioServer.start ();
 		
-		getDefault().getPreferenceStore()
-		  .addPropertyChangeListener (new IPropertyChangeListener() {
+		// Set up a listener to catch property changes.
+		IPreferenceStore pstore = getDefault().getPreferenceStore();
+		pstore.addPropertyChangeListener (new IPropertyChangeListener() {
 		    public void propertyChange (PropertyChangeEvent event) {
 		      String prop = event.getProperty();
 		      if (prop.startsWith("/medi8/audio/port/"))
@@ -80,7 +82,15 @@ public class CorePlugin extends AbstractUIPlugin {
 		      else if (prop.startsWith("/medi8/audio/"))
 		        AudioServer.send (prop, event.getNewValue());
 		    }
-		  });
+	  });
+		
+		// Set the left and right audio connections.
+		AudioServer.send( "/medi8/audio/port/left/" 
+		                  + pstore.getString("/medi8/audio/port/left"),
+		                  null);
+		AudioServer.send( "/medi8/audio/port/right/" 
+		                  + pstore.getString("/medi8/audio/port/right"),
+		                  null);		
 	}
 	
 	public void stop(BundleContext context) throws Exception {
