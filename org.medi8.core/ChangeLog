@@ -1,3 +1,43 @@
+2004-11-13  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/internal/core/ui/Medi8Layout.java (Medi8Layout): Added scale
+	argument.
+	(scale): New field.
+	(layout): Handle marker figures.
+	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java (computeChildren):
+	Create new MarkerFigures.
+	(SequenceFigure): Updated.
+	* src/org/medi8/internal/core/model/events/MarkerChangeEvent.java: New file.
+	* src/org/medi8/internal/core/ui/figure/MarkerFigure.java (getTrack): New
+	method.
+	(MarkerFigure): Set default image.
+	(pd): New field.
+	(getDefaultImage): New method.
+	(getTime): New method.
+	* src/org/medi8/internal/core/model/Sequence.java (Edge): New class.
+	(EdgeIterator): Likewise.
+	(searchForConflicts): New method.
+	(updateActive): Likewise.
+	(updateOneEdge): Likewise.
+	(findMinimum): Likewise.
+	(updateSize): Call searchForConflicts.
+	(markers): New field.
+	(getMarkerIterator): New method.
+	(ConflictMarker): New class.
+	* error.png: New file.
+	* src/org/medi8/internal/core/ui/figure/TrackFigure.java (msg): Removed.
+	(layout): Removed unused variables.
+	(computeChildren): Don't use aspect ratio when computing width.
+
+	* src/org/medi8/internal/core/ui/figure/TrackFigure.java (computeChildren):
+	Handle dead clips.
+	* src/org/medi8/core/file/Medi8XMLParser.java (endElement): Handle
+	dead clips.
+	* src/org/medi8/core/file/XMLGeneratingVisitor.java (visit): New
+	overload.
+	* src/org/medi8/internal/core/model/Visitor.java (visit): New overload.
+	* src/org/medi8/internal/core/model/DeadClip.java: New file.
+
 2004-11-12  Anthony Green  <green@spindazzle.org>
 
 	* src/org/medi8/internal/core/ui/ComboFieldEditor.java: New file.

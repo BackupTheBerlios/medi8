@@ -4,9 +4,14 @@
 package org.medi8.internal.core.ui.figure;
 
 import org.medi8.internal.core.model.Time;
+import org.medi8.internal.core.model.Track;
 
 import org.eclipse.draw2d.ImageFigure;
+import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.PaletteData;
 
 /**
  * This class is a Figure that displays an image.
@@ -17,12 +22,13 @@ public class MarkerFigure extends ImageFigure
 {
 	/**
 	 * Create a new MarkerFigure associated with a given time.
-	 * This figure has no image; one must be set with setImage.
 	 * @param time The time with which this figure is associated
 	 */
 	public MarkerFigure(Time time)
 	{
 		this.time = time;
+		setImage(getDefaultImage());
+		setToolTip(new Label ("Conflict between tracks"));
 	}
 
 	/**
@@ -32,6 +38,21 @@ public class MarkerFigure extends ImageFigure
 	{
 		super(image);
 		this.time = time;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.draw2d.Figure#setLocation(org.eclipse.draw2d.geometry.Point)
+	 */
+	public void setLocation(Point p)
+	{
+	  if (SequenceFigure.FIGURE_DEBUG)
+	  {
+		String label = ("Conflict between tracks"
+		    + "\nTime = " + time
+		    + "\nX = " + p.x);
+		setToolTip(new Label(label));
+	  }
+	  super.setLocation(p);
 	}
 
 	/**
@@ -44,6 +65,40 @@ public class MarkerFigure extends ImageFigure
 	{
 		setVisible (! (time.compareTo(start) < 0 || time.compareTo(end) > 0));
 	}
+	
+	/**
+	 * Return the track associated with this marker, or null
+	 * if there is no associated track.
+	 */
+	public Track getTrack ()
+	{
+	  // Just a stub for now.
+	  return null;
+	}
+	
+	public Time getTime ()
+	{
+	  return time;
+	}
 
 	private Time time;
+	
+	private Image getDefaultImage ()
+	{
+	  byte[] data = new byte[16 * 16 * 3];
+	  for (int i = 0; i < 16; ++i)
+	  {
+	    for (int j = 0; j < 3 * 16; j += 3)
+	    {
+	      data[3 * 16 * i + j] = 78;
+	      data[3 * 16 * i + j + 1] = 30;
+	      data[3 * 16 * i + j + 2] = 23;
+	    }
+	  }
+	  ImageData id = new ImageData(16, 16, 24, pd, 3, data);
+	  return new Image(null, id);
+	}
+	
+	// FIXME: temporary
+	private static final PaletteData pd = new PaletteData(0xff0000, 0x00ff00, 0x0000ff);
 }

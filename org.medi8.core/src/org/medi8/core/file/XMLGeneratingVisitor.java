@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import java.util.Iterator;
 
 import org.medi8.internal.core.model.Clip;
+import org.medi8.internal.core.model.DeadClip;
 import org.medi8.internal.core.model.EmptyClip;
 import org.medi8.internal.core.model.FileClip;
 import org.medi8.internal.core.model.SelectionClip;
@@ -84,4 +85,14 @@ public class XMLGeneratingVisitor extends Visitor
 		s.visitChildren(this);
 		out.println("</select>");
 	}
+	
+	/* (non-Javadoc)
+   * @see org.medi8.internal.core.model.Visitor#visit(org.medi8.internal.core.model.DeadClip)
+   */
+  public void visit(DeadClip d)
+  {
+    out.println("<dead>");
+    d.visitChildren(this);
+    out.println("</dead>");
+  }
 }

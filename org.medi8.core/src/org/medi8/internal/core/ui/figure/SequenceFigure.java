@@ -47,7 +47,6 @@ public class SequenceFigure extends Figure implements IChangeListener
 		targ.addDropListener(adapter);
 		
 		selectionBox = new SelectionFigure (this);
-		add (selectionBox);
 		selectionBox.setVisible(false);
 		
 		cursorLine = new Polyline();
@@ -55,9 +54,8 @@ public class SequenceFigure extends Figure implements IChangeListener
 		cursorLine.addPoint(new Point(0, 0));
 		cursorLine.addPoint(new Point(0, 0));
 		cursorLine.setVisible(false);
-		add(cursorLine);
 		
-		setLayoutManager(new Medi8Layout(Medi8Editor.VERTICAL_GAP));
+		setLayoutManager(new Medi8Layout(Medi8Editor.VERTICAL_GAP, scale));
 		sequence.addChangeNotifyListener(this);
 		topRuler = new TimecodeRuler (TimecodeRuler.ABOVE);
 		topRuler.setScale(scale);
@@ -149,6 +147,8 @@ public class SequenceFigure extends Figure implements IChangeListener
 	private void computeChildren()
 	{
 		add(topRuler);
+		add(selectionBox);
+
 		Iterator iter = sequence.getIterator();
 		while (iter.hasNext())
 		{
@@ -159,8 +159,14 @@ public class SequenceFigure extends Figure implements IChangeListener
 			adapter.addDropTargetListener(child.getDropListener(editor));
 		}
 		// Make sure the cursor is always on top.
-		remove(cursorLine);
 		add(cursorLine);
+		
+		iter = sequence.getMarkerIterator();
+		while (iter.hasNext())
+		{
+		  Sequence.ConflictMarker marker = (Sequence.ConflictMarker) iter.next();
+		  add (new MarkerFigure (marker.when));
+		}
 	}
 
 	private Medi8Editor editor;
@@ -181,5 +187,7 @@ public class SequenceFigure extends Figure implements IChangeListener
 	private VideoTrack cursorTrack;
 
 	// This is referenced elsewhere in the package, namely by TrackFigure.
-	static Transfer fileTransfer = FileTransfer.getInstance(); 
+	static Transfer fileTransfer = FileTransfer.getInstance();
+	
+	public static final boolean FIGURE_DEBUG = true;
 }

@@ -6,6 +6,7 @@ package org.medi8.internal.core.model;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.medi8.internal.core.model.events.MarkerChangeEvent;
 import org.medi8.internal.core.model.events.NewTrackEvent;
 import org.medi8.internal.core.model.events.SyntheticLengthChangeEvent;
 
@@ -22,6 +23,7 @@ public class Sequence implements Visitable
 	{
 		tracks = new Vector();
 		listeners = new Vector();
+		markers = new Vector();
 	}
 	
 	public void addTrack(Track track)
@@ -42,6 +44,11 @@ public class Sequence implements Visitable
 	public Iterator getIterator()
 	{
 		return tracks.iterator();
+	}
+	
+	public Iterator getMarkerIterator()
+	{
+	  return markers.iterator();
 	}
 	
 	public void addChangeNotifyListener(IChangeListener listener)
@@ -105,6 +112,198 @@ public class Sequence implements Visitable
 			VideoTrack t = (VideoTrack) tracks.get(i);
 			t.setLength(max);
 		}
+		
+		searchForConflicts();
+	}
+	
+	Time findMinimum (Edge[] edges)
+	{
+	  Time result = null;
+	  for (int i = 0; i < edges.length; ++i)
+	  {
+	    if (edges[i] != null
+	        && (result == null || edges[i].when.compareTo(result) < 0))
+	      result = edges[i].when;
+	  }
+	  return result;
+	}
+	
+	void updateOneEdge (int slot, Iterator[] iterators, Edge[] current)
+	{
+	  if (iterators[slot] != null)
+	  {
+	    Edge next;
+	    do
+	    {
+	      if (! iterators[slot].hasNext())
+	      {
+	        next = null;
+	        iterators[slot] = null;
+	        break;
+	      }
+	      next = (Edge) iterators[slot].next();
+	      if (next.clip instanceof EmptyClip || next.clip instanceof DeadClip)
+	        next = null;
+	    }
+	    while (next == null);
+	    current[slot] = next;
+	  }
+	}
+	
+	boolean updateActive (Time when, Edge[] active, Iterator[] iterators, 
+	                      Edge[] current)
+	{
+	  // First, drop all active clips that are ending.
+	  boolean anyActive = false;
+	  boolean anyStarting = false;
+	  boolean anyIterators = false;
+	  boolean[] starts = new boolean[active.length];
+	  for (int i = 0; i < active.length; ++i)
+	  {
+	    if (current[i] != null && when.equals(current[i].when))
+	    {
+	      if (! current[i].isStarting)
+	      {
+	        // We're at the end of some clip, so drop it from
+	        // the active list and advance the corresponding iterator.
+	        active[i] = null;
+	        updateOneEdge(i, iterators, current);
+	      }
+	      else
+	      {
+	        anyStarting = true;
+	        starts[i] = true;
+	      }
+	    }
+	    if (active[i] != null)
+	      anyActive = true;
+	    if (iterators[i] != null)
+	      anyIterators = true;
+	  }
+	  
+	  for (int i = 0; i < active.length; ++i)
+	  {
+	    if (starts[i])
+	    {
+	      active[i] = current[i];
+	      if (anyActive)
+	      {
+	        // FIXME: search for the other track.
+	        markers.add (new ConflictMarker ((VideoTrack) tracks.get(i), null,
+	                                         active[i].when));
+	      }
+	      updateOneEdge(i, iterators, current);
+	    }
+	  }
+	  
+	  return anyIterators;
+	}
+	
+	void searchForConflicts ()
+	{
+	  markers.clear();
+
+	  Iterator[] iterators = new Iterator[tracks.size ()];
+	  for (int i = 0; i < tracks.size (); ++i)
+	  {
+	    if (tracks.get (i) instanceof VideoTrack)
+	      iterators[i] = new EdgeIterator (((VideoTrack) tracks.get(i)).getIterator());
+	  }
+
+	  Edge[] active = new Edge[tracks.size ()];
+	  Edge[] currentEdges = new Edge[tracks.size ()];
+
+	  for (int i = 0; i < currentEdges.length; ++i)
+	    updateOneEdge(i, iterators, currentEdges);
+
+	  while (true)
+	  {
+	    Time now = findMinimum(currentEdges);
+	    if (now == null)
+	      break;
+	    if (! updateActive(now, active, iterators, currentEdges))
+	      break;
+	  }
+	  
+	  // FIXME: only fire if it really changed.
+	  notify(new MarkerChangeEvent (this));
+	}
+
+	/**
+	 * This represents an edge of a clip, either the starting edge
+	 * or the trailing edge. 
+	 */
+	static class Edge
+	{
+	  Time when;
+	  boolean isStarting;
+	  Clip clip;
+	}
+
+	/**
+	 * This class wraps a track's iterator and returns a sequence
+	 * of edge objects. 
+	 */
+	static class EdgeIterator implements Iterator
+	{
+	  Clip currentClip;
+	  Time now = new Time (0);
+	  Iterator trackIterator;
+	  
+	  public EdgeIterator (Iterator it)
+	  {
+	    trackIterator = it;
+	  }
+
+	  public boolean hasNext()
+	  {
+	    if (currentClip != null)
+	      return true;
+	    return trackIterator.hasNext();
+	  }
+	  
+	  public Object next()
+	  {
+	    Edge result = new Edge ();
+	    if (currentClip != null)
+	    {
+	      now = new Time (now, currentClip.getLength());
+	      result.isStarting = false;
+	      result.clip = currentClip;
+	      currentClip = null;
+	    }
+	    else
+	    {
+	      currentClip = (Clip) trackIterator.next ();
+	      result.clip = currentClip;
+	      result.isStarting = true;
+	    }
+	    result.when = now;
+	    return result;
+	  }
+	  
+	  public void remove()
+	  {
+	    // Nothing.
+	  }
+	}
+
+	/**
+	 * This represents a conflict point.
+	 * FIXME: should be a real marker.
+	 */
+	public static class ConflictMarker
+	{
+	  public VideoTrack track1;
+	  public VideoTrack track2;
+	  public Time when;
+
+	  public ConflictMarker (VideoTrack track1, VideoTrack track2, Time when)
+	  {
+	    this.track1 = track1;
+	    this.track2 = track2;
+	    this.when = when;
+	  }
 	}
 
 	/**
@@ -116,6 +315,11 @@ public class Sequence implements Visitable
 	 * All event listeners.
 	 */
 	private Vector listeners;
+	
+	/**
+	 * All markers we manage.
+	 */
+	private Vector markers;
 	
 	/**
 	 * FPS for this sequence.  -1 if not known.

@@ -18,6 +18,8 @@ public abstract class Visitor
 	
 	public abstract void visit (EmptyClip e);
 	
+	public abstract void visit (DeadClip d);
+	
 	public abstract void visit (SelectionClip s);
 	
 	public abstract void visit (VideoTrack t);

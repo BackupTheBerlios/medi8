@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Canvas;
 import org.medi8.core.file.MLTClipFactory;
 import org.medi8.internal.core.Medi8Editor;
 import org.medi8.internal.core.model.Clip;
+import org.medi8.internal.core.model.DeadClip;
 import org.medi8.internal.core.model.EmptyClip;
 import org.medi8.internal.core.model.FileClip;
 import org.medi8.internal.core.model.Medi8Event;
@@ -132,20 +133,25 @@ public class TrackFigure extends Figure
 		int height = getBounds().height;
 		figureMap.clear();
 		int i = 0;
+		double now = 0;
 		while (iter.hasNext())
 		{
 			Clip clip = (Clip) iter.next();
 			Provenance prov = clip.getProvenance();
 			
 			Figure fig;
-			int offset = scale.durationToUnits(clip.getLength());
-			int width = (int) (offset / ASPECT);
+			int width = scale.durationToUnits(clip.getLength());
 			String tip = null;
 			if (clip instanceof EmptyClip)
 			{
 				fig = createBox(ColorConstants.lightGray, width, height);
 				// This is handy while debugging.
 				tip = "Empty Clip";
+			}
+			else if (clip instanceof DeadClip)
+			{
+			  fig = createBox (ColorConstants.darkGray, width, height);
+			  tip = "Dead Clip: " + clip.getProvenance();
 			}
 			else if (clip instanceof FileClip)
 			{
@@ -154,7 +160,7 @@ public class TrackFigure extends Figure
 				fig = createThumbnail(file, width, height);
 				if (fig == null)
 				{
-					tip = tip + "; Fail: " + msg; 
+					tip = tip + "; Fail";
 					fig = createBox(ColorConstants.lightGray, width, height);
 				}
 			}
@@ -166,10 +172,16 @@ public class TrackFigure extends Figure
 			}
 			if (tip == null && prov != null)
 				tip = prov.toString();
+			if (SequenceFigure.FIGURE_DEBUG)
+			{
+			  tip += ("\nwidth = " + width + "\nTime = " + now
+			      + "\nX = " + scale.durationToUnit(now));
+			}
 			if (tip != null)
 				fig.setToolTip(new Label(tip));
 			add(fig);
 			figureMap.put(fig, clip);
+			now += clip.getLength().toDouble();
 		}
 	}
 	
@@ -191,8 +203,6 @@ public class TrackFigure extends Figure
 				width, height);
 		return result;
 	}
-	
-	String msg; // FIXME: debug only, remove this.
 	
 	/**
 	 * This handles layout for the children of a TrackFigure. 
@@ -245,9 +255,6 @@ public class TrackFigure extends Figure
 				fig.setBounds(bounds);
 				offset += dim.width;
 			}
-			
-			int width = relativeArea.width;
-			int widthTime = (int) (width / ASPECT);
 		}
 	}
 

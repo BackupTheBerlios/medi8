@@ -27,9 +27,10 @@ public class Medi8Layout extends AbstractHintLayout
 	/**
 	 * Create a new layout, with the given vertical gap between elements. 
 	 */
-	public Medi8Layout(int gap)
+	public Medi8Layout(int gap, Scale scale)
 	{
 		this.gap = gap;
+		this.scale = scale;
 	}
 
 	protected Dimension calculatePreferredSize(IFigure container, int wHint,
@@ -72,8 +73,11 @@ public class Medi8Layout extends AbstractHintLayout
 			// A marker must be handled specially.
 			if (fig instanceof MarkerFigure)
 			{
-				// FIXME: for now, do nothing
-				continue;
+			  MarkerFigure mf = (MarkerFigure) fig;
+			  Point p = new Point (scale.durationToUnits(mf.getTime()),
+			                       50 /* FIXME */);
+			  mf.setLocation(p);
+			  continue;
 			}
 			
 			// We handle the cursor specially later.
@@ -115,4 +119,5 @@ public class Medi8Layout extends AbstractHintLayout
 	}
 	
 	private int gap;
+	private Scale scale;
 }

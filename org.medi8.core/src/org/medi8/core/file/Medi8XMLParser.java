@@ -4,6 +4,7 @@
 package org.medi8.core.file;
 
 import org.medi8.internal.core.model.Clip;
+import org.medi8.internal.core.model.DeadClip;
 import org.medi8.internal.core.model.FileClip;
 import org.medi8.internal.core.model.Provenance;
 import org.medi8.internal.core.model.SelectionClip;
@@ -63,6 +64,10 @@ public class Medi8XMLParser extends DefaultHandler
 			currentClip = new SelectionClip(currentClip, currentStart, currentEnd);
 			currentStart = null;
 			currentEnd = null;
+		}
+		else if ("dead".equals (name))
+		{
+		  currentClip = new DeadClip (currentClip);
 		}
 	}
 
