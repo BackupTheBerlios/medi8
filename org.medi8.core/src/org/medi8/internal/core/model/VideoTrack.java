@@ -223,6 +223,33 @@ public class VideoTrack extends Track
 	  // FIXME choice of deletion is arbitrary.
 	  notify (new DeleteEvent(this, right));
 	}
+	
+	/**
+	 * Find the clip that comes before the clip covering
+	 * the indicated time.
+	 * @param when
+	 * @return
+	 */
+	public Clip findClipBefore (Time when)
+	{
+	  int index = findClip(when);
+	  if (index <= 0)
+	    return null;
+	  return (Clip) elements.get(index - 1);
+	}
+	
+	/**
+	 * Find the clip covering the indicated time.
+	 * @param when
+	 * @return
+	 */
+	public Clip findClipAfter (Time when)
+	{
+	  int index = findClip (when);
+	  if (index == -1)
+	    return null;
+	  return (Clip) elements.get(index);
+	}
 
 	private int findClip(Clip clip)
 	{
