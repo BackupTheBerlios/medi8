@@ -1,11 +1,10 @@
 all: .repository-stamp
-	(cd video/m8vplay && make all)
+	make -C video all
 
 clean:
 	@rm -rf modules
-	@rm -f .repository-stamp
-	@find ./ -name \*~ | xargs rm -f
-	(cd video/m8vplay && make clean)
+	@rm -f .repository-stamp *~
+	make -C video clean
 
 # MLT doesn't support multiple repositories currently.
 # This project simply copies the contents of the installed repository
