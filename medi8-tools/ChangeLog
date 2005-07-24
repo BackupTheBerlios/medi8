@@ -1,3 +1,18 @@
+2005-07-23  Tom Tromey  <tromey@redhat.com>
+
+	* audio/m8aplay/playlist.hh (~playlist): New virtual destructor.
+	* audio/m8aplay/ffmpeg_file_reader.hh (~ffmpeg_file_reader): New virtual
+	destructor.
+	* audio/m8aplay/ffmpeg_file_reader.cc (ffmpeg_file_reader::process):
+	Do unsigned comparisons.
+	(ffmpeg_file_reader::locate): Added missing argument to av_seek_frame.
+	* audio/m8aplay/audio_source.hh (~audio_source): New virtual destructor.
+	* audio/m8ainfo/m8ainfo.cc (main): Avoid undefined behavior.
+
+2005-07-23  tromey  <tromey@mopsy>
+
+	* audio/m8ainfo/m8ainfo.cc (main): 
+
 2005-02-09  Tom Tromey  <tromey@redhat.com>
 
 	* audio/m8aplay/bus.hh (~bus): New virtual destructor.

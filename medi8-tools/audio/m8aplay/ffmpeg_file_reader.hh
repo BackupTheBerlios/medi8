@@ -46,6 +46,9 @@ private:
                                                                                                                                                              
 public:
   ffmpeg_file_reader (const char *filename, jack_nframes_t srate);
+  
+  virtual ~ffmpeg_file_reader() { }
+  
   static void *reader_thread (void *);
                                                                                                                                                              
 	// Seek to a new position.

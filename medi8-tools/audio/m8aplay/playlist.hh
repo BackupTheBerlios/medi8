@@ -38,6 +38,9 @@ private:
 	std::list<list_item*>::iterator play_itr;
                                                                                 
 public:
+
+  virtual ~playlist() { }
+
   // Add an input source to this bus.
   void add (audio_source *);
 

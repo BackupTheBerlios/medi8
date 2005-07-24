@@ -88,7 +88,7 @@ void
 ffmpeg_file_reader::locate (jack_nframes_t frame)
 {
 	log_debug ("about to seek");
-	if (av_seek_frame (format_context, audio_stream_id, frame) < 0)
+	if (av_seek_frame (format_context, audio_stream_id, frame, 0) < 0)
 		log_error ("could not seek to position %u", (unsigned) frame);
 }
 
@@ -110,9 +110,9 @@ ffmpeg_file_reader::process (jack_nframes_t nframes,
     {
       // Handle the case where our audio buffer holds enough data already.
       // We always exit the loop here.
-      if (valid_buffer_frames >= (unsigned) nframes)
+      if ((unsigned) valid_buffer_frames >= (unsigned) nframes)
 			{
-	  		for (int i = 0; i < nframes; i++)
+	  		for (unsigned int i = 0; i < nframes; i++)
 	    	{
 	      	left_buffer[i] += audio_buffer[audio_buffer_position++];
 	      	right_buffer[i] += audio_buffer[audio_buffer_position++];

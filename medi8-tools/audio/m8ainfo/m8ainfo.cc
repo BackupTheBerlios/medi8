@@ -49,9 +49,8 @@ main (int argc, char *argv[])
                                JackPortIsInput)) == NULL)
     log_error ("Cannot find any physical playback ports");
 
-	int i = 0;
-  while (ports[i] != NULL)
-  	printf ("port%d=%s\n", i++, ports[i]);
+  for (int i = 0; ports[i] != NULL; ++i)
+  	printf ("port%d=%s\n", i, ports[i]);
                                                                                                                    
   free (ports);
 }

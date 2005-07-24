@@ -35,6 +35,8 @@ public:
   virtual jack_nframes_t process (jack_nframes_t,
                         					jack_default_audio_sample_t *,
                         					jack_default_audio_sample_t *) = 0;
+                        					
+	virtual ~audio_source() { }
 };
                                                                                                                                                              
 #endif
