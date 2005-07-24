@@ -31,6 +31,8 @@
 
 
    <extension
+         id="medi8Nature"
+         name="Medi8 Nature"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run

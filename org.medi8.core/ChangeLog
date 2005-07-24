@@ -1,3 +1,8 @@
+2005-07-24  Tom Tromey  <tromey@redhat.com>
+
+	* plugin.xml (id, name): Added attributes to
+	org.eclipse.core.resources.natures extension point.
+
 2005-01-05  Tom Tromey  <tromey@redhat.com>
 
 	* src/org/medi8/internal/core/model/VideoTrack.java (addClip): Removed
