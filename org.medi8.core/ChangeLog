@@ -1,3 +1,8 @@
+2005-08-28  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/internal/core/model/Sequence.java (updateActive): Removed
+	unused variable.
+
 2005-07-24  Tom Tromey  <tromey@redhat.com>
 
 	* plugin.xml (id, name): Added attributes to

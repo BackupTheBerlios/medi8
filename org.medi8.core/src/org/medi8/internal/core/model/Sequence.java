@@ -234,7 +234,6 @@ public class Sequence implements Visitable
 	{
 	  // First, drop all active clips that are ending.
 	  boolean anyActive = false;
-	  boolean anyStarting = false;
 	  boolean anyIterators = false;
 	  boolean[] starts = new boolean[active.length];
 	  for (int i = 0; i < active.length; ++i)
@@ -250,7 +249,6 @@ public class Sequence implements Visitable
 	      }
 	      else
 	      {
-	        anyStarting = true;
 	        starts[i] = true;
 	      }
 	    }
