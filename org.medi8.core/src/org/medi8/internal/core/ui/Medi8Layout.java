@@ -49,9 +49,7 @@ public class Medi8Layout extends AbstractHintLayout
 				continue;
 			
 			Dimension dim = fig.getPreferredSize(wHint, -1);
-			height += dim.height;
-			if (! (fig instanceof TimecodeRuler))
-				height += gap;
+			height += dim.height + gap;
 			width = Math.max(width, dim.width);
 		}
 		return new Dimension(width, height);
@@ -90,10 +88,6 @@ public class Medi8Layout extends AbstractHintLayout
 			if (fig instanceof SelectionFigure)
 				continue;
 			
-			// Don't add padding above the bottom ruler.
-			if (y > 0 && fig instanceof TimecodeRuler)
-				y -= gap;
-			
 			Dimension dim = fig.getPreferredSize();
 			bounds.x = 0;
 			bounds.y = y;
@@ -103,10 +97,7 @@ public class Medi8Layout extends AbstractHintLayout
 			fig.setBounds(bounds);
             // System.err.println("fig: " + fig + "; location: " + bounds);
 			
-			y += bounds.height;
-			// Only add gap between two track elements.
-			if (! (fig instanceof TimecodeRuler))
-				y += gap;
+			y += bounds.height + gap;
 		}
 		
 		if (cursor != null)
