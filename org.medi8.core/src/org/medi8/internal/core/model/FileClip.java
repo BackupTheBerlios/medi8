@@ -9,7 +9,8 @@ package org.medi8.internal.core.model;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.ImageFigure;
-import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.medi8.core.file.MLTClipFactory;
 import org.medi8.internal.core.ui.figure.VideoTrackFigure;
@@ -60,9 +61,10 @@ public class FileClip extends Clip implements Visitable
 	  Figure fig = createThumbnail(width, height);
 	  if (fig == null)
 	  {
-		RectangleFigure box = new RectangleFigure();
+		RoundedRectangle box = new RoundedRectangle();
 		box.setBounds(new Rectangle(0, 0, width, height));
 		box.setBackgroundColor(ColorConstants.cyan);
+        box.setCornerDimensions(new Dimension(height / 4, height / 4));
 		box.setFill(true);
 		fig = box;
 	  }

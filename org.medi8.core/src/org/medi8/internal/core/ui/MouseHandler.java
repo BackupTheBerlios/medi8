@@ -34,7 +34,7 @@ public class MouseHandler implements MouseListener, MouseMotionListener
 			box = new SelectionFigure (seq);
 			seq.add(box);
 		}
-		Rectangle r = seq.getBounds();
+		Rectangle r = new Rectangle(seq.getBounds());
 		r.setLocation(me.x, 0);
 		r.setSize(0, r.height);
 		box.setBounds(r);

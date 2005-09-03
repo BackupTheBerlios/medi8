@@ -109,7 +109,6 @@ public class VideoTrackFigure extends TrackFigure
 		Iterator iter = track.getIterator();
 		int height = getBounds().height;
 		figureMap.clear();
-		int i = 0;
 		double now = 0;
 		while (iter.hasNext())
 		{

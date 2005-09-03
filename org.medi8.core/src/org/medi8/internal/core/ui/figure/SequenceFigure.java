@@ -101,7 +101,7 @@ public class SequenceFigure extends Figure implements IChangeListener
 	 */
 	public void setSelection(VideoTrackFigure track, int xLow, int xHigh, Clip clip)
 	{
-		Rectangle bounds = track.getBounds();
+		Rectangle bounds = new Rectangle (track.getBounds());
 		bounds.setLocation(xLow, bounds.y - Medi8Editor.VERTICAL_GAP / 2);
 		bounds.setSize(xHigh - xLow, bounds.height + Medi8Editor.VERTICAL_GAP);
 		selectionBox.setBounds(bounds);

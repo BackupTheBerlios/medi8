@@ -81,7 +81,6 @@ public abstract class TrackFigure extends Figure implements
 		{
 			TrackFigure trackFig = (TrackFigure) seqArg;
 			int offset = 0;
-			Rectangle relativeArea = trackFig.getClientArea();
 			Rectangle bounds = new Rectangle();
 			Iterator iter = trackFig.getChildren().iterator();
 			while (iter.hasNext())
@@ -93,6 +92,7 @@ public abstract class TrackFigure extends Figure implements
 				bounds.width = dim.width;
 				bounds.height = Medi8Editor.CLIP_HEIGHT;
 				fig.setBounds(bounds);
+                // System.err.println("   fig = " + fig + "; bounds = " + bounds);
 				offset += dim.width;
 			}
 		}

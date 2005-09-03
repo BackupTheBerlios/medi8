@@ -1,3 +1,21 @@
+2005-08-29  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/core/file/MLTClipFactory.java (createThumbnail): Changed
+	default background color.
+	* src/org/medi8/internal/core/ui/Medi8Layout.java (calculatePreferredSize):
+	Leave boundary above and below figures.
+	* src/org/medi8/internal/core/ui/MouseHandler.java (mousePressed): 
+	Duplicate the rectangle.
+	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java (setSelection):
+	Duplicate the rectangle.
+
+	* src/org/medi8/internal/core/ui/figure/TrackFigure.java (layout): Removed
+	unused variable.
+	* src/org/medi8/internal/core/model/FileClip.java (getFigure): Use a
+	rounded	rectangle.
+	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java
+	(computeChildren): Removed unused variable.
+
 2005-08-28  Tom Tromey  <tromey@redhat.com>
 
 	* .settings/org.eclipse.jdt.core.prefs: New file.

@@ -36,7 +36,7 @@ public class Medi8Layout extends AbstractHintLayout
 			int hHint)
 	{
 		int width = wHint;
-		int height = 0;
+		int height = gap;
 		Iterator iter = container.getChildren().iterator();
 		while (iter.hasNext())
 		{
@@ -54,7 +54,6 @@ public class Medi8Layout extends AbstractHintLayout
 				height += gap;
 			width = Math.max(width, dim.width);
 		}
-		height -= gap;
 		return new Dimension(width, height);
 	}
 
@@ -62,7 +61,7 @@ public class Medi8Layout extends AbstractHintLayout
 	{
 		Rectangle relativeArea = figure.getClientArea();
 		Rectangle bounds = new Rectangle();
-		int y = 0;
+		int y = gap;
 		Iterator iter = figure.getChildren().iterator();
 		Polyline cursor = null;
 		while (iter.hasNext())
@@ -75,6 +74,7 @@ public class Medi8Layout extends AbstractHintLayout
 			  MarkerFigure mf = (MarkerFigure) fig;
 			  Point p = new Point (scale.durationToUnits(mf.getTime()),
 			                       50 /* FIXME */);
+              // System.err.println("Point is: " + p + "; time = " + mf.getTime());
 			  mf.setLocation(p);
 			  continue;
 			}
@@ -101,6 +101,7 @@ public class Medi8Layout extends AbstractHintLayout
 			bounds.height = dim.height;
 			bounds.translate(relativeArea.x, relativeArea.y);
 			fig.setBounds(bounds);
+            // System.err.println("fig: " + fig + "; location: " + bounds);
 			
 			y += bounds.height;
 			// Only add gap between two track elements.
