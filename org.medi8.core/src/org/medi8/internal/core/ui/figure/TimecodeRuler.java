@@ -11,6 +11,7 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.medi8.internal.core.Medi8Editor;
+import org.medi8.internal.core.model.Time;
 import org.medi8.internal.core.ui.Scale;
 
 // FIXME: should display tic marks and times
@@ -44,7 +45,7 @@ public class TimecodeRuler extends Figure implements PropertyChangeListener
 		this.how = how;
 
         Dimension size = getSize();
-        size.height = Medi8Editor.CLIP_HEIGHT / 2;
+        size.height = Medi8Editor.CLIP_HEIGHT;
         setSize(size);
 	}
 
@@ -60,7 +61,7 @@ public class TimecodeRuler extends Figure implements PropertyChangeListener
 		this.scale = scale;
 		scale.addListener(this);
 	}
-
+    
 	protected void paintFigure(Graphics g)
 	{
 		Rectangle r = getBounds();
@@ -74,17 +75,26 @@ public class TimecodeRuler extends Figure implements PropertyChangeListener
 		// Draw a vertical line every second, and a bigger
 		// one every minute.
 		int j = 0;
-		int height = r.height * direction;
+		int height = r.height * direction / 2;
 		while (true)
 		{
+            int x = scale.durationToUnit(j);
+            if (x > r.width)
+                break;
 			int h;
 			if (j % 60 == 0)
+              {
 				h = height * 3 / 4;
+                // Currently we draw the time once per minute.
+                // FIXME: this is wrong, we should have a heuristic
+                // that depends on the scale.
+                String text = Time.toString(j);
+                // FIXME: really center the text; this is a hack.
+                int textx = Math.max(0, x - 20);
+                g.drawString(text, textx, r.y);
+              }
 			else
 				h = height / 2;
-			int x = scale.durationToUnit(j);
-			if (x > r.width)
-				break;
 			g.drawLine(x, y, x, y + h);
 			++j;
 		}

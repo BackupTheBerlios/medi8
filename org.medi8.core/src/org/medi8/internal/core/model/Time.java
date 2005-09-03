@@ -89,14 +89,29 @@ public class Time implements Comparable, Cloneable
 	
 	public String toString()
 	{
-		// FIXME: do something smart here.
-		return Double.toString(value);
+	  return toString(value);
 	}
+    
+    public static String toString(double val)
+    {
+      long seconds = (long) val;
+      int minutes = (int) (seconds / 60);
+      int frames = (int) ((val - seconds) * 24);
+      seconds -= minutes * 60;
+      
+      StringBuffer result = new StringBuffer();
+      result.append(minutes);
+      result.append(':');
+      if (seconds < 10)
+        result.append('0');
+      result.append(seconds);
+      result.append(':');
+      if (frames < 10)
+        result.append('0');
+      result.append(frames);
+      return result.toString();
+    }
 	
-	/**
-	 * Return this time as an integer number of frames.
-	 * Use with care.
-	 */
 	public double toDouble()
 	{
 		return value;

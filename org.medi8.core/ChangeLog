@@ -1,5 +1,12 @@
 2005-09-03  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/ui/figure/TimecodeRuler.java (paintFigure):
+	Draw time values.
+	* src/org/medi8/internal/core/model/Time.java (toString): New method.
+	(toString): Use it.
+
+2005-09-03  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/internal/core/ui/figure/TimecodeRuler.java (TimecodeRuler):
 	Set preferred height.
 	* src/org/medi8/internal/core/ui/Medi8Layout.java: Fixed imports.
