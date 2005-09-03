@@ -14,7 +14,6 @@ import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.medi8.internal.core.ui.figure.MarkerFigure;
 import org.medi8.internal.core.ui.figure.SelectionFigure;
-import org.medi8.internal.core.ui.figure.TimecodeRuler;
 
 /**
  * A layout manager that knows how to lay out a medi8 frame.

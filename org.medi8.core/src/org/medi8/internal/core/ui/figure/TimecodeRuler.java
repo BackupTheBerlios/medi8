@@ -8,7 +8,9 @@ import java.beans.PropertyChangeListener;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.medi8.internal.core.Medi8Editor;
 import org.medi8.internal.core.ui.Scale;
 
 // FIXME: should display tic marks and times
@@ -40,6 +42,10 @@ public class TimecodeRuler extends Figure implements PropertyChangeListener
 		if (how != ABOVE && how != BELOW)
 			throw new IllegalArgumentException();
 		this.how = how;
+
+        Dimension size = getSize();
+        size.height = Medi8Editor.CLIP_HEIGHT / 2;
+        setSize(size);
 	}
 
 	/**

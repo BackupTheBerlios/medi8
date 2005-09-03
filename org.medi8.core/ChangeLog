@@ -1,5 +1,11 @@
 2005-09-03  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/ui/figure/TimecodeRuler.java (TimecodeRuler):
+	Set preferred height.
+	* src/org/medi8/internal/core/ui/Medi8Layout.java: Fixed imports.
+
+2005-09-03  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/internal/core/ui/Medi8Layout.java (calculatePreferredSize):
 	Always add vertical gaps.
 	(layout): Likewise.
