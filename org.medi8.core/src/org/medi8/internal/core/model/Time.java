@@ -89,10 +89,10 @@ public class Time implements Comparable, Cloneable
 	
 	public String toString()
 	{
-	  return toString(value);
+	  return "" + value;
 	}
     
-    public static String toString(double val)
+    public static String toUserString(double val)
     {
       long seconds = (long) val;
       int minutes = (int) (seconds / 60);

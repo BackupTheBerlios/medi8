@@ -88,7 +88,7 @@ public class TimecodeRuler extends Figure implements PropertyChangeListener
                 // Currently we draw the time once per minute.
                 // FIXME: this is wrong, we should have a heuristic
                 // that depends on the scale.
-                String text = Time.toString(j);
+                String text = Time.toUserString(j);
                 // FIXME: really center the text; this is a hack.
                 int textx = Math.max(0, x - 20);
                 g.drawString(text, textx, r.y);

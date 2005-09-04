@@ -1,3 +1,11 @@
+2005-09-04  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/internal/core/ui/figure/TimecodeRuler.java (paintFigure):
+	Updated.
+	* src/org/medi8/internal/core/model/Time.java (toString): Revert to
+	formatting 'value' directly.
+	(toUserString): Changed name.
+
 2005-09-03  Tom Tromey  <tromey@redhat.com>
 
 	* src/org/medi8/internal/core/ui/Medi8Layout.java (layout): Position conflict
