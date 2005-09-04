@@ -3,6 +3,8 @@
  */
 package org.medi8.internal.core.ui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.eclipse.draw2d.AbstractHintLayout;
@@ -12,8 +14,11 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.medi8.internal.core.model.VideoTrack;
+import org.medi8.internal.core.ui.figure.ConflictMarkerFigure;
 import org.medi8.internal.core.ui.figure.MarkerFigure;
 import org.medi8.internal.core.ui.figure.SelectionFigure;
+import org.medi8.internal.core.ui.figure.VideoTrackFigure;
 
 /**
  * A layout manager that knows how to lay out a medi8 frame.
@@ -56,6 +61,14 @@ public class Medi8Layout extends AbstractHintLayout
 
 	public void layout(IFigure figure)
 	{
+      // These are used to make sure that conflict markers
+      // appear over their corresponding track.  FIXME: we should
+      // display conflict markers differently, e.g., as a translucent
+      // red line connecting the two tracks that conflict.  This
+      // requires some reworking of the conflict marker figure hierarchy.
+      ArrayList markers = new ArrayList();
+      HashMap vidMap = new HashMap();
+      
 		Rectangle relativeArea = figure.getClientArea();
 		Rectangle bounds = new Rectangle();
 		int y = gap;
@@ -66,12 +79,18 @@ public class Medi8Layout extends AbstractHintLayout
 			IFigure fig = (IFigure) iter.next();
 			
 			// A marker must be handled specially.
-			if (fig instanceof MarkerFigure)
+			if (fig instanceof ConflictMarkerFigure)
+              {
+                markers.add(fig);
+                continue;
+              }
+            else if (fig instanceof MarkerFigure)
 			{
+              // Does it even make sense to do this here?
+              // Where would a plain marker end up vertically?
 			  MarkerFigure mf = (MarkerFigure) fig;
 			  Point p = new Point (scale.durationToUnits(mf.getTime()),
 			                       50 /* FIXME */);
-              // System.err.println("Point is: " + p + "; time = " + mf.getTime());
 			  mf.setLocation(p);
 			  continue;
 			}
@@ -95,9 +114,25 @@ public class Medi8Layout extends AbstractHintLayout
 			bounds.translate(relativeArea.x, relativeArea.y);
 			fig.setBounds(bounds);
             // System.err.println("fig: " + fig + "; location: " + bounds);
+            
+            if (fig instanceof VideoTrackFigure)
+              vidMap.put(((VideoTrackFigure) fig).getTrack(), fig);
 			
 			y += bounds.height + gap;
 		}
+        
+        // Now move conflict markers into position.
+        int len = markers.size();
+        for (int i = 0; i < len; ++i)
+          {
+            ConflictMarkerFigure cmf = (ConflictMarkerFigure) markers.get(i);
+            VideoTrackFigure fig = (VideoTrackFigure) vidMap.get(cmf.getFirstTrack());
+            Rectangle r = fig.getBounds();
+            int ch = cmf.getSize().height;
+            Point p = new Point (scale.durationToUnits(cmf.getTime()),
+                                 r.y + r.height / 2 - ch / 2);
+            cmf.setLocation(p);
+          }
 		
 		if (cursor != null)
 		{

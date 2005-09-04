@@ -5,6 +5,7 @@ package org.medi8.internal.core.ui.figure;
 
 import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -27,6 +28,9 @@ public class MarkerFigure extends ImageFigure
 	{
 		this.time = time;
 		setImage(getDefaultImage());
+
+        Dimension size = new Dimension(16, 16);
+        setSize(size);
 	}
 
 	/**
@@ -36,6 +40,7 @@ public class MarkerFigure extends ImageFigure
 	{
 		super(image);
 		this.time = time;
+        // FIXME: set the size.
 	}
 	
 	/* (non-Javadoc)

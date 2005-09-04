@@ -14,6 +14,7 @@ import org.eclipse.swt.graphics.Image;
 import org.medi8.internal.core.Medi8Editor;
 import org.medi8.internal.core.model.Sequence;
 import org.medi8.internal.core.model.Time;
+import org.medi8.internal.core.model.VideoTrack;
 
 /**
  * This represents a conflict.  A conflict is a point in time
@@ -35,6 +36,15 @@ public class ConflictMarkerFigure extends MarkerFigure
 
 	ConflictMouseHandler handler = new ConflictMouseHandler(editor);
 	this.addMouseListener(handler);
+  }
+  
+  /**
+   * Get the first video track that is in conflict at this point.
+   * @return the first conflicting track
+   */
+  public VideoTrack getFirstTrack()
+  {
+    return marker.track1;
   }
 
   /**

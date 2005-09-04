@@ -1,6 +1,12 @@
 TODO List
 ----------------
 
+change how ConflictMarkerFigure works
+it should not be an image but just hold other figures
+then the layout engine could make it be something like
+a red line with handles on either end, which stretches to
+touch both of the tracks in conflict
+
 get rid of gef scrollbar, use SWT one
 
 mouse bindings

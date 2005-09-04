@@ -1,5 +1,14 @@
 2005-09-03  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/ui/Medi8Layout.java (layout): Position conflict
+	marker over the track.
+	* src/org/medi8/internal/core/ui/figure/ConflictMarkerFigure.java (getFirstTrack):
+	New method.
+	* src/org/medi8/internal/core/ui/figure/MarkerFigure.java (MarkerFigure):
+	Set default size of image.
+
+2005-09-03  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/internal/core/ui/figure/TimecodeRuler.java (paintFigure):
 	Draw time values.
 	* src/org/medi8/internal/core/model/Time.java (toString): New method.
