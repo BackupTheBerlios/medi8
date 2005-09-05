@@ -7,16 +7,14 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.swt.graphics.Font;
 import org.medi8.internal.core.Medi8Editor;
 import org.medi8.internal.core.model.Time;
 import org.medi8.internal.core.ui.Scale;
-
-// FIXME: should display tic marks and times
-// Probably will need some heuristic to make this display prettily.
-
 
 /**
  * This is a Figure that displays a timecode ruler.
@@ -89,8 +87,9 @@ public class TimecodeRuler extends Figure implements PropertyChangeListener
                 // FIXME: this is wrong, we should have a heuristic
                 // that depends on the scale.
                 String text = Time.toUserString(j);
-                // FIXME: really center the text; this is a hack.
-                int textx = Math.max(0, x - 20);
+                Font font = getFont();
+                Dimension size = FigureUtilities.getStringExtents(text, font);
+                int textx = Math.max(0, x - size.width / 2);
                 g.drawString(text, textx, r.y);
               }
 			else
