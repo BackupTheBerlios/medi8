@@ -267,9 +267,6 @@ public class Medi8Editor extends EditorPart
 	{
 		Layer base = new Layer();
 
-		// This is 45 minutes, in frames.
-		Time end = new Time(45 * 60 * 24);  // FIXME: knows about fps.
-
 		ScrollPane pane = new ScrollPane();
 		pane.setHorizontalScrollBarVisibility(ScrollPane.ALWAYS);
 		pane.setVerticalScrollBarVisibility(ScrollPane.AUTOMATIC);
