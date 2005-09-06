@@ -1,6 +1,10 @@
 TODO List
 ----------------
 
+some operations don't refresh the display
+forcing a refresh (change workspaces) does
+look into this
+
 change how ConflictMarkerFigure works
 it should not be an image but just hold other figures
 then the layout engine could make it be something like

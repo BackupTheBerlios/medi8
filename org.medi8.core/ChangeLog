@@ -1,5 +1,27 @@
 2005-09-05  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/model/Sequence.java (updateSizes): Handle
+	case where max==null.
+	* src/org/medi8/internal/core/ui/figure/AutomationTrackFigure.java
+	(AutomationTrackFigure): Updated.
+	(AutomationTrackFigure): Removed.
+	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java (getSequence):
+	New method.
+	(dropTrack): New field.
+	(computeChildren): Add the drop track.
+	* src/org/medi8/internal/core/ui/figure/DropTrackFigure.java: New file.
+	* src/org/medi8/internal/core/Medi8Editor.java: Cleaned up imports.
+	(createFigure): Only create one initial track.
+	* src/org/medi8/internal/core/ui/figure/TrackFigure.java: Reformatted.
+	(TrackFigure): Added argument.
+	* src/org/medi8/internal/core/ui/figure/TrackDropListener.java: New file...
+	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java: ...removed
+	from here.
+	(getDropListener): Updated.
+	(VideoTrackFigure): Updated.
+
+2005-09-05  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/internal/core/Medi8Editor.java (createFigure): Removed
 	unused variable.
 

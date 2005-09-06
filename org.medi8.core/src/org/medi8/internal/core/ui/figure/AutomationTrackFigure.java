@@ -27,8 +27,8 @@ public class AutomationTrackFigure extends TrackFigure
   
   public AutomationTrackFigure(SequenceFigure seq, AutomationTrack track, Scale scale)
 	{
-		setScale(scale);
-		this.sequenceFigure = seq;
+        super(seq, scale);
+
 		this.track = track;
 		track.addChangeNotifyListener(this);
 		
@@ -57,15 +57,6 @@ public class AutomationTrackFigure extends TrackFigure
 	  return;
 	}
 	
-	/**
-   * 
-   */
-  private AutomationTrackFigure()
-  {
-    super();
-    // TODO Auto-generated constructor stub
-  }
-
   /* (non-Javadoc)
    * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
    */

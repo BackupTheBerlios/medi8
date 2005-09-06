@@ -60,7 +60,6 @@ import org.medi8.core.file.XMLGeneratingVisitor;
 import org.medi8.internal.core.model.Clip;
 import org.medi8.internal.core.model.InsertOrDeleteCommand;
 import org.medi8.internal.core.model.Sequence;
-import org.medi8.internal.core.model.Time;
 import org.medi8.internal.core.model.Track;
 import org.medi8.internal.core.model.VideoTrack;
 import org.medi8.internal.core.model.audio.AudioBus;
@@ -277,7 +276,9 @@ public class Medi8Editor extends EditorPart
 		if (sequence == null)
 		{
 			sequence = new Sequence();
-			Track[] tracks = new Track[6];
+            // Only create one initial track and let user make
+            // more via the drop track.
+			Track[] tracks = new Track[1];
 			int i;
 			for (i = 0; i < tracks.length-1; ++i)
 			{

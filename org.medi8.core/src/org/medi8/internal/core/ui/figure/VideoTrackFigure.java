@@ -4,7 +4,6 @@
 package org.medi8.internal.core.ui.figure;
 
 import java.beans.PropertyChangeEvent;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -17,12 +16,6 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.util.TransferDropTargetListener;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Canvas;
-import org.medi8.core.file.MLTClipFactory;
 import org.medi8.internal.core.Medi8Editor;
 import org.medi8.internal.core.model.Clip;
 import org.medi8.internal.core.model.EmptyClip;
@@ -44,8 +37,8 @@ public class VideoTrackFigure extends TrackFigure
 	 */
 	public VideoTrackFigure(SequenceFigure seq, VideoTrack track, Scale scale)
 	{
-		setScale(scale);
-		this.sequenceFigure = seq;
+        super(seq, scale);
+
 		this.track = track;
 		track.addChangeNotifyListener(this);
 		
@@ -101,7 +94,14 @@ public class VideoTrackFigure extends TrackFigure
 	 */
 	TransferDropTargetListener getDropListener(Medi8Editor editor)
 	{
-		return new TrackDropListener(editor);
+		return new TrackDropListener(this, editor)
+        {
+		  public void handleDrop(Clip clip, Time when)
+          {
+            Command cmd = new InsertOrDeleteCommand("insert", track, clip, when);
+            editor.executeCommand(cmd);
+          }
+        };
 	}
 	
 	private void computeChildren()
@@ -136,82 +136,6 @@ public class VideoTrackFigure extends TrackFigure
 		}
 	}
 
-	/**
-	 * This handles the drop part of dnd. 
-	 * FIXME: ideally there would be a generic draw2d drop listener.
-	 */
-	class TrackDropListener implements TransferDropTargetListener
-	{
-		// There must be a better way...
-		Medi8Editor editor;
-		Canvas canvas;
-		
-		public TrackDropListener(Medi8Editor editor)
-		{
-			this.editor = editor;
-			this.canvas = editor.getCanvas();
-		}
-		
-		public Transfer getTransfer() {
-			return SequenceFigure.fileTransfer;
-		}
-		
-		public boolean isEnabled(DropTargetEvent event) {
-			// Note this is the SWT Point, not the Draw2d Point.
-			// Yay Draw2d!
-			Point canvPoint = canvas.toControl(event.x, event.y);
-			return containsPoint(canvPoint.x, canvPoint.y);
-		}
-
-		public void dragEnter(DropTargetEvent event) {
-			// FIXME: this is entry to the canvas, probably shouldn't do anything
-			// here.
-			if (event.detail == DND.DROP_DEFAULT) {
-				if ((event.operations & DND.DROP_COPY) != 0)
-					event.detail = DND.DROP_COPY;
-				else
-					event.detail = DND.DROP_NONE;
-			}
-		}
-
-		public void dragLeave(DropTargetEvent event) {
-			// Nothing to do -- this is exit from the Canvas, not this item.
-		}
-
-		public void dragOperationChanged(DropTargetEvent event) {
-			if (event.detail == DND.DROP_DEFAULT) {
-				if ((event.operations & DND.DROP_COPY) != 0)
-					event.detail = DND.DROP_COPY;
-				else
-					event.detail = DND.DROP_NONE;
-			}
-		}
-
-		public void dragOver(DropTargetEvent event) {
-			//event.feedback = DND.FEEDBACK_SCROLL;
-		}
-
-		public void drop(DropTargetEvent event) {
-			String[] files = (String[]) event.data;
-			// FIXME: for now only handle the first file.
-			Clip clip1 = MLTClipFactory.createClip(new File(files[0]));
-			Point canvPoint = canvas.toControl(event.x, event.y);
-
-			// Now transform to figure's coordinates.
-			org.eclipse.draw2d.geometry.Point xform
-				= new org.eclipse.draw2d.geometry.Point(canvPoint.x, canvPoint.y);
-			translateToRelative(xform);
-			Time when = scale.unitsToDuration(xform.x);
-			
-			Command cmd = new InsertOrDeleteCommand("insert", (VideoTrack) track, clip1, when);
-			editor.executeCommand(cmd);
-		}
-
-		public void dropAccept(DropTargetEvent event) {
-			// Nothing to do here.
-		}
-	}
-	
 	class VideoTrackMouseHandler extends TrackMouseHandler
 	{
 		private int origX;

@@ -173,7 +173,7 @@ public class Sequence implements Visitable
 			  if (max == null || n.compareTo(max) > 0)
 			    max = n;
 		}
-		if (max.zero())
+		if (max == null || max.zero())
 		{
 			// We want to display something in this case.
 			// Use two hours.

@@ -61,6 +61,8 @@ public class SequenceFigure extends Figure implements IChangeListener
 		sequence.addChangeNotifyListener(this);
 		topRuler = new TimecodeRuler (TimecodeRuler.ABOVE);
 		topRuler.setScale(scale);
+        dropTrack = new DropTrackFigure(this, scale);
+        adapter.addDropTargetListener(dropTrack.getDropListener(editor));
 		computeChildren();
 	}
 	
@@ -69,6 +71,11 @@ public class SequenceFigure extends Figure implements IChangeListener
 		this.sequence = s;
 		computeChildren();
 	}
+    
+    public Sequence getSequence()
+    {
+      return sequence;
+    }
 
 	public boolean useLocalCoordinates()
 	{
@@ -149,7 +156,11 @@ public class SequenceFigure extends Figure implements IChangeListener
 	private void computeChildren()
 	{
 		add(topRuler);
+        add(dropTrack);
 		add(selectionBox);
+
+        // FIXME: adapter should be cleared somehow.  Or re-created,
+        // but then we must re-add dropTrack.
 
 		Iterator iter = sequence.getIterator();
 		while (iter.hasNext())
@@ -177,6 +188,7 @@ public class SequenceFigure extends Figure implements IChangeListener
 	private Sequence sequence;
 	private Scale scale;
 	private TimecodeRuler topRuler;
+    private DropTrackFigure dropTrack;
 	
 	// Some objects used for drag-and-drop.
 	private DropTarget targ;
