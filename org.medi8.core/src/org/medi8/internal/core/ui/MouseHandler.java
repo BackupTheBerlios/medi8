@@ -1,8 +1,5 @@
 /*
  * Created on Aug 4, 2004
- *
- * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 package org.medi8.internal.core.ui;
 
@@ -10,35 +7,55 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.medi8.internal.core.ui.figure.SelectionFigure;
 import org.medi8.internal.core.ui.figure.SequenceFigure;
 
 /**
  * @author tromey
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class MouseHandler implements MouseListener, MouseMotionListener
 {
-	public MouseHandler (SequenceFigure seq)
+	public MouseHandler (SequenceFigure seq, Canvas canvas, MenuManager manager)
 	{
 		this.seq = seq;
+        this.canvas = canvas;
+        this.manager = manager;
 	}
 
-	public void mousePressed(MouseEvent me) {
-		if (me.button != 1)
-			return;
-		if (box == null)
-		{
-			box = new SelectionFigure (seq);
-			seq.add(box);
-		}
-		Rectangle r = new Rectangle(seq.getBounds());
-		r.setLocation(me.x, 0);
-		r.setSize(0, r.height);
-		box.setBounds(r);
-		dragX = me.x;
+	public void mousePressed(final MouseEvent me) {
+		if (me.button == 1)
+          {
+            if (box == null)
+              {
+                box = new SelectionFigure (seq);
+                seq.add(box);
+              }
+            Rectangle r = new Rectangle(seq.getBounds());
+            r.setLocation(me.x, 0);
+            r.setSize(0, r.height);
+            box.setBounds(r);
+            dragX = me.x;
+          }
+        else if (me.button == 3)
+          {
+            Display dpy = canvas.getShell().getDisplay();
+            dpy.asyncExec(new Runnable()
+                          {
+                            public void run()
+                            {
+                              if (canvas.getShell().isDisposed())
+                                return;
+                              Menu menu = manager.createContextMenu(canvas);
+                              menu.setLocation(canvas.toDisplay(me.x, me.y));
+                              menu.setEnabled(true);
+                              menu.setVisible(true);
+                            }
+                          });
+          }
 	}
 
 	public void mouseReleased(MouseEvent me) {
@@ -91,4 +108,6 @@ public class MouseHandler implements MouseListener, MouseMotionListener
 	SequenceFigure seq;
 	SelectionFigure box;
 	int dragX;
+    Canvas canvas;
+    MenuManager manager;
 }

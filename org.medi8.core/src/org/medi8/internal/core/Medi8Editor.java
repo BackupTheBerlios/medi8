@@ -38,6 +38,7 @@ import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.gef.ui.actions.UpdateAction;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -295,7 +296,8 @@ public class Medi8Editor extends EditorPart
 		base.add(sequenceFigure);
 		base.setLayoutManager(new FlowLayout());
 		
-		MouseHandler handler = new MouseHandler (sequenceFigure);
+		MouseHandler handler = new MouseHandler (sequenceFigure, canvas,
+                                                 videoContextMenu);
 		sequenceFigure.addMouseListener(handler);
 		sequenceFigure.addMouseMotionListener(handler);
 		
@@ -347,11 +349,13 @@ public class Medi8Editor extends EditorPart
 		action = new UndoAction(this);
 		registry.registerAction(action);
 		stackActions.add(action.getId());
+        videoContextMenu.add(action);
 		site.getActionBars().setGlobalActionHandler(ActionFactory.UNDO.getId(), action);
 	
 		action = new RedoAction(this);
 		registry.registerAction(action);
 		stackActions.add(action.getId());
+        videoContextMenu.add(action);
 		site.getActionBars().setGlobalActionHandler(ActionFactory.REDO.getId(), action);
 	
 		// FIXME: we probably shouldn't bother using a DeleteAction here.
@@ -360,7 +364,8 @@ public class Medi8Editor extends EditorPart
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		site.getActionBars().setGlobalActionHandler(ActionFactory.DELETE.getId(), action);
-		
+        videoContextMenu.add(ActionFactory.DELETE.create(getSite().getWorkbenchWindow()));;
+
 		// This is just like Delete, but also copies to the clipboard.
 		action = new InternalDeleteAction(this) {
 			public String getId() {
@@ -376,6 +381,7 @@ public class Medi8Editor extends EditorPart
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		site.getActionBars().setGlobalActionHandler(ActionFactory.CUT.getId(), action);
+        videoContextMenu.add(ActionFactory.CUT.create(getSite().getWorkbenchWindow()));
 		
 		action = new SelectionAction(this) {
 			public String getId () {
@@ -401,12 +407,14 @@ public class Medi8Editor extends EditorPart
 		registry.registerAction(action);
 		selectionActions.add(ActionFactory.COPY.getId());
 		site.getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), action);
-	
+        videoContextMenu.add(ActionFactory.COPY.create(getSite().getWorkbenchWindow()));
+
+        // Note: no need to add 'save' to the context menu.
 		action = new SaveAction(this);
 		registry.registerAction(action);
 		propertyActions.add(action.getId());
 		site.getActionBars().setGlobalActionHandler(ActionFactory.SAVE.getId(), action);
-		
+
 		// FIXME: shouldn't use SelectionAction here.
 		action = new SelectionAction(this)
 		{
@@ -430,6 +438,7 @@ public class Medi8Editor extends EditorPart
 		registry.registerAction(action);
 		clipboardActions.add(action.getId());
 		site.getActionBars().setGlobalActionHandler(ActionFactory.PASTE.getId(), action);
+        videoContextMenu.add(ActionFactory.PASTE.create(getSite().getWorkbenchWindow()));
 
 		//action = new RetargetAction(IWorkbenchActionConstants.BOOKMARK, "Add Bookmark...");
 		//registry.registerAction(action);
@@ -506,6 +515,9 @@ public class Medi8Editor extends EditorPart
 	private ArrayList selectionActions = new ArrayList();
 	private ArrayList propertyActions = new ArrayList();
 	private ArrayList clipboardActions = new ArrayList();
+    
+    // The video track context menu.
+    private MenuManager videoContextMenu = new MenuManager();
 	
 	/** Listeners. */
 	private HashSet selectionListeners = new HashSet();
