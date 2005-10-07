@@ -25,5 +25,6 @@
 #include <framework/mlt_consumer.h>
 
 extern mlt_consumer consumer_thumb_init (char *);
+extern mlt_consumer consumer_monitor_init (char *arg);
 
 #endif

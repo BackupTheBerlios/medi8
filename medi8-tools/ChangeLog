@@ -1,3 +1,8 @@
+2005-10-06  Tom Tromey  <tromey@redhat.com>
+
+	* video/consumer_monitor/consumer_monitor.h (consumer_monitor_init):
+	Declare.
+
 2005-07-23  Tom Tromey  <tromey@redhat.com>
 
 	* audio/m8aplay/playlist.hh (~playlist): New virtual destructor.
