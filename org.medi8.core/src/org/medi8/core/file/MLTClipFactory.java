@@ -106,7 +106,7 @@ public class MLTClipFactory
                                                     "-consumer", "thumb",
                                                     "width=" + width,
                                                     "height=" + height,
-                                                    // TODO this is a comman
+                                                    // TODO this is a comma
                                                     // delimited list of frames.
                                                     // For now let's just grab
                                                     // the first.
@@ -114,7 +114,7 @@ public class MLTClipFactory
                                       new String[] { repository,
                                                     "MLT_NORMALISATION=NTSC" });
 
-        Properties prop = new Properties();
+        // Properties prop = new Properties();
 
         DataInputStream dis = new DataInputStream(p.getInputStream());
         String line = dis.readLine();
