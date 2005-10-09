@@ -49,6 +49,16 @@ public abstract class Clip implements Visitable, Cloneable
 	{
 		return "Clip[" + (location == null ? "" : ("provenance=" + location + ",")) + "length=" + length + "]";
 	}
+    
+    /**
+     * This is like toString but returns a string that is suitable for
+     * presentation to the user, for instance as a tool tip.
+     * @return a description of the clip understandable by the user.
+     */
+    public String toUserString()
+    {
+      return location == null ? "" : location.toString();
+    }
 	
 	public boolean isVideo ()
 	{

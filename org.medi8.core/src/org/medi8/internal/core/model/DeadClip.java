@@ -55,6 +55,14 @@ public class DeadClip extends Clip
   {
     return "DeadClip[" + super.toString() + "]";
   }
+  
+  public String toUserString()
+  {
+    String result = super.toUserString();
+    if (! "".equals(result))
+      result = "Deleted part of " + result;
+    return result;
+  }
 
   private Clip child;
 }

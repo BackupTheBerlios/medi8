@@ -52,6 +52,14 @@ public class SelectionClip extends Clip implements Visitable
 					+ ",child=" + child + ",start=" + startTime
 					+ ",end=" + endTime + "]";
 	}
+    
+    public String toUserString()
+    {
+      String result = super.toUserString();
+      if (! "".equals(result))
+        result = "Selection of " + result;
+      return result;
+    }
 	
 	public void visit (Visitor v)
 	{

@@ -1,5 +1,18 @@
 2005-10-09  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java (computeChildren):
+	Use toUserString().
+	* src/org/medi8/internal/core/model/SelectionClip.java (toUserString):
+	New method.
+	* src/org/medi8/internal/core/model/DeadClip.java (toUserString): New
+	method.
+	* src/org/medi8/internal/core/model/Clip.java (toUserString): New
+	method.
+	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java
+	(FIGURE_DEBUG): 'false' by default.
+
+2005-10-09  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/core/file/MLTClipFactory.java (createThumbnail):
 	Commented out unused variable.
 	* src/org/medi8/core/file/VideoServer.java (in): Now a 

@@ -116,10 +116,7 @@ public class VideoTrackFigure extends TrackFigure
 			Provenance prov = clip.getProvenance();
 			
 			int width = scale.durationToUnits(clip.getLength());
-			// This isn't best, since right now the clip toString()
-			// methods return debugging stuff.  FIXME: add a new
-			// non-debugging toString (or a flag) and use that.
-			String tip = clip.toString();
+			String tip = clip.toUserString();
 			Figure fig = clip.getFigure(width, height);
 			if (tip == null && prov != null)
 				tip = prov.toString();
@@ -128,7 +125,7 @@ public class VideoTrackFigure extends TrackFigure
 			  tip += ("\nwidth = " + width + "\nTime = " + now
 			      + "\nX = " + scale.durationToUnit(now));
 			}
-			if (tip != null)
+			if (tip != null && ! "".equals(tip))
 				fig.setToolTip(new Label(tip));
 			add(fig);
 			figureMap.put(fig, clip);

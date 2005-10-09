@@ -204,5 +204,5 @@ public class SequenceFigure extends Figure implements IChangeListener
 	// This is referenced elsewhere in the package, namely by VideoTrackFigure.
 	static Transfer fileTransfer = FileTransfer.getInstance();
 	
-	public static final boolean FIGURE_DEBUG = true;
+	public static final boolean FIGURE_DEBUG = false;
 }
