@@ -1,3 +1,13 @@
+2005-10-15  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/internal/core/model/FileClip.java (createThumbnail):
+	Updated.
+	* src/org/medi8/core/file/MLTClipFactory.java (USE_THUMBNAILS): New
+	field.
+	(createThumbnail): Changed return type.  Create gradient if no
+	thumbnails requested.
+	(createGradient): New method.
+
 2005-10-09  Tom Tromey  <tromey@redhat.com>
 
 	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java (computeChildren):

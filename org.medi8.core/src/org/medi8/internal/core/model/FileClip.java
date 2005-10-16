@@ -74,10 +74,7 @@ public class FileClip extends Clip implements Visitable
 	private Figure createThumbnail(int overallWidth, int height)
 	{
 		int width = (int) (height * VideoTrackFigure.ASPECT);
-		ImageFigure result = new ImageFigure();
-		result.setSize(overallWidth, height);
-		MLTClipFactory.createThumbnail(result, file, overallWidth,
-				width, height);
-		return result;
+		return MLTClipFactory.createThumbnail(file, overallWidth, 
+                                              width, height);
 	}
 }

@@ -10,10 +10,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.ImageFigure;
+import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
+import org.eclipse.swt.widgets.Display;
 import org.medi8.internal.core.model.Clip;
 import org.medi8.internal.core.model.FileClip;
 import org.medi8.internal.core.model.Provenance;
@@ -26,6 +32,10 @@ import org.medi8.internal.core.model.Time;
  */
 public class MLTClipFactory
 {
+  // Set to true if you want to use the medi8 tools to create
+  // thumbnails.  FIXME: currently this does not really work :-(
+  private static final boolean USE_THUMBNAILS = false;
+
   private MLTClipFactory()
   {
   }
@@ -73,6 +83,23 @@ public class MLTClipFactory
         return null;
       }
   }
+  
+  // Create a gradient figure.
+  private static Figure createGradient(int overallWidth, int height)
+  {
+    Figure result = new RectangleFigure()
+    {
+      public void paintFigure(Graphics g)
+      {
+        Rectangle r = getBounds();
+        g.fillGradient(r.x, r.y, r.width, r.height, true);
+      }
+    };
+    result.setBackgroundColor(new Color(Display.getCurrent(), 0x7a, 0xf3, 0x88));
+    result.setForegroundColor(new Color(Display.getCurrent(), 0x32, 0xed, 0x48));
+    result.setSize(overallWidth, height);
+    return result;
+  }
 
   /**
    * This constructs a thumbnail for the given file and puts it in the indicated
@@ -90,9 +117,13 @@ public class MLTClipFactory
    * @param height
    *          Height of one frame of the image
    */
-  public static void createThumbnail(final ImageFigure container, String file,
-                                     int overallWidth, int width, int height)
+  public static Figure createThumbnail(String file, int overallWidth,
+                                       int width, int height)
   {
+    if (! USE_THUMBNAILS)
+      return createGradient(overallWidth, height);
+    ImageFigure container = new ImageFigure();
+    container.setSize(overallWidth, height);
     byte[] bytes = new byte[overallWidth * height * 3];
     ImageData data = new ImageData(overallWidth, height, 24, pd, 3, bytes);
     byte[] tbytes = new byte[width * height * 3];
@@ -131,7 +162,7 @@ public class MLTClipFactory
       {
         if (p != null)
           p.destroy();
-        return;
+        return createGradient(overallWidth, height);
       }
     try
       {
@@ -169,6 +200,8 @@ public class MLTClipFactory
 
     Image img = new Image(null, data);
     container.setImage(img);
+    
+    return container;
   }
 
   private static final PaletteData pd = new PaletteData(0xff0000, 0x00ff00,
