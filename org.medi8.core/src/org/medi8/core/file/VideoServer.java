@@ -112,8 +112,9 @@ public class VideoServer
                                             new String[] { server_name, "100", "100" },
                                             new String[] {"SDL_VIDEODRIVER=x11",
                                                           "SDL_DEBUG=1",
-                                                          "SDL_WINDOWID=0x" + Long.toHexString(parentHandle),
-                                                          "MLT_NORMALISATION=NTSC",
+                                                          "SDL_WINDOWID=" + parentHandle,
+                                                          // FIXME
+                                                          //"MLT_NORMALISATION=NTSC",
                                                           repository});
       }
     catch (IOException ex)

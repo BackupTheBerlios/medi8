@@ -59,8 +59,8 @@ public class MLTClipFactory
                                               new String[] { "inigo",
                                                             file.toString(),
                                                             "-consumer", "info" },
-                                              new String[] { repository,
-                                                            "MLT_NORMALISATION=NTSC" });
+                                              new String[] { repository /*,  FIXME
+                                                            "MLT_NORMALISATION=NTSC" */});
 
         Properties prop = new Properties();
         prop.load(p.getInputStream());
@@ -142,8 +142,8 @@ public class MLTClipFactory
                                                     // For now let's just grab
                                                     // the first.
                                                     "frames=0" },
-                                      new String[] { repository,
-                                                    "MLT_NORMALISATION=NTSC" });
+                                      new String[] { repository /*,
+                                                    "MLT_NORMALISATION=NTSC"*/ });
 
         // Properties prop = new Properties();
 
