@@ -4,6 +4,7 @@ TODO List
 some operations don't refresh the display
 forcing a refresh (change workspaces) does
 look into this
+more info: adding calls to revalidate() doesn't help
 
 change how ConflictMarkerFigure works
 it should not be an image but just hold other figures

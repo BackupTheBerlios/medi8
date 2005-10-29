@@ -142,7 +142,11 @@ public class VideoTrackFigure extends TrackFigure
 		}
 		public void mousePressed(MouseEvent me) {
 			if (me.button != 1)
-				return;
+              {
+                sequenceFigure.handleMousePressed(me);
+                return;
+              }
+            me.consume();
 			origX = me.x;
 			// Sigh: two kinds of Point.
 			org.eclipse.draw2d.geometry.Point where 

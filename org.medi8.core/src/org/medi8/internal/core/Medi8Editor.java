@@ -281,11 +281,16 @@ public class Medi8Editor extends EditorPart
             // more via the drop track.
 			Track[] tracks = new Track[1];
 			int i;
-			for (i = 0; i < tracks.length-1; ++i)
+			for (i = 0; i < tracks.length - 1; ++i)
 			{
 				tracks[i] = new VideoTrack();
 				sequence.addTrack(tracks[i]);
 			}
+            
+            // The automation track makes newly dropped tracks show
+            // up in a strange place.  What UI do we want for this?
+            // FIXME
+            // Also, if we remove this, we will crash the JVM.
 			tracks[i] = AudioBus.getMasterBus().getAutomationTrack ();
 			sequence.addTrack(tracks[i]);
 		}
