@@ -214,8 +214,8 @@ public class Medi8Editor extends EditorPart
 		}
 		catch (Exception e)
 		{
-			//This is just an example.  All exceptions caught here.
-			e.printStackTrace();
+			// Ignore the exception.
+			// e.printStackTrace();
 		}
 	}
 

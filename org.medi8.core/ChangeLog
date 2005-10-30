@@ -1,3 +1,8 @@
+2005-10-30  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/internal/core/Medi8Editor.java (init): Ignore the
+	exception.
+
 2005-10-29  Tom Tromey  <tromey@redhat.com>
 
 	* src/org/medi8/internal/core/ui/figure/DropTrackFigure.java
