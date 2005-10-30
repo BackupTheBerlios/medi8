@@ -7,10 +7,12 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.medi8.internal.core.Medi8Editor;
+import org.medi8.internal.core.model.AddOrDeleteTrackCommand;
 import org.medi8.internal.core.model.Clip;
 import org.medi8.internal.core.model.InsertOrDeleteCommand;
 import org.medi8.internal.core.model.Medi8Event;
@@ -51,12 +53,12 @@ public class DropTrackFigure
     {
       public void handleDrop(Clip clip, Time when)
       {
-        // FIXME: we need a way to add a new track via a command
-        // and then get this into the insertion command.
-        VideoTrack newTrack = new VideoTrack();  // FIXME: always video?
-        sequenceFigure.getSequence().addTrack(newTrack);
-        Command cmd = new InsertOrDeleteCommand("insert", newTrack, clip, when);
-        editor.executeCommand(cmd);
+        CompoundCommand command = new CompoundCommand("insert");
+        VideoTrack newTrack = new VideoTrack();  // FIXME: not always video.
+        command.add(new AddOrDeleteTrackCommand(sequenceFigure.getSequence(),
+                                                newTrack));
+        command.add(new InsertOrDeleteCommand("insert", newTrack, clip, when));
+        editor.executeCommand(command);
       }
     };
   }

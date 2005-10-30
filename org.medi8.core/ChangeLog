@@ -1,5 +1,14 @@
 2005-10-29  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/ui/figure/DropTrackFigure.java
+	(handleDrop): Create a compound command.
+	* src/org/medi8/internal/core/model/AddOrDeleteTrackCommand.java: 
+	New file.
+	* src/org/medi8/internal/core/model/Sequence.java (removeTrack): New
+	method.
+
+2005-10-29  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java (mousePressed):
 	Consume event.  Pass unhandled events to sequence figure.
 
