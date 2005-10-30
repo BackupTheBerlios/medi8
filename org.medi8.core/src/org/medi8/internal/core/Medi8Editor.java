@@ -279,9 +279,11 @@ public class Medi8Editor extends EditorPart
 			sequence = new Sequence();
             // Only create one initial track and let user make
             // more via the drop track.
-			Track[] tracks = new Track[1];
+			final boolean wantAutomation = false;
+            int nTracks = 1;
+			Track[] tracks = new Track[1 + (wantAutomation ? 1 : 0)];
 			int i;
-			for (i = 0; i < tracks.length - 1; ++i)
+			for (i = 0; i < nTracks; ++i)
 			{
 				tracks[i] = new VideoTrack();
 				sequence.addTrack(tracks[i]);
@@ -289,10 +291,14 @@ public class Medi8Editor extends EditorPart
             
             // The automation track makes newly dropped tracks show
             // up in a strange place.  What UI do we want for this?
-            // FIXME
-            // Also, if we remove this, we will crash the JVM.
-			tracks[i] = AudioBus.getMasterBus().getAutomationTrack ();
-			sequence.addTrack(tracks[i]);
+            // For now we disable this.  FIXME: make the automation
+            // track figure render something.  Think about having
+            // it always float to the bottom...?
+            if (wantAutomation)
+              {
+                tracks[i] = AudioBus.getMasterBus().getAutomationTrack ();
+                sequence.addTrack(tracks[i]);
+              }
 		}
 		
 		sequenceFigure = new SequenceFigure(this, sequence, scaler);

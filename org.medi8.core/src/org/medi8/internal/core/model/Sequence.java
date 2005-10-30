@@ -187,11 +187,13 @@ public class Sequence implements Visitable
 			    max = n;
 		}
 		if (max == null || max.zero())
-		{
-			// We want to display something in this case.
-			// Use two hours.
-			max = new Time(2 * 60 * 60);
-		}
+		  {
+		    // We want to display something in this case.
+		    // Use ten minutes.  Note that if this is too
+		    // large, the gradient used by the drop track
+            // figure will cause a JVM crash.  FIXME.
+			max = new Time(10* 60);
+		  }
 		for (int i = 0; i < tracks.size(); ++i)
 		{
 			Track t = (Track) tracks.get(i);

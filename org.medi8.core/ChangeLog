@@ -1,5 +1,21 @@
 2005-10-30  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/ui/figure/TimecodeRuler.java
+	(paintFigure): Ensure text is not cut off on right edge.
+	* src/org/medi8/internal/core/model/Sequence.java (updateSizes):
+	Default to ten minutes.
+	* src/org/medi8/internal/core/Medi8Editor.java (createFigure):
+	Disable automation track.
+	* src/org/medi8/internal/core/ui/figure/DropTrackFigure.java:
+	Organized imports.
+
+2005-10-30  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/internal/core/Medi8Editor.java (createFigure): Make 
+	an initial video track.
+
+2005-10-30  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/internal/core/Medi8Editor.java (init): Ignore the
 	exception.
 

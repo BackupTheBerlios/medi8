@@ -89,7 +89,9 @@ public class TimecodeRuler extends Figure implements PropertyChangeListener
                 String text = Time.toUserString(j);
                 Font font = getFont();
                 Dimension size = FigureUtilities.getStringExtents(text, font);
+                // Make sure text is not cut off at left or right edges.
                 int textx = Math.max(0, x - size.width / 2);
+                textx = Math.min(textx, r.width - size.width);
                 g.drawString(text, textx, r.y);
               }
 			else
