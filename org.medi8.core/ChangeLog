@@ -1,5 +1,12 @@
 2005-10-30  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/ui/figure/TrackDropListener.java
+	(getPoint): New method.
+	(isEnabled): Use it.
+	(drop): Likewise.
+
+2005-10-30  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/internal/core/ui/figure/TimecodeRuler.java
 	(paintFigure): Ensure text is not cut off on right edge.
 	* src/org/medi8/internal/core/model/Sequence.java (updateSizes):

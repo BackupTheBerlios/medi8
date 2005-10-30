@@ -2,11 +2,11 @@ package org.medi8.internal.core.ui.figure;
 
 import java.io.File;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Canvas;
 import org.medi8.core.file.MLTClipFactory;
 import org.medi8.internal.core.Medi8Editor;
@@ -41,12 +41,23 @@ abstract class TrackDropListener implements TransferDropTargetListener
   {
     return SequenceFigure.fileTransfer;
   }
-
-  public boolean isEnabled(DropTargetEvent event)
+  
+  // Return a track-relative point given an event.
+  private Point getPoint(DropTargetEvent event)
   {
     // Note this is the SWT Point, not the Draw2d Point.
     // Yay Draw2d!
-    Point canvPoint = canvas.toControl(event.x, event.y);
+    org.eclipse.swt.graphics.Point canvPoint
+      = canvas.toControl(event.x, event.y);
+    Point result = new Point(canvPoint.x, canvPoint.y);
+    // I hate draw2d.
+    figure.translateToRelative(result);
+    return result;
+  }
+
+  public boolean isEnabled(DropTargetEvent event)
+  {
+    Point canvPoint = getPoint(event);
     return this.figure.containsPoint(canvPoint.x, canvPoint.y);
   }
 
@@ -98,13 +109,8 @@ abstract class TrackDropListener implements TransferDropTargetListener
     String[] files = (String[]) event.data;
     // FIXME: for now only handle the first file.
     Clip clip1 = MLTClipFactory.createClip(new File(files[0]));
-    Point canvPoint = canvas.toControl(event.x, event.y);
-
-    // Now transform to figure's coordinates.
-    org.eclipse.draw2d.geometry.Point xform
-      = new org.eclipse.draw2d.geometry.Point(canvPoint.x, canvPoint.y);
-    this.figure.translateToRelative(xform);
-    Time when = this.figure.scale.unitsToDuration(xform.x);
+    Point canvPoint = getPoint(event);
+    Time when = this.figure.scale.unitsToDuration(canvPoint.x);
 
     handleDrop(clip1, when);
   }

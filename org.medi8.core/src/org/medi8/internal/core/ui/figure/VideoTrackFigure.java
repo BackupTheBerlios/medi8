@@ -132,7 +132,7 @@ public class VideoTrackFigure extends TrackFigure
 			now += clip.getLength().toDouble();
 		}
 	}
-
+    
 	class VideoTrackMouseHandler extends TrackMouseHandler
 	{
 		private int origX;
