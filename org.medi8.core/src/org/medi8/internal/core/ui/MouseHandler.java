@@ -1,113 +1,152 @@
 /*
  * Created on Aug 4, 2004
  */
+
+
 package org.medi8.internal.core.ui;
 
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.MouseMotionListener;
-import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
-import org.medi8.internal.core.ui.figure.SelectionFigure;
 import org.medi8.internal.core.ui.figure.SequenceFigure;
 
 /**
- * @author tromey
+ * This is a simple mouse handler for the main part of a Medi8
+ * editor.  It handles mouse actions for the background.
+ * Other figures may pass mouse events to it (via the SequenceFigure);
+ * for instance this is typically done for the context menu handling.
+ * @author Tom Tromey
  */
-public class MouseHandler implements MouseListener, MouseMotionListener
+public class MouseHandler
+  implements MouseListener, MouseMotionListener
 {
-	public MouseHandler (SequenceFigure seq, Canvas canvas, MenuManager manager)
-	{
-		this.seq = seq;
-        this.canvas = canvas;
-        this.manager = manager;
-	}
+  public MouseHandler(SequenceFigure seq, Canvas canvas, MenuManager manager)
+  {
+    this.seq = seq;
+    this.canvas = canvas;
+    this.manager = manager;
+  }
 
-	public void mousePressed(final MouseEvent me) {
-		if (me.button == 1)
+  public void mousePressed(final MouseEvent me)
+  {
+    if (me.button == 1)
+      {
+        Point p = new Point(me.x, me.y);
+        seq.translateFromParent(p);
+        if ((me.getState() & MouseEvent.SHIFT) != 0)
           {
-            if (box == null)
+            // We set dragX as it allows for shift-click-then-drag.
+            if (Math.abs(p.x - xlo) < Math.abs(p.x - xhi))
               {
-                box = new SelectionFigure (seq);
-                seq.add(box);
+                xlo = p.x;
+                dragX = xhi;
               }
-            Rectangle r = new Rectangle(seq.getBounds());
-            r.setLocation(me.x, 0);
-            r.setSize(0, r.height);
-            box.setBounds(r);
-            dragX = me.x;
+            else
+              {
+                xhi = p.x;
+                dragX = xlo;
+              }
+            seq.setSelection(null, xlo, xhi, null);
           }
-        else if (me.button == 3)
+        else
           {
-            Display dpy = canvas.getShell().getDisplay();
-            dpy.asyncExec(new Runnable()
-                          {
-                            public void run()
-                            {
-                              if (canvas.getShell().isDisposed())
-                                return;
-                              Menu menu = manager.createContextMenu(canvas);
-                              menu.setLocation(canvas.toDisplay(me.x, me.y));
-                              menu.setEnabled(true);
-                              menu.setVisible(true);
-                            }
-                          });
+            seq.setCursorLocation(null, p.x);
+            dragX = p.x;
           }
-	}
+        me.consume();
+      }
+    else if (me.button == 3)
+      {
+        Display dpy = canvas.getShell().getDisplay();
+        dpy.asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            if (canvas.getShell().isDisposed())
+              return;
+            Menu menu = manager.createContextMenu(canvas);
+            menu.setLocation(canvas.toDisplay(me.x, me.y));
+            menu.setEnabled(true);
+            menu.setVisible(true);
+          }
+        });
+        me.consume();
+      }
+  }
 
-	public void mouseReleased(MouseEvent me) {
-		if (me.button != 1)
-			return;
+  private void updateBox(MouseEvent me)
+  {
+    Point p = new Point(me.x, me.y);
+    seq.translateFromParent(p);
+    if (p.x < dragX)
+      {
+        xlo = p.x;
+        xhi = dragX;
+      }
+    else
+      {
+        xlo = dragX;
+        xhi = p.x;
+      }
+    if (xlo == xhi)
+      seq.setCursorLocation(null, xlo);
+    else
+      seq.setSelection(null, xlo, xhi, null);
+  }
 
-	}
+  public void mouseReleased(MouseEvent me)
+  {
+    if (me.button == 1 && dragX != -1)
+      updateBox(me);
+    dragX = -1;
+  }
 
-	public void mouseDoubleClicked(MouseEvent me) {
-		// Nothing.
-	}
+  public void mouseDoubleClicked(MouseEvent me)
+  {
+    // Nothing.
+  }
 
-	public void mouseDragged(MouseEvent me) {
-		if (me.button != 1)
-			return;
-		Rectangle r = box.getBounds();
-		int x2 = r.x + r.width;
-		int nx, nw;
-		if (me.x < dragX)
-		{
-			nx = me.x;
-			nw = dragX - me.x;
-		}
-		else
-		{
-			nx = dragX;
-			nw = me.x - dragX;
-		}
-		r.setLocation(nx, 0);
-		r.setSize(nw, r.height);
-		box.setBounds(r);
-	}
+  public void mouseDragged(MouseEvent me)
+  {
+    updateBox(me);
+  }
 
-	public void mouseEntered(MouseEvent me) {
-		// Nothing.
-	}
+  public void mouseEntered(MouseEvent me)
+  {
+    // Nothing.
+  }
 
-	public void mouseExited(MouseEvent me) {
-		// Nothing.
-	}
+  public void mouseExited(MouseEvent me)
+  {
+    // Nothing.
+  }
 
-	public void mouseHover(MouseEvent me) {
-		// Nothing.
-	}
+  public void mouseHover(MouseEvent me)
+  {
+    // Nothing.
+  }
 
-	public void mouseMoved(MouseEvent me) {
-		// Nothing.
-	}
-	
-	SequenceFigure seq;
-	SelectionFigure box;
-	int dragX;
-    Canvas canvas;
-    MenuManager manager;
+  public void mouseMoved(MouseEvent me)
+  {
+    // Nothing.
+  }
+
+  /** The sequence figure to which we're attached.  */
+  SequenceFigure seq;
+
+  /** When dragging, the starting point.  */
+  int dragX = -1;
+  /** Bounds of the selection rectangle.  */
+  int xlo, xhi;
+
+  /** The canvas to which we're attached.  */
+  Canvas canvas;
+
+  /** The menu manager holding the context menu.  */
+  MenuManager manager;
 }

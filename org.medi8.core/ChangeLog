@@ -1,5 +1,25 @@
 2005-10-30  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java
+	(setSelection): Handle 'null' track.  Hide cursor line.
+	(setCursorLocation): Hide selection box.
+	(computeChildren): Add selection box first.
+	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java:
+	Reformatted.
+	(mousePressed): Forward to sequence.
+	(mouseReleased): Likewise.
+	(mouseDragged): Likewise.
+	(trySelectClip): New method.
+	* src/org/medi8/internal/core/ui/MouseHandler.java: Reformatted.
+	Documented.
+	(updateBox): New method.
+	(mouseDragged): Use it.
+	(mouseReleased): Likewise.
+	(mousePressed): Handle shift-click.
+	(box): Removed.
+
+2005-10-30  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/internal/core/ui/figure/TrackDropListener.java
 	(getPoint): New method.
 	(isEnabled): Use it.

@@ -108,14 +108,19 @@ public class SequenceFigure extends Figure implements IChangeListener
 	 */
 	public void setSelection(VideoTrackFigure track, int xLow, int xHigh, Clip clip)
 	{
-		Rectangle bounds = new Rectangle (track.getBounds());
+        Rectangle origBounds = (track == null ? getBounds() : track.getBounds());
+		Rectangle bounds = new Rectangle (origBounds);
 		bounds.setLocation(xLow, bounds.y - Medi8Editor.VERTICAL_GAP / 2);
 		bounds.setSize(xHigh - xLow, bounds.height + Medi8Editor.VERTICAL_GAP);
 		selectionBox.setBounds(bounds);
 		selectionBox.setVisible(true);
+        cursorLine.setVisible(false);
 		
-		ISelection sel = new ClipSelection(clip, (VideoTrack) track.getTrack());
-		editor.getSite().getSelectionProvider().setSelection(sel);
+        if (track != null)
+          {
+            ISelection sel = new ClipSelection(clip, (VideoTrack) track.getTrack());
+            editor.getSite().getSelectionProvider().setSelection(sel);
+          }
 	}
 	
 	/**
@@ -124,6 +129,7 @@ public class SequenceFigure extends Figure implements IChangeListener
 	 */
 	public void setCursorLocation(VideoTrack track, int x)
 	{
+        selectionBox.setVisible(false);
 		if (x < 0)
 		{
 			cursorLine.setVisible(false);
@@ -135,7 +141,6 @@ public class SequenceFigure extends Figure implements IChangeListener
 			cursorLine.setStart(new Point(x, 0));
 			cursorLine.setEnd(new Point(x, getBounds().height));
 			cursorLine.setVisible(true);
-			// assert track != null;
 			cursorTrack = track;
 		}
 		editor.notifyCursorChange();
@@ -155,9 +160,10 @@ public class SequenceFigure extends Figure implements IChangeListener
 	
 	private void computeChildren()
 	{
+	    // Add selection box first so it is lowest on the z axis. 
+        add(selectionBox);
 		add(topRuler);
         add(dropTrack);
-		add(selectionBox);
 
         // FIXME: adapter should be cleared somehow.  Or re-created,
         // but then we must re-add dropTrack.
