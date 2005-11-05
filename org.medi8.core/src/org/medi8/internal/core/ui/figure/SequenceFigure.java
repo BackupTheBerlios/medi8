@@ -125,7 +125,7 @@ public class SequenceFigure extends Figure implements IChangeListener
       selectionBox.setVisible(true);
       cursorLine.setVisible(false);
 
-      if (track != null)
+      if (track != null && clip != null)
         {
           ISelection sel = new ClipSelection(clip, (VideoTrack) track.getTrack());
           editor.getSite().getSelectionProvider().setSelection(sel);
@@ -136,22 +136,30 @@ public class SequenceFigure extends Figure implements IChangeListener
 	 * Set the current cursor location.
 	 * If called with a negative argument, the cursor is removed.
 	 */
-	public void setCursorLocation(VideoTrack track, int x)
+	public void setCursorLocation(VideoTrackFigure track, int x)
 	{
         selectionBox.setVisible(false);
 		if (x < 0)
-		{
-			cursorLine.setVisible(false);
-			cursorTrack = null;
-		}
+		  {
+		    cursorLine.setVisible(false);
+		    cursorTrack = null;
+		  }
+		else if (track != null)
+		  {
+		    // FIXME: should use a Time, not an x coordinate.
+		    Rectangle bounds = track.getBounds();
+		    cursorLine.setStart(new Point(x, bounds.y - Medi8Editor.VERTICAL_GAP / 2));
+		    cursorLine.setEnd(new Point(x, bounds.y + bounds.height + Medi8Editor.VERTICAL_GAP));
+		    cursorLine.setVisible(true);
+		    cursorTrack = (VideoTrack) track.getTrack();
+		  }
 		else
-		{
-			// FIXME: should use a Time, not an x coordinate.
-			cursorLine.setStart(new Point(x, 0));
-			cursorLine.setEnd(new Point(x, getBounds().height));
-			cursorLine.setVisible(true);
-			cursorTrack = track;
-		}
+		  {
+		    cursorLine.setStart(new Point(x, 0));
+            cursorLine.setEnd(new Point(x, getBounds().height));
+            cursorLine.setVisible(true);
+            cursorTrack = null;
+          }
 		editor.notifyCursorChange();
 	}
 	

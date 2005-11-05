@@ -1,5 +1,25 @@
 2005-11-05  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java
+	(setSelection): Allow non-null track with null clip.
+	(setCursorLocation): Changed type of 'track' argument.
+	* src/org/medi8/internal/core/ui/figure/VideoTrackFigure.java
+	(VideoTrackMouseHandler): Now extends MouseHandler.
+	(VideoTrackFigure): Updated.
+	(setSelection): New method.
+	(mouseDoubleClicked): Removed.
+	(mousePressed): Delegate to 'super'.
+	(mouseReleased): Removed.
+	(mouseDragged): Removed.
+	* src/org/medi8/internal/core/ui/figure/TrackFigure.java
+	(TrackMouseHandler): Removed.
+	* src/org/medi8/internal/core/ui/MouseHandler.java: Now abstract.
+	* src/org/medi8/internal/core/Medi8Editor.java (createFigure): Use
+	SequenceMouseHandler.
+	* src/org/medi8/internal/core/ui/SequenceMouseHandler.java: New file.
+
+2005-11-05  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/internal/core/ui/MouseHandler.java (setSelection):
 	New method.
 	(updateBox): Use it.

@@ -40,11 +40,6 @@ public abstract class TrackFigure
    */
   protected SequenceFigure sequenceFigure;
 
-  protected abstract class TrackMouseHandler
-    implements MouseListener, MouseMotionListener
-  {
-  }
-
   /**
    * This handles layout for the children of a VideoTrackFigure.
    */

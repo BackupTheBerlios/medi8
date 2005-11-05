@@ -28,6 +28,7 @@ import org.medi8.internal.core.model.Provenance;
 import org.medi8.internal.core.model.Time;
 import org.medi8.internal.core.model.Track;
 import org.medi8.internal.core.model.VideoTrack;
+import org.medi8.internal.core.ui.MouseHandler;
 import org.medi8.internal.core.ui.Scale;
 
 /**
@@ -46,7 +47,7 @@ public class VideoTrackFigure
     this.track = track;
     track.addChangeNotifyListener(this);
 
-    TrackMouseHandler handler = new VideoTrackMouseHandler();
+    VideoTrackMouseHandler handler = new VideoTrackMouseHandler();
     this.addMouseMotionListener(handler);
     this.addMouseListener(handler);
 
@@ -137,8 +138,16 @@ public class VideoTrackFigure
   }
 
   class VideoTrackMouseHandler
-    extends TrackMouseHandler
+    extends MouseHandler
   {
+    protected void setSelection(int xlo, int xhi, boolean cursor)
+    {
+      if (cursor)
+        sequenceFigure.setCursorLocation(VideoTrackFigure.this, xlo);
+      else
+        sequenceFigure.setSelection(VideoTrackFigure.this, xlo, xhi, null);
+    }
+
     private boolean trySelectClip(MouseEvent me)
     {
       Point where = new Point(me.x, me.y);
@@ -171,11 +180,6 @@ public class VideoTrackFigure
       return true;
     }
 
-    public void mouseDoubleClicked(MouseEvent me)
-    {
-      sequenceFigure.handleMouseDoubleClicked(me);
-    }
-
     public void mousePressed(MouseEvent me)
     {
       if (me.button == 1 && (me.getState() & MouseEvent.CONTROL) != 0)
@@ -183,17 +187,7 @@ public class VideoTrackFigure
           if (trySelectClip(me))
             return;
         }
-      sequenceFigure.handleMousePressed(me);
-    }
-
-    public void mouseReleased(MouseEvent me)
-    {
-      sequenceFigure.handleMouseReleased(me);
-    }
-
-    public void mouseDragged(MouseEvent me)
-    {
-      sequenceFigure.handleMouseDragged(me);
+      super.mousePressed(me);
     }
 
     public void mouseEntered(MouseEvent me)

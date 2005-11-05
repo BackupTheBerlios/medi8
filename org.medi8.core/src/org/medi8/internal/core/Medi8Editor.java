@@ -67,6 +67,7 @@ import org.medi8.internal.core.model.audio.AudioBus;
 import org.medi8.internal.core.ui.ClipSelection;
 import org.medi8.internal.core.ui.MouseHandler;
 import org.medi8.internal.core.ui.Scale;
+import org.medi8.internal.core.ui.SequenceMouseHandler;
 import org.medi8.internal.core.ui.figure.SequenceFigure;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -307,8 +308,8 @@ public class Medi8Editor extends EditorPart
 		base.add(sequenceFigure);
 		base.setLayoutManager(new FlowLayout());
 		
-		MouseHandler handler = new MouseHandler (sequenceFigure, canvas,
-                                                 videoContextMenu);
+		MouseHandler handler = new SequenceMouseHandler (sequenceFigure, canvas,
+		                                                 videoContextMenu);
 		sequenceFigure.addMouseListener(handler);
 		sequenceFigure.addMouseMotionListener(handler);
 		
