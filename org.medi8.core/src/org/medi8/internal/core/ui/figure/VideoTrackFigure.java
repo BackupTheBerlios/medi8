@@ -167,7 +167,6 @@ public class VideoTrackFigure
       Rectangle bound = child.getBounds();
       sequenceFigure.setSelection(VideoTrackFigure.this, bound.x,
                                   bound.x + bound.width, clip);
-      sequenceFigure.setCursorLocation(null, -1);
       me.consume();
       return true;
     }

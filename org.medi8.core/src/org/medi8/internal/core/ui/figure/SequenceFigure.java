@@ -108,19 +108,28 @@ public class SequenceFigure extends Figure implements IChangeListener
 	 */
 	public void setSelection(VideoTrackFigure track, int xLow, int xHigh, Clip clip)
 	{
-        Rectangle origBounds = (track == null ? getBounds() : track.getBounds());
-		Rectangle bounds = new Rectangle (origBounds);
-		bounds.setLocation(xLow, bounds.y - Medi8Editor.VERTICAL_GAP / 2);
-		bounds.setSize(xHigh - xLow, bounds.height + Medi8Editor.VERTICAL_GAP);
-		selectionBox.setBounds(bounds);
-		selectionBox.setVisible(true);
-        cursorLine.setVisible(false);
-		
-        if (track != null)
-          {
-            ISelection sel = new ClipSelection(clip, (VideoTrack) track.getTrack());
-            editor.getSite().getSelectionProvider().setSelection(sel);
-          }
+      Rectangle bounds;
+      if (track == null)
+        {
+          bounds = new Rectangle(getBounds());
+          bounds.setLocation(xLow, bounds.y);
+          bounds.setSize(xHigh - xLow, bounds.height);
+        }
+      else
+        {
+          bounds = new Rectangle(track.getBounds());
+          bounds.setLocation(xLow, bounds.y - Medi8Editor.VERTICAL_GAP / 2);
+          bounds.setSize(xHigh - xLow, bounds.height + Medi8Editor.VERTICAL_GAP);
+        }
+      selectionBox.setBounds(bounds);
+      selectionBox.setVisible(true);
+      cursorLine.setVisible(false);
+
+      if (track != null)
+        {
+          ISelection sel = new ClipSelection(clip, (VideoTrack) track.getTrack());
+          editor.getSite().getSelectionProvider().setSelection(sel);
+        }
 	}
 	
 	/**

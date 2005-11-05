@@ -31,6 +31,22 @@ public class MouseHandler
     this.canvas = canvas;
     this.manager = manager;
   }
+  
+  /**
+   * This can be overridden to change how selections are set.
+   * For a cursor setting call, it will have cursor==true;
+   * in this case xhi may be ignored.
+   * @param xlo the low x coordinate
+   * @param xhi the high x coordinatee
+   * @param cursor true for cursor-setting
+   */
+  protected void setSelection(int xlo, int xhi, boolean cursor)
+  {
+    if (cursor)
+      seq.setCursorLocation(null, xlo);
+    else
+      seq.setSelection(null, xlo, xhi, null);
+  }
 
   public void mousePressed(final MouseEvent me)
   {
@@ -51,11 +67,11 @@ public class MouseHandler
                 xhi = p.x;
                 dragX = xlo;
               }
-            seq.setSelection(null, xlo, xhi, null);
+            setSelection(xlo, xhi, false);
           }
         else
           {
-            seq.setCursorLocation(null, p.x);
+            setSelection(xlo, -1, true);
             dragX = p.x;
           }
         me.consume();
@@ -93,10 +109,7 @@ public class MouseHandler
         xlo = dragX;
         xhi = p.x;
       }
-    if (xlo == xhi)
-      seq.setCursorLocation(null, xlo);
-    else
-      seq.setSelection(null, xlo, xhi, null);
+    setSelection(xlo, xhi, xlo == xhi);
   }
 
   public void mouseReleased(MouseEvent me)
