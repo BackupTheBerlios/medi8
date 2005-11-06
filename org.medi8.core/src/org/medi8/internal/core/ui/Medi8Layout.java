@@ -14,7 +14,6 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.medi8.internal.core.model.VideoTrack;
 import org.medi8.internal.core.ui.figure.ConflictMarkerFigure;
 import org.medi8.internal.core.ui.figure.MarkerFigure;
 import org.medi8.internal.core.ui.figure.SelectionFigure;
@@ -128,9 +127,8 @@ public class Medi8Layout extends AbstractHintLayout
             ConflictMarkerFigure cmf = (ConflictMarkerFigure) markers.get(i);
             VideoTrackFigure fig = (VideoTrackFigure) vidMap.get(cmf.getFirstTrack());
             Rectangle r = fig.getBounds();
-            int ch = cmf.getSize().height;
             Point p = new Point (scale.durationToUnits(cmf.getTime()),
-                                 r.y + r.height / 2 - ch / 2);
+                                 r.y + r.height + 1);
             cmf.setLocation(p);
           }
 		

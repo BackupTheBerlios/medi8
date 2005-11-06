@@ -1,5 +1,10 @@
 2005-11-05  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/ui/Medi8Layout.java (layout): Put
+	conflict marker beneath track.
+
+2005-11-05  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/internal/core/ui/figure/SequenceFigure.java
 	(setSelection): Allow non-null track with null clip.
 	(setCursorLocation): Changed type of 'track' argument.
