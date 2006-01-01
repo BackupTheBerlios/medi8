@@ -19,9 +19,10 @@ public class KillAfterCommand extends KillCommand
   
   public void execute ()
   {
+    //System.out.println("searching");
     if (original == null)
       original = track.findClipAfter(when);
-    // System.out.println("KillAfter track " + track + " at " + when + " clip "+ original);
+    //System.out.println("KillAfter track " + track + " at " + when + " clip "+ original);
     super.execute ();
   }
   

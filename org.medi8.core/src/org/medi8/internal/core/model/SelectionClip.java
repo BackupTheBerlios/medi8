@@ -29,6 +29,7 @@ public class SelectionClip extends Clip implements Visitable
 		startTime = start;
 		endTime = end;
 		length = end.getDifference(start);
+        assert length.toDouble() >= 0;
 	}
 	
 	public Time getSelectionStartTime()

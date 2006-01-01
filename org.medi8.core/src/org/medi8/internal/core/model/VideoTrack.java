@@ -184,10 +184,12 @@ public class VideoTrack extends Track
 	  Clip clip = (Clip) elements.get(index);
 	  Time start = (Time) times.get(index);
 	  Time selWhen = when.getDifference(start);
-	  Time newLen = clip.getLength().getDifference(selWhen);
 	  
 	  SelectionClip left = new SelectionClip(clip, new Time(), selWhen);
-	  SelectionClip right = new SelectionClip (clip, selWhen, newLen);
+      // Note that the 'end' argument to the constructor is the end time in
+      // the clip's timeline -- meaning that we should just reuse the clip's
+      // length here.
+	  SelectionClip right = new SelectionClip (clip, selWhen, clip.getLength());
 	  elements.set(index, left);
 	  
 	  times.insertElementAt(when, index + 1);
@@ -272,11 +274,13 @@ public class VideoTrack extends Track
 	    Time t = (Time) times.get(i);
 	    // If the time we're looking for comes before this
 	    // element, keep going.
+        // System.out.println("when=" + when + "; t=" + t + "; == "+ when.compareTo(t));
 	    if (when.compareTo(t) < 0)
 	      continue;
 	    Clip clip = (Clip) elements.get(i);
 	    // If the time we're looking for comes before the end
 	    // of this element, we've found it.
+        // System.out.println("len=" + clip.getLength() + "; t=" + new Time(t, clip.getLength()));
 	    if (when.compareTo(new Time (t, clip.getLength())) < 0)
 	      return i;
 	  }
