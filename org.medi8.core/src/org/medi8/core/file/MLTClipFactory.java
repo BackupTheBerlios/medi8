@@ -8,6 +8,7 @@ package org.medi8.core.file;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import org.eclipse.draw2d.Figure;
@@ -33,11 +34,11 @@ import org.medi8.internal.core.model.Time;
 public class MLTClipFactory
 {
   // Set to true if you want to use the medi8 tools to create
-  // thumbnails.  FIXME: currently this does not really work :-(
-  private static final boolean USE_THUMBNAILS = false;
+  // thumbnails.
+  private static final boolean USE_THUMBNAILS = true;
   
   // Enable process logging.
-  private static final boolean PROCESS_LOGGING = true;
+  private static final boolean PROCESS_LOGGING = false;
 
   private MLTClipFactory()
   {
@@ -125,7 +126,7 @@ public class MLTClipFactory
     result.setSize(overallWidth, height);
     return result;
   }
-
+  
   /**
    * This constructs a thumbnail for the given file and puts it in the indicated
    * container. The container's size should be set by the caller; this function
@@ -151,29 +152,26 @@ public class MLTClipFactory
     container.setSize(overallWidth, height);
     byte[] bytes = new byte[overallWidth * height * 3];
     ImageData data = new ImageData(overallWidth, height, 24, pd, 3, bytes);
-    byte[] tbytes = new byte[width * height * 3];
-    ImageData tdata = new ImageData(width, height, 24, pd, 3, tbytes);
     Process p = null;
 
-    // FIXME Fill this with something silly for now.
-    for (int l = 0; l < height; l++)
-      {
-        for (int c = 0; c < overallWidth * 3; c += 3)
-          {
-            data.data[l * overallWidth * 3 + c] = 0x5c;
-            data.data[l * overallWidth * 3 + c + 1] = (byte) 0xf3;
-            data.data[l * overallWidth * 3 + c + 2] = 0x6b;
-          }
-      }
+//    for (int l = 0; l < height; l++)
+//      {
+//        for (int c = 0; c < overallWidth * 3; c += 3)
+//          {
+//            data.data[l * overallWidth * 3 + c] = 0x5c;
+//            data.data[l * overallWidth * 3 + c + 1] = (byte) 0xf3;
+//            data.data[l * overallWidth * 3 + c + 2] = 0x6b;
+//          }
+//      }
 
     // Compute the list of frames we want.
     StringBuffer frames = new StringBuffer("frames=");
-    int frameCount = 0;
-    for (int w = 0; w < overallWidth; w += width)
+    int frameCount = (overallWidth + width - 1) / width;
+    for (int i = 0; i < frameCount; ++i)
       {
-        if (frameCount > 0)
+        if (i > 0)
           frames.append(',');
-        frames.append(frameCount++);
+        frames.append(i);   // FIXME: need # of frames here
       }
     String frameString = frames.toString();
 
@@ -202,8 +200,14 @@ public class MLTClipFactory
             // FIXME check that this was 255.
 
             // Now read the image data.
+            int lineAmount = width * 3;
+            if (col == frameCount - 1 && frameCount * width != overallWidth)
+              lineAmount = overallWidth - width * (frameCount - 1);
             for (int row = 0; row < height; ++row)
-              dis.readFully(tdata.data, (row * overallWidth + col * width) * 3, width * 3);
+              {
+                int offset = (row * overallWidth + col * width) * 3;
+                dis.readFully(data.data, offset, lineAmount);
+              }
           }
       }
     catch (IOException _)

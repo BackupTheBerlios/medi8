@@ -1,5 +1,12 @@
 2006-01-02  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/core/file/MLTClipFactory.java (USE_THUMBNAILS):
+	Enable.
+	(PROCESS_LOGGING): Disable.
+	(createThumbnail): Fix thumbnail reading logic.
+
+2006-01-02  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/core/file/MLTClipFactory.java (runCommand): New
 	method.
 	(createClip): Use it.
