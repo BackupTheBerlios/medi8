@@ -1,3 +1,12 @@
+2006-01-02  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/core/file/MLTClipFactory.java (runCommand): New
+	method.
+	(createClip): Use it.
+	(createThumbnail): Likewise.
+	(PROCESS_LOGGING): New field.
+	(createThumbnail): Read multiple images from thumbnail producer.
+
 2006-01-01  Tom Tromey  <tromey@redhat.com>
 
 	* src/org/medi8/internal/core/model/VideoTrack.java (split): Fix

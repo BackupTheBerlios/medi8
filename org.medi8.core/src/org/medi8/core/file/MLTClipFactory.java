@@ -35,6 +35,9 @@ public class MLTClipFactory
   // Set to true if you want to use the medi8 tools to create
   // thumbnails.  FIXME: currently this does not really work :-(
   private static final boolean USE_THUMBNAILS = false;
+  
+  // Enable process logging.
+  private static final boolean PROCESS_LOGGING = true;
 
   private MLTClipFactory()
   {
@@ -51,17 +54,39 @@ public class MLTClipFactory
         repository = "MLT_REPOSITORY=" + workspace + "/medi8-tools/modules";
     }
 
+  // Debugging helper.
+  private static Process runCommand(String[] command, String[] env)
+    throws IOException
+  {
+    if (PROCESS_LOGGING)
+      {
+        System.err.println("== Invoking...");
+        for (int i = 0; i < env.length; ++i)
+          {
+            System.err.print(env[i]);
+            System.err.print(" ");
+          }
+        for (int i = 0; i < command.length; ++i)
+          {
+            System.err.print(command[i]);
+            System.err.print(" ");
+          }
+        System.err.println();
+      }
+    return Runtime.getRuntime().exec(command, env);
+  }
+
   public static Clip createClip(File file)
   {
     try
       {
-        Process p = Runtime.getRuntime().exec(
-                                              new String[] { "inigo",
-                                                            file.toString(),
-                                                            "-consumer", "info" },
-                                              new String[] { repository /*,  FIXME
-                                                            "MLT_NORMALISATION=NTSC" */});
-
+        Process p = runCommand(
+                               new String[] { "inigo",
+                                              file.toString(),
+                                              "-consumer", "info" },
+                               new String[] { repository /*,  FIXME
+                                              "MLT_NORMALISATION=NTSC" */});
+        
         Properties prop = new Properties();
         prop.load(p.getInputStream());
         if (p.waitFor() != 0)
@@ -130,36 +155,60 @@ public class MLTClipFactory
     ImageData tdata = new ImageData(width, height, 24, pd, 3, tbytes);
     Process p = null;
 
+    // FIXME Fill this with something silly for now.
+    for (int l = 0; l < height; l++)
+      {
+        for (int c = 0; c < overallWidth * 3; c += 3)
+          {
+            data.data[l * overallWidth * 3 + c] = 0x5c;
+            data.data[l * overallWidth * 3 + c + 1] = (byte) 0xf3;
+            data.data[l * overallWidth * 3 + c + 2] = 0x6b;
+          }
+      }
+
+    // Compute the list of frames we want.
+    StringBuffer frames = new StringBuffer("frames=");
+    int frameCount = 0;
+    for (int w = 0; w < overallWidth; w += width)
+      {
+        if (frameCount > 0)
+          frames.append(',');
+        frames.append(frameCount++);
+      }
+    String frameString = frames.toString();
+
     try
       {
-        p = Runtime.getRuntime().exec(
-                                      new String[] { "inigo", file.toString(),
-                                                    "-consumer", "thumb",
-                                                    "width=" + width,
-                                                    "height=" + height,
-                                                    // TODO this is a comma
-                                                    // delimited list of frames.
-                                                    // For now let's just grab
-                                                    // the first.
-                                                    "frames=0" },
-                                      new String[] { repository /*,
-                                                    "MLT_NORMALISATION=NTSC"*/ });
+        p = runCommand(
+                       new String[] { "inigo", file.toString(),
+                                      "-consumer", "thumb",
+                                      "width=" + width,
+                                      "height=" + height,
+                                      frameString },
+                       new String[] { repository /*,
+                                      "MLT_NORMALISATION=NTSC"*/ });
 
         // Properties prop = new Properties();
 
         DataInputStream dis = new DataInputStream(p.getInputStream());
-        String line = dis.readLine();
-        // FIXME check that this was "P6"
-        line = dis.readLine();
-        // FIXME check that this was WIDTH x HEIGHT
-        line = dis.readLine();
-        // FIXME check that this was 255.
 
-        // Now read the image data.
-        dis.readFully(tdata.data);
+        for (int col = 0; col < frameCount; ++col)
+          {
+            String line = dis.readLine();
+            // FIXME check that this was "P6"
+            line = dis.readLine();
+            // FIXME check that this was WIDTH x HEIGHT
+            line = dis.readLine();
+            // FIXME check that this was 255.
+
+            // Now read the image data.
+            for (int row = 0; row < height; ++row)
+              dis.readFully(tdata.data, (row * overallWidth + col * width) * 3, width * 3);
+          }
       }
     catch (IOException _)
       {
+        //_.printStackTrace();
         if (p != null)
           p.destroy();
         return createGradient(overallWidth, height);
@@ -170,32 +219,8 @@ public class MLTClipFactory
       }
     catch (InterruptedException _)
       {
+        //_.printStackTrace();
         p.destroy();
-      }
-
-    // FIXME Fill this with something silly for now.
-    for (int l = 0; l < height; l++)
-      {
-        for (int c = 0; c < overallWidth * 3; c += 3)
-          {
-            if (c < width * 3)
-              {
-                data.data[l * overallWidth * 3 + c] = tdata.data[l * width * 3
-                                                                 + c];
-                data.data[l * overallWidth * 3 + c + 1] = tdata.data[l * width
-                                                                     * 3 + c
-                                                                     + 1];
-                data.data[l * overallWidth * 3 + c + 2] = tdata.data[l * width
-                                                                     * 3 + c
-                                                                     + 2];
-              }
-            else
-              {
-                data.data[l * overallWidth * 3 + c] = 0x5c;
-                data.data[l * overallWidth * 3 + c + 1] = (byte) 0xf3;
-                data.data[l * overallWidth * 3 + c + 2] = 0x6b;
-              }
-          }
       }
 
     Image img = new Image(null, data);
