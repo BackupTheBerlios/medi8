@@ -30,28 +30,33 @@ public class MonitorWidget extends Composite {
 	 */
 	
 	public MonitorWidget (Composite parent) {
-		super (parent, SWT.EMBEDDED);
-		
-		// Create our video server.
-		video_server = new VideoServer (embeddedHandle);
-		
-		parent.addControlListener (new ControlAdapter () {
-		  public void controlResized (ControlEvent event) {
-		    // TODO resize our embedded SDL window
-		    }
-		});
-		
-		parent.addDisposeListener (new DisposeListener () {
-		    public void widgetDisposed (DisposeEvent event) 
-		    {
-		      // We must stop the video server in order to free up
-		      // system resources.
-		      video_server.stop ();
-		    }
-		});
+		this (parent, SWT.EMBEDDED);
 	}
 	
-	/**
+	public MonitorWidget(Composite parent, int how)
+	{
+	  super(parent, SWT.EMBEDDED);
+        
+        // Create our video server.
+        video_server = new VideoServer (embeddedHandle);
+        
+        parent.addControlListener (new ControlAdapter () {
+          public void controlResized (ControlEvent event) {
+            // TODO resize our embedded SDL window
+            }
+        });
+        
+        parent.addDisposeListener (new DisposeListener () {
+            public void widgetDisposed (DisposeEvent event) 
+            {
+              // We must stop the video server in order to free up
+              // system resources.
+              video_server.stop ();
+            }
+        });
+	}
+
+  /**
 	 * Get the video server.
 	 * @return the video server.
 	 */
