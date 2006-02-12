@@ -1,0 +1,7 @@
+to-do list for medi8 feature
+
+- we need to pick a license and update the feature.xml to reflect it
+- medi8-tools and friends should be packaged as a plugin somehow
+  or just an RPM?
+  if we packaged them as plugins we could put them in the update site;
+  but for this to work it would be best to package MLT this way as well
