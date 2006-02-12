@@ -14,8 +14,6 @@ import java.util.Iterator;
 import org.eclipse.draw2d.AbstractHintLayout;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.MouseListener;
-import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.util.TransferDropTargetListener;

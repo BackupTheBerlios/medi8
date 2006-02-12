@@ -1,5 +1,10 @@
 2006-02-12  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/internal/core/ui/figure/TrackFigure.java: Fixed
+	imports.
+
+2006-02-12  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/internal/core/ui/MonitorView.java: Fixed resize
 	behavior.
 
