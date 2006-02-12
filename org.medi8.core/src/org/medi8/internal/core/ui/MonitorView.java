@@ -3,12 +3,14 @@
 package org.medi8.internal.core.ui;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.swt.layout.RowLayout;
 import org.medi8.core.file.VideoServer;
 import org.medi8.internal.core.ui.widget.gtk.MonitorWidget;
-import org.eclipse.swt.widgets.Button;
 
 public class MonitorView
   extends ViewPart
@@ -44,18 +46,12 @@ public MonitorView()
   {
     // TODO Auto-generated method stub
 
-    RowLayout rowLayout = new RowLayout();
-    rowLayout.type = org.eclipse.swt.SWT.VERTICAL;
-    rowLayout.justify = true;
-    rowLayout.pack = true;
-    rowLayout.wrap = true;
-    rowLayout.fill = true;
     top = new Composite(parent, SWT.NONE);
-    top.setLayout(rowLayout);
     createMonitorWidget1();
     createComposite();
     
     videoServer = monitorWidget.getVideoServer();
+			top.setLayout(new GridLayout());
   }
 
   public void setFocus()
@@ -70,8 +66,12 @@ public MonitorView()
  */
 private void createComposite()
 {
+  GridData gridData = new GridData();
+  gridData.grabExcessHorizontalSpace = true;
+  gridData.verticalAlignment = org.eclipse.swt.layout.GridData.END;
   composite = new Composite(top, SWT.NONE);
   composite.setLayout(new RowLayout());
+  composite.setLayoutData(gridData);
   button = new Button(composite, SWT.NONE);
   button.setText("<<");
   button.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter()
@@ -125,7 +125,11 @@ private void createComposite()
  */
 private void createMonitorWidget1()
 {
+  GridData gridData1 = new org.eclipse.swt.layout.GridData();
+  gridData1.grabExcessHorizontalSpace = true;
+  gridData1.grabExcessVerticalSpace = true;
   monitorWidget = new MonitorWidget(top, SWT.NONE);
+  monitorWidget.setLayoutData(gridData1);
 }
 
 }

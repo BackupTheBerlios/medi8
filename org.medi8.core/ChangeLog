@@ -1,3 +1,8 @@
+2006-02-12  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/internal/core/ui/MonitorView.java: Fixed resize
+	behavior.
+
 2006-01-02  Tom Tromey  <tromey@redhat.com>
 
 	* src/org/medi8/internal/core/ui/widget/gtk/MonitorWidget.java
