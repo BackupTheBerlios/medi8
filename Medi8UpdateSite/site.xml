@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="http://medi8.org/update/">
+      Medi8 Update Site
+   </description>
+   <feature url="features/org.medi8_1.0.0.jar" id="org.medi8" version="1.0.0"/>
+</site>
