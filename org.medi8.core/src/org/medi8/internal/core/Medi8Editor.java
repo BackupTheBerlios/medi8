@@ -5,6 +5,7 @@ package org.medi8.internal.core;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -57,6 +58,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.EditorPart;
 import org.medi8.core.file.Medi8XMLParser;
+import org.medi8.core.file.WestleyGenerator;
 import org.medi8.core.file.XMLGeneratingVisitor;
 import org.medi8.internal.core.model.Clip;
 import org.medi8.internal.core.model.InsertOrDeleteCommand;
@@ -209,6 +211,11 @@ public class Medi8Editor extends EditorPart
 			xr.parse(new InputSource(new InputStreamReader(is)));
 			
 			sequence = parser.getSequence();
+            
+            // This is handy if you want to see the
+            // Westley XML for each file loaded.
+            //WestleyGenerator wg = new WestleyGenerator(System.err);
+            //sequence.visit(wg);
 			
 			// FIXME: add a resource change listener for this file
 			is.close(); 

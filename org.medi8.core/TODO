@@ -1,6 +1,9 @@
 TODO List
 ----------------
 
+the vertical scrollbar should not scroll the drop track
+or the timecode ruler
+
 some operations don't refresh the display
 forcing a refresh (change workspaces) does
 look into this

@@ -38,6 +38,11 @@ public class VideoTrack extends Track
 	{
 	  return new VideoTrackFigure (seq, this, scale);
 	}
+    
+    public boolean isEmpty()
+    {
+      return elements.isEmpty();
+    }
 	
 	/**
 	 * Returns the length of this Track.
