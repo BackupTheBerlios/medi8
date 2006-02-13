@@ -27,13 +27,16 @@ public class FileClip extends Clip implements Visitable
 	private String file;
 	/** The sub-part of the file that this clip comes from.	 */
 	private String subPart;
+    /** Frames per second, or -1 if not applicable.  */
+    private int fps;
 	
 	public FileClip (Provenance location, Time length, String file,
-			String subPart)
+	                 String subPart, int fps)
 	{
 		super (location, length);
 		this.file = file;
 		this.subPart = subPart;
+        this.fps = fps;
 	}
 	
 	public String getFile ()
@@ -45,6 +48,11 @@ public class FileClip extends Clip implements Visitable
 	{
 		return subPart;
 	}
+    
+    public int getFPS ()
+    {
+      return fps;
+    }
 	
 	public void visit (Visitor v)
 	{

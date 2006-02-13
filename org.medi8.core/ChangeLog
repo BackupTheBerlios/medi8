@@ -1,3 +1,22 @@
+2006-02-13  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/core/file/XMLGeneratingVisitor.java (visit): Emit
+	'fps'.
+	* src/org/medi8/core/file/WestleyGenerator.java (fps): New field.
+	(visit): Set it.
+	(visit): Updated.
+	* src/org/medi8/core/file/Medi8XMLParser.java (startElement): Updated.
+	* src/org/medi8/core/file/MLTClipFactory.java (createClip): Updated.
+	* src/org/medi8/internal/core/model/Sequence.java (notify): Set 'fps'
+	in event handler, if needed.
+	(addTrack): New method.
+	(setFPS): New method.
+	* src/org/medi8/internal/core/model/FileClip.java (fps): New field.
+	(FileClip): Added fps argument.
+	(getFPS): New method.
+	* src/org/medi8/internal/core/model/events/AddEvent.java: Reformatted.
+	(getClip): New method.
+
 2006-02-12  Tom Tromey  <tromey@redhat.com>
 
 	* src/org/medi8/core/file/WestleyGenerator.java (visit): Emit a

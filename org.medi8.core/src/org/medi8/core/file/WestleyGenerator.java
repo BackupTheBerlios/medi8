@@ -18,8 +18,13 @@ import org.medi8.internal.core.model.VideoTrack;
 import org.medi8.internal.core.model.Visitor;
 import org.medi8.internal.core.model.audio.AudioBus;
 
+// FIXME: known bugs in this code:
+// * It needs to emit a transition whenver there is a <blank>
+
 /**
  * Create a Westley XML description of a Sequence.
+ * The documentation for this format is at
+ * http://www.dennedy.org/mlt/twiki/bin/view/MLT/Westley
  */
 public class WestleyGenerator
   extends Visitor
@@ -39,6 +44,12 @@ public class WestleyGenerator
   
   /** Next playlist ID.  */
   private int playListID = 0;
+  
+  /** Frames per second for the sequence, or 1 if not known.
+   * We use 1 instead of the more common -1 so that we don't have
+   * to conditionalize our multiplies.
+   */
+  private int fps;
   
   /** True if the current element should be printed directly.
    * This only applies to FileClips.
@@ -87,7 +98,8 @@ public class WestleyGenerator
 
   public void visit(EmptyClip e)
   {
-    inter.println("    <blank length=\"" + e.getLength() + "\"/>");
+    inter.println("    <blank length=\"" + (fps * e.getLength().toDouble())
+                  + "\"/>");
   }
 
   public void visit(DeadClip d)
@@ -104,8 +116,10 @@ public class WestleyGenerator
     printDirectly = true;
     String name = (String) media.get(s.getChild());
     inter.println("    <entry producer=\"" + name + "\" "
-                  + "in=\"" + s.getSelectionStartTime() + "\" "
-                  + "out=\"" + s.getSelectionEndTime() + "\"/>");
+                  + "in=\"" + (fps * s.getSelectionStartTime().toDouble())
+                  + "\" "
+                  + "out=\"" + (fps * s.getSelectionEndTime().toDouble())
+                  + "\"/>");
   }
 
   public void visit(VideoTrack t)
@@ -133,6 +147,9 @@ public class WestleyGenerator
 
   public void visit(Sequence s)
   {
+    fps = s.getFPS();
+    if (fps == -1)
+      fps = 1;
     s.visitChildren(this);
     out.println("<westley>");
     writeMedia();

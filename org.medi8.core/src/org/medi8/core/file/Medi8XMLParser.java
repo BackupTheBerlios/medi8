@@ -91,7 +91,22 @@ public class Medi8XMLParser extends DefaultHandler
 	public void startElement(String name, Attributes attrs)
 	{
 		if ("sequence".equals(name))
+          {
 			currentSequence = new Sequence ();
+            String fpsStr = attrs.getValue("fps");
+            if (fpsStr != null)
+              {
+                try
+                  {
+                    int fps = Integer.parseInt(fpsStr);
+                    currentSequence.setFPS(fps);
+                  }
+                catch (NumberFormatException _)
+                  {
+                    // Nothing.
+                  }
+              }
+          }
 		else if ("videotrack".equals(name))
 			currentTrack = new VideoTrack ();
 		else if ("automationtrack".equals(name))
@@ -104,7 +119,20 @@ public class Medi8XMLParser extends DefaultHandler
 			Provenance where = new Provenance (filename);
 			Time length = new Time(Double.parseDouble(attrs.getValue("length")));
 			String subpart = attrs.getValue("subpart");
-			currentClip = new FileClip(where, length, filename, subpart);
+            String fpsStr = attrs.getValue("fps");
+            int fps;
+            try
+              {
+                if (fpsStr == null)
+                  fps = -1;
+                else
+                  fps = Integer.parseInt(fpsStr);
+              }
+            catch (NumberFormatException _)
+              {
+                fps = -1;
+              }
+			currentClip = new FileClip(where, length, filename, subpart, fps);
 		}
 		else if ("select".equals(name))
 		{

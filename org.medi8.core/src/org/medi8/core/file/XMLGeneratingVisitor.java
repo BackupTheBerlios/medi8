@@ -101,7 +101,7 @@ public class XMLGeneratingVisitor
    */
   public void visit(Sequence s)
   {
-    out.println("<sequence>");
+    out.println("<sequence fps=\"" + s.getFPS() + "\">");
     s.visitChildren(this);
     out.println("</sequence>");
   }
@@ -114,7 +114,9 @@ public class XMLGeneratingVisitor
   public void visit(FileClip f)
   {
     out.println("<file name=\"" + f.getFile() + "\" " + "length=\""
-                + f.getLength() + "\" " + "subpart=\"" + f.getPart() + "\"/>");
+                + f.getLength() + "\" " + "subpart=\"" + f.getPart()
+                + "\" " + "fps=\"" + f.getFPS() + "\""
+                + "/>");
   }
 
   public void visit(SelectionClip s)

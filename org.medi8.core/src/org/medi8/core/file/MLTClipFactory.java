@@ -98,7 +98,8 @@ public class MLTClipFactory
         int length = Integer.parseInt(prop.getProperty("length"));
         Provenance where = new Provenance(file.toString());
         Time timeLen = new Time(length / fps);
-        return new FileClip(where, timeLen, file.toString(), segment);
+        // FIXME: type of FPS.
+        return new FileClip(where, timeLen, file.toString(), segment, (int) fps);
       }
     catch (IOException _)
       {

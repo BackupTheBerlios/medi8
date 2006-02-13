@@ -1,6 +1,8 @@
 /*
  * Created on 16-Nov-03
  */
+
+
 package org.medi8.internal.core.model.events;
 
 import org.medi8.internal.core.model.Clip;
@@ -10,7 +12,8 @@ import org.medi8.internal.core.model.VideoTrack;
 
 /**
  */
-public class AddEvent extends Medi8Event
+public class AddEvent
+  extends Medi8Event
 {
   public AddEvent(VideoTrack source, Time when, Clip clip)
   {
@@ -19,6 +22,12 @@ public class AddEvent extends Medi8Event
     this.clip = clip;
   }
 
-	private Time when;
-	private Clip clip;
+  public Clip getClip()
+  {
+    return clip;
+  }
+
+  private Time when;
+
+  private Clip clip;
 }
