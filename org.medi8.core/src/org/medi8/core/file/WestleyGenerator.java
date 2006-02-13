@@ -136,13 +136,17 @@ public class WestleyGenerator
     s.visitChildren(this);
     out.println("<westley>");
     writeMedia();
-    out.println("  <tractor>");
     try {
       inter.flush();
       baos.writeTo(out);
     } catch (IOException _) {
       throw new RuntimeException(_);
     }
+    out.println("  <tractor>");
+    out.println("    <multitrack>");
+    for (int i = 0; i < playListID; ++i)
+      out.println("      <track producer=\"playlist" + i + "\"/>");
+    out.println("    </multitrack>");
     out.println("  </tractor>");
     out.println("</westley>");
     out.flush();
