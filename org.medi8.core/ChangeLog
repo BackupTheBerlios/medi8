@@ -1,5 +1,10 @@
 2006-02-13  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/core/file/WestleyGenerator.java (visit): Generate a
+	blank.
+
+2006-02-13  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/core/file/XMLGeneratingVisitor.java (visit): Emit
 	'fps'.
 	* src/org/medi8/core/file/WestleyGenerator.java (fps): New field.

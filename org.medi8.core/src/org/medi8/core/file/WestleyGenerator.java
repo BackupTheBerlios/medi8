@@ -104,9 +104,11 @@ public class WestleyGenerator
 
   public void visit(DeadClip d)
   {
-    // A dead clip generates no code.
-    // FIXME: it does if we're generating a westley file
+    // A dead clip is just empty.
+    // FIXME: it isn't if we're generating a westley file
     // just for the dead clip itself ...
+    inter.println("    <blank length=\"" + (fps * d.getLength().toDouble())
+                  + "\"/>");
   }
 
   public void visit(SelectionClip s)
