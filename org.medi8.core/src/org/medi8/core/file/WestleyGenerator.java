@@ -115,7 +115,6 @@ public class WestleyGenerator
   {
     printDirectly = false;
     s.visitChildren(this);
-    printDirectly = true;
     String name = (String) media.get(s.getChild());
     inter.println("    <entry producer=\"" + name + "\" "
                   + "in=\"" + (fps * s.getSelectionStartTime().toDouble())
@@ -136,6 +135,7 @@ public class WestleyGenerator
     Iterator it = t.getIterator();
     while (it.hasNext())
       {
+        printDirectly = true;
         Clip child = (Clip) it.next();
         child.visit(this);
       }

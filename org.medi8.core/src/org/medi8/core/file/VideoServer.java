@@ -95,7 +95,7 @@ public class VideoServer
   }
 
   /**
-   * Starts a new m8vplay server process, which is destroyed with the plugin
+   * Starts a new m8vplay server process, which is destroyed when the plugin
    * stops.
    */
   public VideoServer(long parentHandle)

@@ -1,5 +1,12 @@
 2006-02-13  Tom Tromey  <tromey@redhat.com>
 
+	* src/org/medi8/core/file/VideoServer.java (VideoServer): Javadoc fix.
+	* src/org/medi8/core/file/WestleyGenerator.java
+	(visit(SelectionClip)): Don't reset printDirectly.
+	(visit(VideoTrack)): Set printDirectly.
+
+2006-02-13  Tom Tromey  <tromey@redhat.com>
+
 	* src/org/medi8/core/file/WestleyGenerator.java (visit): Generate a
 	blank.
 
