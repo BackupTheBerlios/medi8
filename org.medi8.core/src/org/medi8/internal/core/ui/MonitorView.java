@@ -84,11 +84,11 @@ private void createComposite()
   button1 = new Button(composite, SWT.NONE);
   button1.setText("<");
   button1.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter()
-  {
-    public void widgetSelected(org.eclipse.swt.events.SelectionEvent e)
-    {
-      // FIXME: do we need this button?
-    }
+  {   
+  	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
+  		videoServer.reverse();
+  	}
+  
   });
   button2 = new Button(composite, SWT.NONE);
   button2.setText("||");

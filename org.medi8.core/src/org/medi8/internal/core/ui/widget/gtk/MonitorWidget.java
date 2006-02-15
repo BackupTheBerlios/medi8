@@ -11,7 +11,9 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.medi8.core.file.VideoServer;
 
 /**
@@ -36,7 +38,9 @@ public class MonitorWidget extends Composite {
 	public MonitorWidget(Composite parent, int how)
 	{
 	  super(parent, SWT.EMBEDDED);
-        
+
+      setBackground (new Color(Display.getDefault (), 255, 255, 255));
+
         // Create our video server.
         video_server = new VideoServer (embeddedHandle);
         
@@ -55,7 +59,7 @@ public class MonitorWidget extends Composite {
             }
         });
 	}
-
+    
   /**
 	 * Get the video server.
 	 * @return the video server.

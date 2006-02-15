@@ -55,12 +55,78 @@ public class WestleyGenerator
    * This only applies to FileClips.
    */
   private boolean printDirectly = true;
+  
+  /** True if a DeadClip should render itself.  */
+  private boolean renderDeadClip = false;
 
   public WestleyGenerator(PrintStream out)
   {
     this.out = out;
     this.baos = new ByteArrayOutputStream();
     this.inter = new PrintStream(baos);
+  }
+  
+  private void writeBuffer()
+  {
+    try {
+      inter.flush();
+      baos.writeTo(out);
+    } catch (IOException _) {
+      throw new RuntimeException(_);
+    }
+  }
+  
+  /**
+   * The primary interface to generating Westley for a Sequence.
+   * Use this and not visit.
+   * @param seq the sequence
+   */
+  public void generate(Sequence seq)
+  {
+    fps = seq.getFPS();
+    if (fps == -1)
+      fps = 1;
+    seq.visit(this);
+    out.println("<westley>");
+    writeMedia();
+    writeBuffer();
+    out.println("  <tractor>");
+    out.println("    <multitrack>");
+    for (int i = 0; i < playListID; ++i)
+      out.println("      <track producer=\"playlist" + i + "\"/>");
+    out.println("    </multitrack>");
+    out.println("  </tractor>");
+    out.println("</westley>");
+    out.flush();
+  }
+
+  /**
+   * Generate some Westley XML describing a single clip, which is
+   * contained in the given sequence.
+   * This treats DeadClips specially.
+   * @param clip the clip
+   */
+  public void generate(Sequence seq, Clip clip)
+  {
+    fps = seq.getFPS();
+    if (fps == -1)
+      fps = 1;
+    renderDeadClip = clip instanceof DeadClip;
+    inter.println("  <playlist id=\"playlist0\">");
+    clip.visit(this);
+    inter.println("  </playlist>");
+    out.println("<westley>");
+    writeMedia();
+    writeBuffer();
+    out.println("  <tractor>");
+    out.println("    <multitrack>");
+    out.println("      <track producer=\"playlist0\"/>");
+    out.println("    </multitrack>");
+    out.println("  </tractor>");
+    if (renderDeadClip)
+      out.println("  <filter mlt_service=\"greyscale\" track=\"0\"/>");
+    out.println("</westley>");
+    out.flush();
   }
 
   public void visit(AudioBus bus)
@@ -104,11 +170,13 @@ public class WestleyGenerator
 
   public void visit(DeadClip d)
   {
-    // A dead clip is just empty.
-    // FIXME: it isn't if we're generating a westley file
-    // just for the dead clip itself ...
-    inter.println("    <blank length=\"" + (fps * d.getLength().toDouble())
-                  + "\"/>");
+    // A dead clip is ordinarily empty, but if we need to, we render it as
+    // its underlying clip; in this case generate will apply a greyscale.
+    if (renderDeadClip)
+      d.visitChildren(this);
+    else
+      inter.println("    <blank length=\"" + (fps * d.getLength().toDouble())
+                    + "\"/>");
   }
 
   public void visit(SelectionClip s)
@@ -147,27 +215,10 @@ public class WestleyGenerator
     // FIXME: implement
   }
 
+  // This should only be called by generate.
+  // FIXME: move the visitor into a private class.
   public void visit(Sequence s)
   {
-    fps = s.getFPS();
-    if (fps == -1)
-      fps = 1;
     s.visitChildren(this);
-    out.println("<westley>");
-    writeMedia();
-    try {
-      inter.flush();
-      baos.writeTo(out);
-    } catch (IOException _) {
-      throw new RuntimeException(_);
-    }
-    out.println("  <tractor>");
-    out.println("    <multitrack>");
-    for (int i = 0; i < playListID; ++i)
-      out.println("      <track producer=\"playlist" + i + "\"/>");
-    out.println("    </multitrack>");
-    out.println("  </tractor>");
-    out.println("</westley>");
-    out.flush();
   }
 }

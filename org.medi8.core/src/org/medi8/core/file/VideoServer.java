@@ -178,6 +178,11 @@ public class VideoServer
     sendCommand("PLAY " + vtrUnit);
   }
   
+  public void reverse()
+  {
+    sendCommand("PLAY " + vtrUnit + " -1000");
+  }
+  
   public void pause()
   {
     sendCommand("PAUSE " + vtrUnit);
