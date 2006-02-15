@@ -246,7 +246,7 @@ public class MLTClipFactory
       }
 
     // We don't need the temporary file.
-    // file.delete();
+    file.delete();
 
     Image img = new Image(null, data);
     container.setImage(img);
