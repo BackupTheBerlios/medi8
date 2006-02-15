@@ -8,7 +8,6 @@ package org.medi8.internal.core.model;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -82,7 +81,7 @@ public class FileClip extends Clip implements Visitable
 	private Figure createThumbnail(int overallWidth, int height)
 	{
 		int width = (int) (height * VideoTrackFigure.ASPECT);
-		return MLTClipFactory.createThumbnail(file, overallWidth, 
+		return MLTClipFactory.createThumbnail(this, overallWidth, 
                                               width, height);
 	}
 }

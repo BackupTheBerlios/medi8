@@ -3,7 +3,13 @@
  */
 package org.medi8.internal.core.model;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.medi8.core.file.MLTClipFactory;
+import org.medi8.internal.core.ui.figure.VideoTrackFigure;
 
 /**
  * This is a Clip that represents a selection of
@@ -72,13 +78,27 @@ public class SelectionClip extends Clip implements Visitable
 		child.visit (v);
 	}
 
-	public Figure getFigure(int width, int height)
-	{
-	  // Ideally we would display frames from the
-	  // selected part of the clip.  But, currently
-	  // the MLT driver we have can't do this.
-	  return child.getFigure(width, height);
-	}
+    public Figure getFigure(int width, int height)
+    {
+      Figure fig = createThumbnail(width, height);
+      if (fig == null)
+      {
+        RoundedRectangle box = new RoundedRectangle();
+        box.setBounds(new Rectangle(0, 0, width, height));
+        box.setBackgroundColor(ColorConstants.cyan);
+        box.setCornerDimensions(new Dimension(height / 4, height / 4));
+        box.setFill(true);
+        fig = box;
+      }
+      return fig;
+    }
+
+    private Figure createThumbnail(int overallWidth, int height)
+    {
+        int width = (int) (height * VideoTrackFigure.ASPECT);
+        return MLTClipFactory.createThumbnail(this, overallWidth, 
+                                              width, height);
+    }
 
 	private Clip child;
 	private Time startTime;

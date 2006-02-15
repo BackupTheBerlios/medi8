@@ -7,8 +7,9 @@ package org.medi8.core.file;
 
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.Properties;
 
 import org.eclipse.draw2d.Figure;
@@ -135,8 +136,8 @@ public class MLTClipFactory
    * 
    * @param container
    *          ImageFigure that holds the result
-   * @param file
-   *          File to read
+   * @param clip
+   *          Clip for which we're generating thumbnails
    * @param overallWidth
    *          Width of resulting image
    * @param width
@@ -144,11 +145,27 @@ public class MLTClipFactory
    * @param height
    *          Height of one frame of the image
    */
-  public static Figure createThumbnail(String file, int overallWidth,
+  public static Figure createThumbnail(Clip clip, int overallWidth,
                                        int width, int height)
   {
     if (! USE_THUMBNAILS)
-      return createGradient(overallWidth, height);
+      return null; // createGradient(overallWidth, height);
+    
+    File file;
+    try
+      {
+        file = File.createTempFile("m8w", ".xml");
+        PrintStream ps = new PrintStream(new FileOutputStream(file));
+        WestleyGenerator wgen = new WestleyGenerator(ps);
+        wgen.generate(clip);
+        ps.close();
+      }
+    catch (IOException _)
+      {
+        return null; // createGradient(overallWidth, height);
+      }
+    String fileArgument = "westley:" + file;
+
     ImageFigure container = new ImageFigure();
     container.setSize(overallWidth, height);
     byte[] bytes = new byte[overallWidth * height * 3];
@@ -179,7 +196,7 @@ public class MLTClipFactory
     try
       {
         p = runCommand(
-                       new String[] { "inigo", file.toString(),
+                       new String[] { "inigo", fileArgument,
                                       "-consumer", "thumb",
                                       "width=" + width,
                                       "height=" + height,
@@ -216,7 +233,7 @@ public class MLTClipFactory
         //_.printStackTrace();
         if (p != null)
           p.destroy();
-        return createGradient(overallWidth, height);
+        return null; // createGradient(overallWidth, height);
       }
     try
       {
@@ -227,6 +244,9 @@ public class MLTClipFactory
         //_.printStackTrace();
         p.destroy();
       }
+
+    // We don't need the temporary file.
+    // file.delete();
 
     Image img = new Image(null, data);
     container.setImage(img);

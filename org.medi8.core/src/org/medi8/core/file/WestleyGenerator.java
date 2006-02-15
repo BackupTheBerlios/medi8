@@ -106,11 +106,8 @@ public class WestleyGenerator
    * This treats DeadClips specially.
    * @param clip the clip
    */
-  public void generate(Sequence seq, Clip clip)
+  public void generate(Clip clip)
   {
-    fps = seq.getFPS();
-    if (fps == -1)
-      fps = 1;
     renderDeadClip = clip instanceof DeadClip;
     inter.println("  <playlist id=\"playlist0\">");
     clip.visit(this);
@@ -146,6 +143,12 @@ public class WestleyGenerator
       name = (String) media.get(clip);
     if (printDirectly)
       inter.println("    <entry producer=\"" + name + "\"/>");
+    if (fps == 0)
+      {
+        fps = clip.getFPS();
+        if (fps == -1)
+          fps = 1;
+      }
   }
   
   private void writeMedia()

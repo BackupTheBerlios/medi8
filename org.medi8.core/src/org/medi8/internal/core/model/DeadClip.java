@@ -7,6 +7,8 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.medi8.core.file.MLTClipFactory;
+import org.medi8.internal.core.ui.figure.VideoTrackFigure;
 
 /**
  * This class represents a dead section of a track.  It wraps some
@@ -44,6 +46,9 @@ public class DeadClip extends Clip
 
   public Figure getFigure(int width, int height)
   {
+    Figure fig = createThumbnail(width, height);
+    if (fig != null)
+      return fig;
 	RectangleFigure box = new RectangleFigure();
 	box.setBounds(new Rectangle(0, 0, width, height));
 	box.setBackgroundColor(ColorConstants.darkGray);
@@ -51,6 +56,13 @@ public class DeadClip extends Clip
     return box;
   }
   
+  private Figure createThumbnail(int overallWidth, int height)
+  {
+    int width = (int) (height * VideoTrackFigure.ASPECT);
+    return MLTClipFactory.createThumbnail(this, overallWidth, 
+                                          width, height);
+  }
+
   public String toString ()
   {
     return "DeadClip[" + super.toString() + "]";

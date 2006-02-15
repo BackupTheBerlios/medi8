@@ -1,3 +1,20 @@
+2006-02-15  Tom Tromey  <tromey@redhat.com>
+
+	Generate thumbnails using Westley:
+	* src/org/medi8/internal/core/model/SelectionClip.java
+	(createThumbnail): New method.
+	(getFigure): Rewrote.
+	* src/org/medi8/internal/core/model/DeadClip.java (createThumbnail):
+	New method.
+	(getFigure): Use it.
+	* src/org/medi8/internal/core/model/FileClip.java (createThumbnail):
+	Updated.
+	* src/org/medi8/core/file/WestleyGenerator.java (visit(FileClip)):
+	Set fps.
+	(generate): Removed sequence argument.
+	* src/org/medi8/core/file/MLTClipFactory.java: Fixed imports.
+	(createThumbnail): Take a clip, not a file.
+
 2006-02-14  Tom Tromey  <tromey@redhat.com>
 
 	* src/org/medi8/core/file/WestleyGenerator.java (generate): New
