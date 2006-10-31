@@ -63,7 +63,33 @@ public class VideoTrack extends Track
 		maxTime = len;
 		notify(new SyntheticLengthChangeEvent(this));
 	}
-	
+
+    public boolean insertClip(Time when, Clip clip)
+    {
+      int index = -1;
+      for (int i = 0; i < times.size(); ++i)
+        {
+          Time t = (Time) times.get(i);
+          if (t.equals(when))
+            {
+              index = i;
+              break;
+            }
+        }
+      // Couldn't insert here...
+      if (index == -1)
+        return false;
+      // Move all elements down.
+      Time delta = clip.getLength();
+      for (int i = index; i < times.size(); ++i)
+        {
+          times.set(i, new Time((Time) times.get(i), delta));
+          notify(new MoveEvent(this, (Clip) elements.get(i), delta));
+        }
+      // Should always return true.
+      return addClip(when, clip);
+    }
+
 	public boolean addClip(Time when, Clip clip)
 	{
 		boolean result = addClipNoEvents(when, clip);
@@ -125,8 +151,64 @@ public class VideoTrack extends Track
 		notify (new DeleteEvent(this, clip));
 		return true;
 	}
-	
-	public Time findClipTime(Clip clip)
+
+    /**
+     * Remove a clip from this track and move later clips earlier to
+     * fill the new gap.
+     * @param clip the clip to remove
+     * @return true if we removed a clip, false otherwise
+     */
+    public boolean deleteClipAndFill(Clip clip)
+    {
+        int index = findClip(clip);
+        if (index == -1)
+            return false;
+        elements.remove(index);
+        Time oldTime = (Time) times.get(index);
+        times.remove(index);
+        notify (new DeleteEvent(this, clip));
+
+        // Now INDEX is the index of the next element.
+        if (index < times.size())
+          {
+            Time delta = oldTime.getDifference((Time) times.get(index));
+            while (index < times.size())
+              {
+                times.set(index, new Time((Time) times.get(index), delta));
+                notify(new MoveEvent(this, (Clip) elements.get(index), delta));
+                ++index;
+              }
+          }
+        return true;
+    }
+
+    /**
+     * Resize a selection clip and move other clips either to make room
+     * (if the selection grew) or to fill the newly created gap (if the
+     * selection shrunk).
+     * @param clip the clip to resize
+     * @param newStart the new start time of the selection
+     * @param newEnd the new end time of the selection
+     * @return true if the clip was successfully resized, false otherwise
+     */
+    public boolean resizeSelection(SelectionClip clip, Time newStart, Time newEnd)
+    {
+      int index = findClip(clip);
+      if (index == -1)
+        return false;
+      // FIXME: should be able to verify that the new selection makes sense.
+      clip.setTimes(newStart, newEnd);
+      // FIXME: should emit an event here.
+      Time delta = clip.getLength();
+      while (++index < times.size())
+        {
+          times.set(index, new Time((Time) times.get(index), delta));
+          notify(new MoveEvent(this, (Clip) elements.get(index), delta));
+        }
+      return true;
+    }
+
+    public Time findClipTime(Clip clip)
 	{
 		int index = findClip(clip);
 		if (index == -1)

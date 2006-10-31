@@ -1,3 +1,16 @@
+2006-10-30  Tom Tromey  <tromey@redhat.com>
+
+	* src/org/medi8/internal/core/model/Clippy.java: New file.
+	* src/org/medi8/internal/core/model/VideoTrack.java
+	(deleteClipAndFill): New method.
+	(insertClip): New method.
+	(resizeSelection): New method.
+
+	* src/org/medi8/core/file/VideoServer.java (instance): New field.
+	(getInstance): New method.
+	(stop): Clear 'instance'.
+	(VideoServer): Set 'instance'.
+
 2006-02-15  Tom Tromey  <tromey@redhat.com>
 
 	* src/org/medi8/core/file/MLTClipFactory.java (createThumbnail):

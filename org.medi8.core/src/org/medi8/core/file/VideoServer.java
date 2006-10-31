@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Arrays;
 
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -33,6 +34,13 @@ public class VideoServer
   
   // The unit we're using.
   String vtrUnit;
+  
+  private static VideoServer instance;
+  
+  public static VideoServer getInstance()
+  {
+    return instance;
+  }
 
   /**
    * Stop the video server.
@@ -40,6 +48,7 @@ public class VideoServer
   public void stop()
   {
     process.destroy();
+    instance = null;
   }
 
   /**
@@ -108,14 +117,26 @@ public class VideoServer
 
     try
       {
-        process = Runtime.getRuntime().exec(
-                                            new String[] { server_name, "100", "100" },
-                                            new String[] {"SDL_VIDEODRIVER=x11",
-                                                          "SDL_DEBUG=1",
-                                                          "SDL_WINDOWID=" + parentHandle,
-                                                          // FIXME
-                                                          //"MLT_NORMALISATION=NTSC",
-                                                          repository});
+        // We can't add to the subprocess environment in 1.4.
+        // So, we pass it in on the command line and let m8vplay handle it.
+        String[] cmdLine = new String[] {
+                                         server_name,
+                                         // FIXME: it doesn't work without --sync.
+                                         // This is some bug in the gtk code
+                                         // in m8vplay.
+                                         "--sync",
+                                         "SDL_VIDEODRIVER=x11",
+                                         "SDL_DEBUG=1",
+                                         // FIXME
+                                         //"MLT_NORMALISATION=NTSC",
+                                         repository,
+                                         "100", "100",
+                                         "" + parentHandle
+                                         };
+
+        System.err.println(Arrays.asList(cmdLine));
+
+        process = Runtime.getRuntime().exec(cmdLine);
       }
     catch (IOException ex)
       {
@@ -171,6 +192,8 @@ public class VideoServer
     // just make an assumption.
     sendCommand("UADD sdl:" + Long.toHexString(parentHandle));
     vtrUnit = "U0";
+
+    instance = this;
   }
 
   public void play()
